@@ -1,6 +1,6 @@
 !build/
 build/*
-!build/main.pdf\
+!build/main.pdf
 
 
 ## Core latex/pdflatex auxiliary files:
