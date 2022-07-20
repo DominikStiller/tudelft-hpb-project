@@ -15,6 +15,12 @@
 \input{nomenclature}
 \printnomenclature
 
+
+
+
+
+
+
 \section{Introduction}
 Scientific results obtained from a combination of LRO altimetry, GRAIL gravity field determination and Lunar Laser Ranging can in some cases lead to conflicting results on specific details on lunar geodetic properties (tides, rotation, etc.) Although minor, these discrepancies may not allow the exceptionally accurate data sets that are available to be processed to their inherent accuracy.
 
@@ -29,8 +35,10 @@ The models will be implemented in Tudat, an open-source simulation framework for
 
 
 
+
+
 \section{Models}\label{sec:models}
-On the highest level, we divide radiation pressure models into sources and targets. Sources emit or reflect electromagnetic radiation onto the target, which experiences an acceleration. For sources, we regard direct solar, albedo and thermal radiation. For targets, we regard cannonball and paneled models with and without self-shadowing.
+On the highest level, we divide radiation pressure models into sources and targets. Sources emit or reflect electromagnetic radiation onto the target, which experiences an acceleration. For sources, we regard direct solar, albedo and thermal radiation. For targets, we regard cannonball and paneled models with and without self-shadowing. Only radiation pressure due to incoming radiation and instantaneous reradiation is considered. Radiation pressure due to delayed thermal radiation of the spacecraft itself as described by \textcite{Wetterer2014} will not be treated.
 
 Source models and target models can be developed independently, then mixed and matched. The interface between sources and targets consists of 2 quantities:
 \begin{itemize}
@@ -39,16 +47,16 @@ Source models and target models can be developed independently, then mixed and m
 \end{itemize}
 These can be combined into the directional irradiance $\vb E=E \vu r$. This assumes that all radiation is parallel, i.e. originates from a distant point, which is a good approximation for distant sources (e.g., the Sun at 1 AU distance). Sources for which the spatial extent is relevant (e.g., Earth albedo radiation in LEO) can be discretized into multiple point sources.
 
-We treat all radiation equally as total flux, independently of wavelength. While most optical properties such as reflectivity are physically wavelength-dependent, characterizing their dependence is challenging in practice. This leads us to using the same surface properties across wavelengths, even though albedo radiation is in the visible range while thermal radiation is infrared.
+We treat all radiation equally as total flux, independently of wavelength. While most optical properties such as reflectivity are physically functions of wavelength, characterizing their dependence is challenging in practice. This leads us to using the same surface properties across wavelengths, even though albedo radiation is in the visible range while thermal radiation is infrared. However, we make provisions for wavelength-dependent extensions in the future.
 
 
 
 \subsection{Sources}
-The most significant source of radiation pressure in Earth and lunar orbits is direct solar radiation, which follows an inverse square law:
+The most significant source of radiation pressure in Earth and lunar orbits is direct solar radiation. The solar irradiance $E_s$ can be found through the radiant power of the sun or total solar irradiance (TSI) at 1 AU:
 \begin{align}
-   E_s = \nu\frac{\SI{3.839e26}{W}}{4\pi \norm{\vb r}^2}
+   E_s = \nu\frac{\SI{3.839e26}{W}}{4\pi \norm{\vb r}^2} = \nu E_{s,\SI{1}{AU}}\frac{\SI{1}{AU}}{\norm{\vb r}^2}
 \end{align}
-This leads to the well-known solar irradiance of $E_s=\SI{1367}{W/m^2}$ at $\norm{\vb r}=\SI{1}{AU}$. Note that this irradiance is a time average, and varies~\cite{Vielberg2020} as Earth moves between its perihelion and aphelion, but also with changes in the Sun's radiant power itself. Time series for total solar irradiance at Earth exist, but not Sun's radiant power, making a constant value the only feasible option for lunar orbits.
+This leads to the solar constant of $E_{s,\SI{1}{AU}}=\SI{1360.8}{W/m^2}$ at $\norm{\vb r}=\SI{1}{AU}$~\cite{Wild2012}. Note that this irradiance is a time average and varies due to sunspot darkening and facular brightening~\cite{Kopp2016}. Observational time series for TSI exist~\cite{Dewitte2017} such that the time-varying solar irradiance at any distance can be found using the inverse square law.
 
 $\nu\in[0,1]$ is the shadow function, scaling the received irradiance according to the visible portion of the sun, which may be occulted by other bodies. A conical model dividing space into regions of full sunlight, penumbra and umbra due to a single body is the standard~\cite{Montenbruck2000}. This model could be extended to consider (partial) occultation by two bodies as described by \textcite{Zhang2019}.
 
@@ -59,13 +67,13 @@ $\nu\in[0,1]$ is the shadow function, scaling the received irradiance according 
    \label{fig:albedo-geometry}
 \end{figure}
 
-Albedo radiation, reflected by planet surfaces, is much smaller but still significant. Albedo requires knowledge of properties of the radiation source (for our intents and purposes, the Sun) and the reflecting body. The solar irradiance $E_s$ and angle between reflecting surface normal and Sun $\theta_s$ determine the incident irradiance onto the source surface element $dA$. The reflected radiation depends on the albedo distribution $a=a(\lambda, \phi)$ which may vary with longitude $\lambda$ and latitude $\phi$. The received radiation depends on the view angle $\alpha$, which is the angle between the surface normals of source and target. This geometry is shown in \cref{fig:albedo-geometry}. The irradiance from $dA$ at the target due to albedo is given by~\cite{Knocke1988}:
+Albedo radiation, reflected by planet surfaces, is much smaller but still significant. Albedo requires knowledge of properties of the radiation source (for our intents and purposes, the Sun) and the reflecting body. The solar irradiance $E_s$ and angle between reflecting surface normal and Sun $\theta_s$ determine the incident irradiance onto the source surface element $dA$. The reflected radiation depends on the albedo distribution $a=a(\lambda, \phi)$ which may vary with longitude $\lambda$ and latitude $\phi$. The received radiation depends on the view angle $\alpha$, which is the angle between the surface normals of source and target. This geometry is shown in \cref{fig:albedo-geometry}. For Earth, Lambertian reflectance is a good assumption. The irradiance from $dA$ at the target due to albedo is then given by~\cite{Knocke1988}:
 \begin{align}\label{eq:source-albedo-paneled}
    E = a\cos\theta_s E_s\frac{dA\cos\alpha}{\pi \norm{\vb r}^2}
 \end{align}
 where $a\cos\theta_s E_s$ is the reflected irradiance. Note that albedo radiation only exists if $dA$ receives sunlight. Shadow calculations could also be included but are more involved for albedo models, since both the incoming solar radiation and outgoing albedo radiation could be affected by occultation. Calculations are further complicated since common occultation models assume spherical sources and not flat surface elements.
 
-The simplest choice for the lunar albedo is the average value of $a=0.12$~\cite{Mueller2021}. A more detailed albedo distribution is the 15x15 spherical harmonics model by \textcite{Floberghagen1999}. However, for calculations, paneling of the source is more convenient. \textcite{Knocke1988} introduce a spherical cap centered at the subsatellite point, which is divided into rings of panels of constant albedo, tangent to the source surface at their center. \cref{eq:source-albedo-paneled} is then evaluated for each panel $dA$. We call this \emph{dynamic paneling}. Alternatively, the whole body could be paneled independently of the satellite position (\emph{static paneling})
+The simplest choice for the lunar albedo is the average value of $a=0.12$~\cite{Mueller2021}. A more detailed lunar albedo distribution is the 15x15 spherical harmonics model by \textcite{Floberghagen1999}. However, for calculations, paneling of the source is more convenient. \textcite{Knocke1988} introduce a spherical cap centered at the subsatellite point, which is divided into rings of panels of constant albedo, tangent to the source surface at their center. \cref{eq:source-albedo-paneled} is then evaluated for each panel $dA$. We call this \emph{dynamic paneling}. Alternatively, the whole body could be paneled independently of the satellite position (\emph{static paneling}). Such an approach including evenly distributed panels is described by \textcite{Wetterer2014}.
 
 Similarly, the thermal radiation can be described, scaled by the emissivity $e$. Additionally, there is a factor of $1/4$, which is the ratio between receiving and emitting surface. Then the irradiance from $dA$ at the target due to thermal radiation is given by~\cite{Knocke1988}:
 \begin{align}\label{eq:source-thermal-knocke}
@@ -81,6 +89,8 @@ Alternatively, a latitude- and local time-dependent temperature distribution of 
 \end{align}
 where $T_\text{max}=\SI{375}{K}$ and $T_\text{min}=\SI{100}{K}$. Note that the maximum irradiance from \cref{eq:source-thermal-lemoine} is about four times higher than that from \cref{eq:source-thermal-knocke} since $\sigma T_\text{max}^4 \approx E_s$, but varies as the $dA$ moves away from the subsolar point ($\theta_s$ increases) and cools down.
 
+Instead of modeling outgoing planetary fluxes, they can also be data-based from observations. For Earth, CERES provides time series for shortwave and longwave fluxes with up to hourly and \ang{1} resolution~\cite[]{Doelling2016}. For the Moon, irradiance spectra have been published by \textcite{Kieffer2005} and \textcite{Sun2021}. However, they are constant in time and provide a single spectrum for only the Earth-facing lunar side. Therefore, they are of little use for radiation pressure models in lunar orbits, but can be used for Earth orbits.
+
 
 
 \subsection{Targets}
@@ -89,11 +99,11 @@ The \emph{cannonball model} is the simplest model for target acceleration due to
    \vb a = C_r \frac{A}{m} \frac{E}{c} \vu r
 \end{align}
 
-A more sophisticated paneled target model discretizes the spacecraft into $n$ panels with area $A$ and normal vector $\vb n$. This also means that the incidence angle $\theta$ differs per panel. Their surface is characterized by the absorptivity $C_a$, diffuse reflectivity $C_d$ and specular reflectivity $C_s$, which obey $C_a + C_d + C_s = 1$. Then the acceleration of the whole target due to all target panels and a single source is given by~\cite{Montenbruck2014}:
+A more sophisticated paneled target model discretizes the spacecraft into $n$ panels with area $A$ and normal vector $\vb n$. This also means that the incidence angle $\theta$ differs per panel. Their surface is characterized by the absorptivity $C_a$, diffuse reflectivity $C_d$ and specular reflectivity $C_s$, which obey $C_a + C_d + C_s = 1$. Anisotropy can be accounted for using bidirectional reflectance distribution functions (BRDF) as described by \textcite{Wetterer2014}. However, we assume Lambertian diffuse reflectance and instantaneous Lambertian reradiation of absorbed radiation.  Then the acceleration of the whole target due to all target panels and a single source is given by~\cite{Montenbruck2014}:
 \begin{align}
    \vb a = \frac{1}{m} \frac{E}{c} \sum_{j=1}^n A \cos\theta \left[(C_a + C_d)\left(\vu r - \frac{2}{3} \vb n\right) - 2 C_s \cos\theta \, \vb n \right]
 \end{align}
-where all quantities inside the summation except $\vu r$ are specific to panel $j$. For the LRO, these panel properties are given by \textcite{Smith2008}. Self-shadowing could also be included here. \textcite{Mazarico2009} describe an algorithm to modify the effective area due to self-shadowing and describe the effect on the spacecraft trajectory as significant.
+where all quantities inside the summation except $\vu r$ are specific to panel $j$. For the LRO, these panel properties are given by \textcite{Smith2008}. Self-shadowing could also be included here. \textcite{Mazarico2009} describe an algorithm to modify the effective area due to self-shadowing and describe the effect on the spacecraft trajectory as significant. \textcite{Kenneally2020} perform raytracing for self-shadowing with BRDFs on GPUs.
 
 In case of a paneled source, the total acceleration is the vectorial sum of these contributions over all $m$ source panels:
 \begin{align}
@@ -103,16 +113,54 @@ where $E$ is the irradiance due to the $i$-th source panel.
 
 
 
-\section{Code design}
-All models presented in \cref{sec:models} will be implemented. The following Python-like pseudocode shows the classes and their interactions. The code is not complete but only contains parts relevant for radiation pressure computations.
 
-Design decisions I am uncertain about:
+
+
+
+\section{Options}
+Radiation pressure models range from the simple baseline model to our extended model, but even more configuration options are possible. An extensive overview over options for radiation pressure modeling is given in \cite[Sec.~2]{Vielberg2020}. This list contains all options that have been explored in literature and that Tudat may want to support in the future, hence provisions for extensibility should be made. However, only the \textbf{bold options} will be supported in this project.
+
 \begin{itemize}
-   \item \pythoninline{class RadiationPressureAcceleration} bears the main responsibility of combining source and target information, which allows sources and targets to be agnostic of each other. This includes occultation calculations between source and target (occultation calculations for albedo are handled by \pythoninline{class PaneledRadiationSourceInterface}) Is it too much responsibility for one class?
-   \item Both source geometry and emitted/reflected radiation models are implemented in \\ \pythoninline{class PaneledRadiationSourceInterface}, even though they are separate concerns and can be applied in various combinations. Multiple source models for albedo and thermal radiation are implemented in the same class, accessible through switches (Lines 112--119). Alternatively, each of \cref{eq:source-albedo-paneled,eq:source-thermal-knocke,eq:source-thermal-lemoine} could be implemented in separate classes, which would introduce too much unnecessary complexity in my opinion.
+   \item Body:
+   \begin{itemize}
+      \item \textbf{Mass}
+      \item \textbf{Position and orientation}
+      \item Shape (for occultation, spherical or oblate spheroid)
+      \item Athmosphere (for refraction influencing occultation)
+      \item \textbf{Radiation source and/or target}
+      \item \textbf{Temperature distribution (in case Lemoine thermal model is used)}
+   \end{itemize}
+   \item Point source:
+   \begin{itemize}
+      \item \textbf{Radiant power or TSI (constant or time-varying)}
+      \item Continuous or discrete emission spectrum (i.e. function of wavelength, binned or visible + infrared)
+   \end{itemize}
+   \item Paneled source:
+   \begin{itemize}
+      \item \textbf{Original radiation source}
+      \item \textbf{Albedo and emissivity distribution (constant, per panel or as spherical harmonics)}
+      \item \textbf{Thermal emission model (Knocke or Lemoine)}
+      \item \textbf{Albedo reflection law (constant} or BRDF, possibly depending on wavelength)
+      \item \textbf{Paneling resolution}
+      \item \textbf{Static or dynamic paneling}
+      \item \textbf{Occultation of albedo panels}
+      \item Data-based fluxes (like CERES measurements) instead of modeled fluxes
+   \end{itemize}
+   \item Cannonball target:
+   \begin{itemize}
+      \item \textbf{Cross-sectional area}
+      \item \textbf{Radiation pressure coefficient}
+   \end{itemize}
+   \item Paneled target:
+   \begin{itemize}
+      \item \textbf{Area of each panel}
+      \item \textbf{Position and orientation of each panel (constant} or time-varying (for HGA or SA), from CK kernels or e.g. aligned with sun, position only relevant for self-shadowing and self-reflection)
+      \item With or \textbf{without} self-shadowing and self-reflection
+      \item \textbf{Absorptivity, specular reflectivity and diffuse reflectivity of each panel (constant} or depending on wavelength, possibly time-varying due to degradation)
+      \item \textbf{Reflection law (constant} or BRDF, possibly depending on wavelength)
+      \item \textbf{Thermal reradiation (instantaneous} or from temperature distribution considering heat conduction and generation, should be implemented as separate acceleration class if not instantaneous)
+   \end{itemize}
 \end{itemize}
-
-\inputminted{python}{code_design.py}
 
 
 
@@ -123,7 +171,9 @@ Design decisions I am uncertain about:
 \section{Verification \& Validation}
 Verification will check whether the models presented in this document were implemented correctly, based on manual calculations and values from literature. Validation will check whether the mathematical models themselves give sensible results. Both will be implemented as unit tests. Existing radiation pressure unit tests within Tudat will be reused and adapted to avoid regression. However, existing tests include a lot of logic that itself may be flawed. Therefore, the reworked unit tests will be more straightforward, at the cost of duplicate code.
 
-To validate the simulation setup, I will also propagate LRO's orbit and check consistency with ephemerides from SPICE SPKs. While small discrepancies are expected due to differences in other models, the error should be reasonable.
+The lunar radiation model can be rougly validated with the average lunar irradiance in LEO of \SI{977}{W/m^2}~\cite{Matthews2008}. To validate the simulation setup, I will also propagate LRO's orbit and check consistency with ephemerides from SPICE SPKs. While (possibly significant) differences are expected in both, the error should be reasonable and orders of magnitude of results similar.
+
+
 
 
 
@@ -132,7 +182,7 @@ To validate the simulation setup, I will also propagate LRO's orbit and check co
 \section{Result analysis}\label{sec:result-analysis}
 The question to be answered is \textit{What is the quantitative influence of using high-accuracy radiation pressure models on the attainable orbit precision for the Lunar Reconaissance Orbiter?} The answer will not include statements about absolute or relative precision improvements, since there is no ground truth. Rather, the answer will give tendencies about how different models and parameters influence orbital elements.
 
-The simulation setup for gathering results will be varied to investigate different levels of accuracy. In the simplest form, the radiation pressure models only contain a direct solar radiation source and a cannonball target (\emph{baseline model}) In the most complete form (\emph{extended model}), the setup looks as follows:
+The simulation setup for gathering results will be varied to investigate different levels of accuracy. In the simplest form, the radiation pressure models only contain a direct solar radiation source and a cannonball target without occultation (\emph{baseline model}) In the most complete form (\emph{extended model}), the setup looks as follows:
 \begin{itemize}
    \item Sun:
    \begin{itemize}
@@ -171,14 +221,33 @@ The result analysis is inspired by \textcite{Vielberg2020} for LEO satellites, b
    \item Sensitivity analysis for albedo and target reflection/absorption coefficients (since these parametrizations are often inaccurate, investigating influence of their errors is important)
    \item Effect of different levels of detail of radiation pressure models on accelerations (cf.~\cite[Fig.~8]{Vielberg2020}) and Keplerian orbit elements (e.g., how does addition of albedo radiation change semi-major axis?), moving from baseline model towards extended model
    \begin{itemize}
-      \item Baseline model: only direct solar radiation source, cannonball target
+      \item Baseline model: only direct solar radiation source, cannonball target, no occultation
       \item For source, add albedo and thermal radiation (vary paneling resolution, constant and spherical harmonics albedo, constant or varying thermal radiation from \cref{eq:source-thermal-knocke,eq:source-thermal-lemoine}, dynamic/static paneling)
       \item For target, switch to paneled model with/without self-shadowing
+      \item Add multiple occultation
       \item Compare mean difference and RMS difference w.r.t. baseline in radial, cross-track and along-track directions after propagation arc
       \item Compare Keplerian orbits w.r.t. baseline after propagation arc
       \item Measure performance impact of increased level of detail through wall-clock and/or CPU time
    \end{itemize}
 \end{itemize}
+
+
+
+
+
+
+
+\section{Code design}
+All models presented in \cref{sec:models} will be implemented. The following Python-like pseudocode shows the classes and their interactions. The code is not complete but only contains parts relevant for radiation pressure computations.
+
+Design decisions I am uncertain about:
+\begin{itemize}
+   \item \pythoninline{class RadiationPressureAcceleration} bears the main responsibility of combining source and target information, which allows sources and targets to be agnostic of each other. This includes occultation calculations between source and target (occultation calculations for albedo are handled by \pythoninline{class PaneledRadiationSourceInterface}) Is it too much responsibility for one class?
+   \item Both source geometry and emitted/reflected radiation models are implemented in \\ \pythoninline{class PaneledRadiationSourceInterface}, even though they are separate concerns and can be applied in various combinations. Multiple source models for albedo and thermal radiation are implemented in the same class, accessible through switches (Lines 112--119). Alternatively, each of \cref{eq:source-albedo-paneled,eq:source-thermal-knocke,eq:source-thermal-lemoine} could be implemented in separate classes, which would introduce too much unnecessary complexity in my opinion.
+\end{itemize}
+
+\inputminted{python}{code_design.py}
+
 
 
 
@@ -209,6 +278,10 @@ A minimum viable version will be implemented first, including only a point sourc
       \item Optimize
    \end{enumerate}
 \end{enumerate}
+
+
+
+
 
 
 

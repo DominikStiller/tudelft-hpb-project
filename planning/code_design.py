@@ -103,13 +103,13 @@ class PaneledRadiationSourceInterface(RadiationSourceInterface):
 
          sourcePosition = source.position + panel.center
          distanceSourceToTarget = (targetPosition - sourcePosition).norm()
-         # for received radiation at panel
-         shadowFunction = calculateShadowFunction(originalSource, occultingBodies, panel.center)
 
          albedoIrradiance = 0
          thermalIrradiance = 0
 
          if modelSettings & ALBEDO:
+            # for received radiation at panel
+            shadowFunction = calculateShadowFunction(originalSource, occultingBodies, panel.center)
             albedoIrradiance = \
                shadowFunction * panel.albedo * ...  # albedo radiation calculation, Eq. 2
          if modelSettings & THERMAL_KNOCKE:
