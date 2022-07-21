@@ -67,7 +67,7 @@ $\nu\in[0,1]$ is the shadow function, scaling the received irradiance according 
    \label{fig:albedo-geometry}
 \end{figure}
 
-Albedo radiation, reflected by planet surfaces, is much smaller but still significant. Albedo requires knowledge of properties of the radiation source (for our intents and purposes, the Sun) and the reflecting body. The solar irradiance $E_s$ and angle between reflecting surface normal and Sun $\theta_s$ determine the incident irradiance onto the source surface element $dA$. The reflected radiation depends on the albedo distribution $a=a(\lambda, \phi)$ which may vary with longitude $\lambda$ and latitude $\phi$. The received radiation depends on the view angle $\alpha$, which is the angle between the surface normals of source and target. This geometry is shown in \cref{fig:albedo-geometry}. For Earth, Lambertian reflectance is a good assumption. The irradiance from $dA$ at the target due to albedo is then given by~\cite{Knocke1988}:
+Albedo radiation, reflected by planet surfaces, is much smaller but still significant. Albedo requires knowledge of properties of the radiation source (for our intents and purposes, the Sun) and the reflecting body. The solar irradiance $E_s$ and angle between reflecting surface normal and Sun $\theta_s$ determine the incident irradiance onto the source surface element $dA$. The reflected radiation depends on the albedo distribution $a=a(\lambda, \phi)$ which may vary with longitude $\lambda$ and latitude $\phi$. The received radiation depends on the view angle $\alpha$, which is the angle between the surface normals of source and target. This geometry is shown in \cref{fig:albedo-geometry}. The reflected radiance depends on the reflectance type. For Earth, purely diffuse Lambertian reflectance is a fair assumption~\cite{Knocke1988}. More sophisticated reflectance considering land cover exist, for example using kernel-based bidirectional reflectance distribution functions (BRDF) as decribed by \textcite{Lucht2000}. The irradiance from $dA$ at the target due to albedo is then given by~\cite{Knocke1988}:
 \begin{align}\label{eq:source-albedo-paneled}
    E = a\cos\theta_s E_s\frac{dA\cos\alpha}{\pi \norm{\vb r}^2}
 \end{align}
@@ -89,7 +89,7 @@ Alternatively, a latitude- and local time-dependent temperature distribution of 
 \end{align}
 where $T_\text{max}=\SI{375}{K}$ and $T_\text{min}=\SI{100}{K}$. Note that the maximum irradiance from \cref{eq:source-thermal-lemoine} is about four times higher than that from \cref{eq:source-thermal-knocke} since $\sigma T_\text{max}^4 \approx E_s$, but varies as the $dA$ moves away from the subsolar point ($\theta_s$ increases) and cools down.
 
-Instead of modeling outgoing planetary fluxes, they can also be data-based from observations. For Earth, CERES provides time series for shortwave and longwave fluxes with up to hourly and \ang{1} resolution~\cite[]{Doelling2016}. For the Moon, irradiance spectra have been published by \textcite{Kieffer2005} and \textcite{Sun2021}. However, they are constant in time and provide a single spectrum for only the Earth-facing lunar side. Therefore, they are of little use for radiation pressure models in lunar orbits, but can be used for Earth orbits.
+Instead of modeling outgoing planetary fluxes, they can also be observation-based. For Earth, CERES provides time series for shortwave and longwave fluxes with up to hourly and \ang{1} resolution~\cite[]{Doelling2016}. For the Moon, irradiance spectra have been published by \textcite{Kieffer2005} and \textcite{Sun2021}. However, they are constant in time and provide a single spectrum for only the Earth-facing lunar side. Therefore, they are of little use for radiation pressure models in lunar orbits, but can be used for Earth orbits.
 
 
 
@@ -99,7 +99,7 @@ The \emph{cannonball model} is the simplest model for target acceleration due to
    \vb a = C_r \frac{A}{m} \frac{E}{c} \vu r
 \end{align}
 
-A more sophisticated paneled target model discretizes the spacecraft into $n$ panels with area $A$ and normal vector $\vb n$. This also means that the incidence angle $\theta$ differs per panel. Their surface is characterized by the absorptivity $C_a$, diffuse reflectivity $C_d$ and specular reflectivity $C_s$, which obey $C_a + C_d + C_s = 1$. Anisotropy can be accounted for using bidirectional reflectance distribution functions (BRDF) as described by \textcite{Wetterer2014}. However, we assume Lambertian diffuse reflectance and instantaneous Lambertian reradiation of absorbed radiation.  Then the acceleration of the whole target due to all target panels and a single source is given by~\cite{Montenbruck2014}:
+A more sophisticated paneled target model discretizes the spacecraft into $n$ panels with area $A$ and normal vector $\vb n$. This also means that the incidence angle $\theta$ differs per panel. Their surface is characterized by the absorptivity $C_a$, diffuse reflectivity $C_d$ and specular reflectivity $C_s$, which obey $C_a + C_d + C_s = 1$. Anisotropy can be accounted for using BRDFs as described by \textcite{Wetterer2014}. However, we assume Lambertian diffuse reflectance and instantaneous Lambertian reradiation of absorbed radiation.  Then the acceleration of the whole target due to all target panels and a single source is given by~\cite{Montenbruck2014}:
 \begin{align}
    \vb a = \frac{1}{m} \frac{E}{c} \sum_{j=1}^n A \cos\theta \left[(C_a + C_d)\left(\vu r - \frac{2}{3} \vb n\right) - 2 C_s \cos\theta \, \vb n \right]
 \end{align}
@@ -118,7 +118,7 @@ where $E$ is the irradiance due to the $i$-th source panel.
 
 
 \section{Options}
-Radiation pressure models range from the simple baseline model to our extended model, but even more configuration options are possible. An extensive overview over options for radiation pressure modeling is given in \cite[Sec.~2]{Vielberg2020}. This list contains all options that have been explored in literature and that Tudat may want to support in the future, hence provisions for extensibility should be made. However, only the \textbf{bold options} will be supported in this project.
+Radiation pressure models range from the simple baseline model to our extended model, but even more configuration options are possible. An extensive overview over options for radiation pressure modeling is given in \cite[Sec.~2]{Vielberg2020}. This list contains all options that have been explored in literature and that Tudat may want to support in the future, hence provisions for extensibility should be made. However, only the \textbf{bold options} will be implemented in this project.
 
 \begin{itemize}
    \item Body:
@@ -144,7 +144,7 @@ Radiation pressure models range from the simple baseline model to our extended m
       \item \textbf{Paneling resolution}
       \item \textbf{Static or dynamic paneling}
       \item \textbf{Occultation of albedo panels}
-      \item Data-based fluxes (like CERES measurements) instead of modeled fluxes
+      \item Observation-based fluxes (like CERES measurements) instead of modeled fluxes
    \end{itemize}
    \item Cannonball target:
    \begin{itemize}
@@ -243,7 +243,6 @@ All models presented in \cref{sec:models} will be implemented. The following Pyt
 Design decisions I am uncertain about:
 \begin{itemize}
    \item \pythoninline{class RadiationPressureAcceleration} bears the main responsibility of combining source and target information, which allows sources and targets to be agnostic of each other. This includes occultation calculations between source and target (occultation calculations for albedo are handled by \pythoninline{class PaneledRadiationSourceInterface}) Is it too much responsibility for one class?
-   \item Both source geometry and emitted/reflected radiation models are implemented in \\ \pythoninline{class PaneledRadiationSourceInterface}, even though they are separate concerns and can be applied in various combinations. Multiple source models for albedo and thermal radiation are implemented in the same class, accessible through switches (Lines 112--119). Alternatively, each of \cref{eq:source-albedo-paneled,eq:source-thermal-knocke,eq:source-thermal-lemoine} could be implemented in separate classes, which would introduce too much unnecessary complexity in my opinion.
 \end{itemize}
 
 \inputminted{python}{code_design.py}
