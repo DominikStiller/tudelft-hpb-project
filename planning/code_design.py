@@ -7,20 +7,17 @@ class Body:
    mass: double
 
    # List of all sources originating from this body
-   # For sun: PointRadiationSourceInterface for direct solar radiation
-   # For planets: PaneledRadiationSourceInterface for albedo + thermal radiation
+   # For sun: PointRadiationSourceModel for direct solar radiation
+   # For planets: PaneledRadiationSourceModel for albedo + thermal radiation
    # For spacecraft: -
-   radiationSourceInterface: RadiationSourceInterface
+   radiationSourceModel: RadiationSourceModel
 
-   # Target interface (for bodies undergoing radiation pressure acceleration)
+   # Target model (for bodies undergoing radiation pressure acceleration)
    # For sun: -
    # For planets: -
-   # For spacecraft: CannonballRadiationPressureTargetInterface or
-   #    PaneledRadiationPressureTargetInterface
-   radiationPressureTargetInterface: RadiationPressureTargetInterface
-
-   temperatureDistribution: TemperatureDistribution  # possible make this a body property
-                                                     # for thermal radiation
+   # For spacecraft: CannonballRadiationPressureTargetModel or
+   #    PaneledRadiationPressureTargetModel
+   radiationPressureTargetModel: RadiationPressureTargetModel
 
 
 class RadiationPressureAcceleration(AccelerationModel3d):
@@ -29,25 +26,37 @@ class RadiationPressureAcceleration(AccelerationModel3d):
    """
    source: Body  # e.g. Sun
    target: Body  # e.g. LRO
-   occultingBodies: list[Body]  # e.g. Earth and Moon
+   occultationModel: OccultationModel
 
    def updateMembers(currentTime: double) -> void:
       """"Evaluate radiation pressure acceleration at current time step"""
       force = Vector3.Zero()
       # Iterate over all source panels and their fluxes
-      for sourceIrradiance, sourceCenter in source.radiationSourceInterface \
+      for sourceIrradiance, sourceCenter in source.radiationSourceModel \
                                  .evaluateIrradianceAtPosition(target.position): # i=1..m
          sourceToTargetDirection = (target.position - sourceCenter).normalize()
-         sourceIrradiance *= calculateShadowFunction(source, occultingBodies, target)
+         # rotate sourceToTargetDirection to body-fixed frame
+         sourceIrradiance = occultationModel.applyOccultation(sourceIrradiance)
          force += target.evaluateRadiationPressureForce(sourceIrradiance,
                                                          sourceToTargetDirection)
+      # rotate force to global frame
       currentAcceleration = force / target.mass
 
 
-def calculateShadowFunction(occultedBody: Body, occultingBodies: list[Body], \
-                              targetBody: Body) -> double:
-   # Calculate using Montenbruck 2000 or Zhang 2019 equations
-   # Compared to current function in Tudat, takes multiple occulting bodies
+abstract class OccultationModel:
+   occultingBodies: list[Body]  # e.g. Earth and Moon
+
+   def applyOccultation(sourceIrradiance: double, occultedBody: Body, targetBody: Body) -> double:
+      pass
+
+
+abstract class ShadowFunctionOccultation:
+   def applyOccultation(irradiance: double, occultedBody: Body, targetBody: Body) -> double:
+      # Calculate using Montenbruck 2000 or Zhang 2019 equations
+      # Compared to current function in Tudat, takes multiple occulting bodies
+      shadowFunction = ...
+      irradiance *= shadowFunction
+      return irradiance
 
 
 abstract class ReflectionLaw:
@@ -59,8 +68,12 @@ abstract class ReflectionLaw:
       reflectedFraction = ...  # [1 / sr]
       return reflectedFraction
 
+   def evaluateReactionVector(surfaceNormal: Vector3, incomingDirection: Vector3) -> Vector3:
+      # integrates Wetterer Eq 2
+
 
 class LambertianReflectionLaw(ReflectionLaw):
+   # Possibly subclass of SpecularDiffuseMixReflectionLaw
    reflectance: double  # identical with albedo
 
    def evaluateReflectedFraction(surfaceNormal: Vector3, incomingDirection: Vector3,
@@ -68,15 +81,24 @@ class LambertianReflectionLaw(ReflectionLaw):
       return reflectance / PI
 
 
+class SpecularDiffuseMixReflectionLaw(ReflectionLaw):
+   absorptivity: double
+   specularReflectivity: double
+   diffuseReflectivity: double
+
+   def evaluateReactionVector(surfaceNormal: Vector3, incomingDirection: Vector3) -> Vector3:
+      # evaluates Wetterer Eq 5
+
+
 ################################################################################################
 #       SOURCES                                                                                #
 ################################################################################################
 
-abstract class RadiationSourceInterface:
-   source: Body  # The source that this interface belongs to
+abstract class RadiationSourceModel:
+   source: Body  # The source that this model belongs to
                  # For albedo, this is the reflecting body, not the Sun
 
-   def evaluateIrradianceAtPosition(targetPosition: Vector3) -> list[tuple[double, Vector3]]:
+   def evaluateIrradianceAtPosition(targetPosition: Vector3) -> list[Vector3]:
       """
       Calculate irradiance at target position, also return source position. Subclasses
       are aware of source geometry. Return a list of tuples of flux and origin to
@@ -88,52 +110,53 @@ abstract class RadiationSourceInterface:
 #===============================================================================================
 #       Point radiation source
 #===============================================================================================
-class PointRadiationSourceInterface(RadiationSourceInterface):
+class IsotropicPointRadiationSourceModel(RadiationSourceModel):
    """Point source (for Sun)"""
-   radiantPowerModel: RadiantPowerModel
+   luminosityModel: LuminosityModel
 
    def evaluateIrradianceAtPosition(targetPosition: Vector3) -> list[tuple[double, Vector3]]:
       sourcePosition = source.position
       distanceSourceToTarget = (targetPosition - sourcePosition).norm()
-      radiantPower = radiantPowerModel.evaluateRadiantPower()
-      irradiance = radiantPower / (4 * PI * distanceSourceToTarget**2)  # Eq. 1
+      luminosity = luminosityModel.evaluateLuminosity()
+      irradiance = luminosity / (4 * PI * distanceSourceToTarget**2)  # Eq. 1
       return [(irradiance, sourcePosition)]
 
 
-abstract class RadiantPowerModel:
+abstract class LuminosityModel:
    """Gives radiant power for a point source"""
 
-   def evaluateRadiantPower() -> double:
+   def evaluateLuminosity() -> double:
       pass
 
 
-class GivenRadiantPowerModel(RadiantPowerModel):
+class ConstantLuminosityModel(LuminosityModel):
    """Gives radiant power directly"""
-   radiantPower: double
+   luminosity: double
 
-   def evaluateRadiantPower():
-      return radiantPower
+   def evaluateLuminosity():
+      return luminosity
 
 
-class IrradianceRadiantPowerModel(RadiantPowerModel):
+class IrradianceLuminosityModel(LuminosityModel):
    """Gives radiant power from irradiance at certain distance (e.g., TSI at 1 AU)"""
    irradianceAtDistance: double  # could also be a time series from TSI observations
    distance: double
 
-   def evaluateRadiantPower():
-      radiantPower = irradianceAtDistance * 4 * PI * distance
-      return radiantPower
+   def evaluateLuminosity():
+      luminosity = irradianceAtDistance * 4 * PI * distance
+      return luminosity
 
 
 #===============================================================================================
 #       Paneled radiation source
 #===============================================================================================
-class PaneledRadiationSourceInterface(RadiationSourceInterface):
+class PaneledRadiationSourceModel(RadiationSourceModel):
    """Paneled sphere (for planet albedo + thermal radiation)"""
    originalSource: Body  # Usually the Sun, from where incoming radiation originates
    occultingBodies: list[Body]  # For Moon as source, only Earth occults
 
    panels: list[SourcePanel]
+   radiationModels: list[RadiationModel]
 
    def _generatePanels():
       # Panelize body and evaluate albedo for panels. For static paneling
@@ -148,16 +171,13 @@ class PaneledRadiationSourceInterface(RadiationSourceInterface):
       # (possibly with caching), or create separate class
       ret = []
       for panel in panels: # i=1..m
-         if not isVisible(panel, targetPosition):
-            # Panel hidden at target position
-            break
-
          sourcePosition = panel.absoluteCenter
          distanceSourceToTarget = (targetPosition - sourcePosition).norm()
 
          irradiance = 0
-         for radiationModel in panel.radiationModels:
-            irradiance += radiationModel.evaluateIrradianceAtPosition()
+         for radiationModel in radiationModels:
+            irradiance += radiationModel.evaluateIrradianceAtPosition(
+               panel, targetPosition)
 
          ret.append((irradiance, sourcePosition))
       return ret
@@ -167,9 +187,9 @@ class RadiationSourcePanel:
    area: double
    relativeCenter: Vector3  # Panel center relative to source center
    absoluteCenter: Vector3  # Panel center relative to global origin
-   normal: Vector3
-
-   radiationModels: list[RadiationModel]
+   normal: Vector3  # body-fixed
+   longitude: double
+   latitude: center
 
 
 abstract class RadiationModel:
@@ -182,84 +202,94 @@ abstract class RadiationModel:
 
 
 class AlbedoRadiationModel(RadiationModel):
-   reflectionLaw: ReflectionLaw  # usually LambertianReflectionLaw
+   # Usually LambertianReflectionLaw
+   reflectionLaw: Function[RadiationSourcePanel -> ReflectionLaw]
 
    def evaluateIrradianceAtPosition(panel: RadiationSourcePanel, targetPosition: Vector3) \
          -> double:
+      if not isVisible(panel, targetPosition):
+            # Panel hidden at target position
+            return 0
+
       # for received radiation at panel
       shadowFunction = calculateShadowFunction(originalSource, occultingBodies, panel.center)
 
       reflectedFraction = reflectionLaw.evaluateReflectedFraction(panel.normal,
          originalSourceDirection, targetDirection)
       albedoIrradiance = \
-         shadowFunction * panel.albedo * ...  # albedo radiation calculation, Eq. 2
+         shadowFunction * ...  # albedo radiation calculation, Eq. 2
       return albedoIrradiance
 
 
 class KnockeThermalRadiationModel(RadiationModel):
+   emissivity: double
+   temperature: double
+
    def evaluateIrradianceAtPosition(panel: RadiationSourcePanel, targetPosition: Vector3) \
          -> double:
-      thermalIrradiance = panel.emissivity * ...  # thermal radiation calculation, Eq. 3
+      thermalIrradiance = emissivity * ...  # thermal radiation calculation, Eq. 3
       return thermalIrradiance
 
 
 class LemoineThermalRadiationModel(RadiationModel):
+   emissivity: double
+
    def evaluateIrradianceAtPosition(panel: RadiationSourcePanel, targetPosition: Vector3) \
          -> double:
       temperature = max(...)
-      thermalIrradiance = panel.emissivity * ...  # thermal radiation calculation, Eq. 4
+      thermalIrradiance = emissivity * ...  # thermal radiation calculation, Eq. 4
       return thermalIrradiance
 
 
 class ObservedRadiationModel(RadiationModel):
-   """Based on measured fluxes (e.g. from CERES, also requires angular distribution model)"""
+   """Based on observed fluxes (e.g. from CERES, also requires angular distribution model)"""
    def evaluateIrradianceAtPosition(targetPosition: Vector3):
-      # 
+      observedIrradiance = ...
+      return observedIrradiance
 
 
 ################################################################################################
 #       TARGETS                                                                                #
 ################################################################################################
 
-abstract class RadiationPressureTargetInterface:
+abstract class RadiationPressureTargetModel:
    def evaluateRadiationPressureForce(sourceIrradiance: double,
-                                      sourceToTargetDirection: Vector3):
+                                      sourceToTargetDirection: Vector3) -> Vector3:
       """
       Calculate radiation pressure force due to a single source panel onto whole target
       """
       pass
 
 
-class CannonballRadiationPressureTargetInterface(RadiationPressureTargetInterface):
+class CannonballRadiationPressureTargetModel(RadiationPressureTargetModel):
    area: double
    coefficient: double
 
    def evaluateRadiationPressureForce(sourceIrradiance: double,
-                                      sourceToTargetDirection: Vector3):
+                                      sourceToTargetDirection: Vector3) -> Vector3:
       force = sourceIrradiance * area * coefficient * ...
       return force
 
 
-class PaneledRadiationPressureTargetInterface(RadiationPressureTargetInterface):
+class PaneledRadiationPressureTargetModel(RadiationPressureTargetModel):
    panels: List[TargetPanel]
 
    def evaluateRadiationPressureForce(sourceIrradiance: double,
-                                      sourceToTargetDirection: Vector3):
+                                      sourceToTargetDirection: Vector3) -> Vector3:
       force = Vector3.Zero()
       for panel in panels: # j=1..n
          if not isVisible(panel, sourceToTargetDirection):
             # Panel pointing away from source
             break
-
-         force += sourceIrradiance * panel.area * ...
+         
+         reactionDirection = panel.reflectionLaw.evaluateReactionDirection(panel.normal, sourceToTargetDirection)
+         force += sourceIrradiance * panel.area * reactionDirection * ...
       return force
 
 
 class TargetPanel:
    area: double
-   normal: Vector3
+   normal: Vector3  # body-fixed
+   center: Vector3  # body-fixed
 
-   absorptivity: double
-   specularReflectivity: double
-   diffuseReflectivity: double
    reflectionLaw: ReflectionLaw

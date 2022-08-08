@@ -52,11 +52,11 @@ We treat all radiation equally as total flux, independently of wavelength. While
 
 
 \subsection{Sources}
-The most significant source of radiation pressure in Earth and lunar orbits is direct solar radiation. The solar irradiance $E_s$ can be found through the radiant power of the sun or total solar irradiance (TSI) at 1 AU:
+The most significant source of radiation pressure in Earth and lunar orbits is direct solar radiation. The solar irradiance $E_s$ can be found through the luminosity of the sun or total solar irradiance (TSI) at 1 AU:
 \begin{align}
-   E_s = \nu\frac{\SI{3.839e26}{W}}{4\pi \norm{\vb r}^2} = \nu E_{s,\SI{1}{AU}}\frac{\SI{1}{AU}}{\norm{\vb r}^2}
+   E_s = \nu\frac{L_s}{4\pi \norm{\vb r}^2} = \nu E_{s,\SI{1}{AU}}\frac{\SI{1}{AU}}{\norm{\vb r}^2}
 \end{align}
-This leads to the solar constant of $E_{s,\SI{1}{AU}}=\SI{1360.8}{W/m^2}$ at $\norm{\vb r}=\SI{1}{AU}$~\cite{Wild2012}. Note that this irradiance is a time average and varies due to sunspot darkening and facular brightening~\cite{Kopp2016}. Observational time series for TSI exist~\cite{Dewitte2017} such that the time-varying solar irradiance at any distance can be found using the inverse square law.
+where the solar luminosity is taken to be $L_s=\SI{3.828e26}{W}$~\cite{Prsa2016}. This leads to the solar constant of $E_{s,\SI{1}{AU}}=\SI{1360.8}{W/m^2}$ at $\norm{\vb r}=\SI{1}{AU}$~\cite{Wild2012}. Note that this luminosity and irradiance are time averages and vary due to sunspot darkening and facular brightening~\cite{Kopp2016}. Observational time series for TSI exist~\cite{Dewitte2017} such that the time-varying solar irradiance at any distance can be found using the inverse square law.
 
 $\nu\in[0,1]$ is the shadow function, scaling the received irradiance according to the visible portion of the sun, which may be occulted by other bodies. A conical model dividing space into regions of full sunlight, penumbra and umbra due to a single body is the standard~\cite{Montenbruck2000}. This model could be extended to consider (partial) occultation by two bodies as described by \textcite{Zhang2019}.
 
@@ -132,7 +132,7 @@ Radiation pressure models range from the simple baseline model to our extended m
    \end{itemize}
    \item Point source:
    \begin{itemize}
-      \item \textbf{Radiant power or TSI (constant or time-varying)}
+      \item \textbf{Luminosity or TSI (constant or time-varying)}
       \item Continuous or discrete emission spectrum (i.e. function of wavelength, binned or visible + infrared)
    \end{itemize}
    \item Paneled source:
@@ -171,7 +171,7 @@ Radiation pressure models range from the simple baseline model to our extended m
 \section{Verification \& Validation}
 Verification will check whether the models presented in this document were implemented correctly, based on manual calculations and values from literature. Validation will check whether the mathematical models themselves give sensible results. Both will be implemented as unit tests. Existing radiation pressure unit tests within Tudat will be reused and adapted to avoid regression. However, existing tests include a lot of logic that itself may be flawed. Therefore, the reworked unit tests will be more straightforward, at the cost of duplicate code.
 
-The lunar radiation model can be rougly validated with the average lunar irradiance in LEO of \SI{977}{W/m^2}~\cite{Matthews2008}. To validate the simulation setup, I will also propagate LRO's orbit and check consistency with ephemerides from SPICE SPKs. While (possibly significant) differences are expected in both, the error should be reasonable and orders of magnitude of results similar.
+The lunar radiation model can be rougly validated with the average lunar irradiance in LEO of \SI{977}{W/m^2}~\cite{Matthews2008} and a peak lunar irradiance in LRO's lunar orbit of \SI{1330}{W/m^2}~\cite{Tooley2010}. To validate the simulation setup, I will also propagate LRO's orbit and check consistency with ephemerides from SPICE SPKs. While (possibly significant) differences are expected in both, the error should be reasonable and orders of magnitude of results similar.
 
 
 
@@ -207,9 +207,10 @@ The simulation setup for gathering results will be varied to investigate differe
    \end{itemize}
    \item LRO:
    \begin{itemize}
-      \item Propagated (translational and rotational) for 226 min, corresponds to about 2 orbital revolutions
-      \item Initial ephemeris from LRO reprocessed spacecraft ephemeris (\texttt{fdf36\_...}) during regular science mission at 50 km altitude, ensure no stationkeeping occured during propagation period and Sun-beta angle is about \ang{45} (so eclipses and no yaw maneuver will occur, cf.~\cite[Fig.~12]{Tooley2010})
-      \item Paneled radiation pressure target with areas and coefficients from \textcite{Smith2008} (assume SA is pointed towards sun, ignore HGA because incorporating CK SPICE kernels for definitive HGA orientation requires too much work)
+      \item Propagated (translational) for 565 min, corresponds to about 5 orbital revolutions
+      \item Rotational ephemeris
+      \item Initial ephemeris from LRO reprocessed spacecraft ephemeris (\texttt{fdf36\_...}) during regular science mission at 50 km altitude, ensure no stationkeeping but eclipses occured during propagation period (start at 26 June 2010 06:00:00)
+      \item Paneled radiation pressure target with areas and coefficients from \textcite{Smith2008} (assume SA is pointed towards Sun and HGA is pointer towards Earth)
       \item No self-shadowing, unless time permits
    \end{itemize}
 \end{itemize}
@@ -240,11 +241,6 @@ The result analysis is inspired by \textcite{Vielberg2020} for LEO satellites, b
 \section{Code design}
 All models presented in \cref{sec:models} will be implemented. The following Python-like pseudocode shows the classes and their interactions. The code is not complete but only contains parts relevant for radiation pressure computations.
 
-Design decisions I am uncertain about:
-\begin{itemize}
-   \item \pythoninline{class RadiationPressureAcceleration} bears the main responsibility of combining source and target information, which allows sources and targets to be agnostic of each other. This includes occultation calculations between source and target (occultation calculations for albedo are handled by \pythoninline{class PaneledRadiationSourceInterface}) Is it too much responsibility for one class?
-\end{itemize}
-
 \inputminted{python}{code_design.py}
 
 
@@ -258,21 +254,22 @@ A minimum viable version will be implemented first, including only a point sourc
 \begin{enumerate}
    \item Implement baseline model
    \begin{enumerate}
-      \item Implement \pythoninline{class PointRadiationSourceInterface} with abstract base class
-      \item Implement \pythoninline{class CannonballRadiationPressureTargetInterface} with abstract base class
+      \item Implement \pythoninline{class IsotropicPointRadiationSourceModel} with abstract base class
+      \item Implement \pythoninline{class CannonballRadiationPressureTargetModel} with abstract base class
       \item Implement \pythoninline{class RadiationPressureAcceleration} without occultation
+      \item Implement LRO simulation (baseline model)
       \item Verify functionality and check if design makes sense
    \end{enumerate}
-   \item Implement \pythoninline{class PaneledRadiationPressureTargetInterface} 
-   \item Implement \pythoninline{class PaneledRadiationSourceInterface} with static paneling (constant albedo until we get access to DLAM-1)
+   \item Implement \pythoninline{class PaneledRadiationPressureTargetModel} 
+   \item Implement \pythoninline{class PaneledRadiationSourceModel} with static paneling (constant albedo until we get access to DLAM-1)
    \item Implement \pythoninline{class OccultationGeometry} for single occulting body and include in \\ \pythoninline{class RadiationPressureAcceleration}
-   \item Implement LRO simulation (baseline model and extended model) as described in \cref{sec:result-analysis}
+   \item Implement LRO simulation (extended model) as described in \cref{sec:result-analysis}
    \item Validate complete simulation
    \item Implement extra items, if time permits
    \begin{enumerate}
       \item Implement spherical harmonics lunar albedo model DLAM-1 from \textcite{Floberghagen1999}, if we get access
       \item Implement occultation by two bodies from \textcite{Zhang2019}
-      \item Implement \pythoninline{class PaneledRadiationSourceInterface} with dynamic paneling
+      \item Implement \pythoninline{class PaneledRadiationSourceModel} with dynamic paneling
       \item Implement self-shadowing from \textcite{Mazarico2009}
       \item Optimize
    \end{enumerate}
