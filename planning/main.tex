@@ -87,7 +87,7 @@ Alternatively, a latitude- and local time-dependent temperature distribution of 
    \qquad
    T = \max\left(T_\text{max}(\cos\theta_s)^{1/4}, T_\text{min}\right)
 \end{align}
-where $T_\text{max}=\SI{375}{K}$ and $T_\text{min}=\SI{100}{K}$. Note that the maximum irradiance from \cref{eq:source-thermal-lemoine} is about four times higher than that from \cref{eq:source-thermal-knocke} since $\sigma T_\text{max}^4 \approx E_s$, but varies as the $dA$ moves away from the subsolar point ($\theta_s$ increases) and cools down.
+where $T_\text{max}=\SI{375}{K}$ and $T_\text{min}=\SI{100}{K}$. Note that the maximum irradiance from \cref{eq:source-thermal-lemoine} is about four times higher than that from \cref{eq:source-thermal-knocke} since $\sigma T_\text{max}^4 \approx E_s$, but the irradiance from \cref{eq:source-thermal-lemoine} varies as the $dA$ moves away from the subsolar point ($\theta_s$ increases) and cools down.
 
 Instead of modeling outgoing planetary fluxes, they can also be observation-based. For Earth, CERES provides time series for shortwave and longwave fluxes with up to hourly and \ang{1} resolution~\cite[]{Doelling2016}. For the Moon, irradiance spectra have been published by \textcite{Kieffer2005} and \textcite{Sun2021}. However, they are constant in time and provide a single spectrum for only the Earth-facing lunar side. Therefore, they are of little use for radiation pressure models in lunar orbits, but can be used for Earth orbits.
 
@@ -171,7 +171,7 @@ Radiation pressure models range from the simple baseline model to our extended m
 \section{Verification \& Validation}
 Verification will check whether the models presented in this document were implemented correctly, based on manual calculations and values from literature. Validation will check whether the mathematical models themselves give sensible results. Both will be implemented as unit tests. Existing radiation pressure unit tests within Tudat will be reused and adapted to avoid regression. However, existing tests include a lot of logic that itself may be flawed. Therefore, the reworked unit tests will be more straightforward, at the cost of duplicate code.
 
-The lunar radiation model can be rougly validated with the average lunar irradiance in LEO of \SI{977}{W/m^2}~\cite{Matthews2008} and a peak lunar irradiance in LRO's lunar orbit of \SI{1330}{W/m^2}~\cite{Tooley2010}. To validate the simulation setup, I will also propagate LRO's orbit and check consistency with ephemerides from SPICE SPKs. While (possibly significant) differences are expected in both, the error should be reasonable and orders of magnitude of results similar.
+The lunar radiation model can be rougly validated with the peak lunar irradiance in LRO's lunar orbit of \SI{1330}{W/m^2}~\cite{Tooley2010}. To validate the simulation setup, I will also propagate LRO's orbit and check consistency with ephemerides from SPICE SPKs. While (possibly significant) differences are expected in both, the error should be reasonable and orders of magnitude of results similar.
 
 
 
@@ -228,7 +228,7 @@ The result analysis is inspired by \textcite{Vielberg2020} for LEO satellites, b
       \item Add multiple occultation
       \item Compare mean difference and RMS difference w.r.t. baseline in radial, cross-track and along-track directions after propagation arc
       \item Compare Keplerian orbits w.r.t. baseline after propagation arc
-      \item Measure performance impact of increased level of detail through wall-clock and/or CPU time
+      \item Measure performance impact of increased level of detail through wall-clock and/or CPU time, and memory footprint
    \end{itemize}
 \end{itemize}
 
@@ -240,6 +240,8 @@ The result analysis is inspired by \textcite{Vielberg2020} for LEO satellites, b
 
 \section{Code design}
 All models presented in \cref{sec:models} will be implemented. The following Python-like pseudocode shows the classes and their interactions. The code is not complete but only contains parts relevant for radiation pressure computations.
+
+All radiation source and target calculations are performed in their respective local frames. The \pythoninline{class RadiationPressureAcceleration} handles reference frame transformations between them. This simplifies and decouples source and target code.
 
 \inputminted{python}{code_design.py}
 

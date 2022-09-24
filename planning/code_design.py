@@ -30,12 +30,17 @@ class RadiationPressureAcceleration(AccelerationModel3d):
 
    def updateMembers(currentTime: double) -> void:
       """"Evaluate radiation pressure acceleration at current time step"""
+
+      # rotate target position to source-fixed frame
+      irradianceList = source.radiationSourceModel \
+                                 .evaluateIrradianceAtPosition(target.position)
+      # rotate irradiances to target-fixed frame
+
       force = Vector3.Zero()
       # Iterate over all source panels and their fluxes
-      for sourceIrradiance, sourceCenter in source.radiationSourceModel \
-                                 .evaluateIrradianceAtPosition(target.position): # i=1..m
+      for sourceIrradiance, sourceCenter in irradianceList: # i=1..m
          sourceToTargetDirection = (target.position - sourceCenter).normalize()
-         # rotate sourceToTargetDirection to body-fixed frame
+         # rotate sourceToTargetDirection to target-fixed frame
          sourceIrradiance = occultationModel.applyOccultation(sourceIrradiance)
          force += target.evaluateRadiationPressureForce(sourceIrradiance,
                                                          sourceToTargetDirection)
@@ -116,34 +121,34 @@ class IsotropicPointRadiationSourceModel(RadiationSourceModel):
 
    def evaluateIrradianceAtPosition(targetPosition: Vector3) -> list[tuple[double, Vector3]]:
       sourcePosition = source.position
-      distanceSourceToTarget = (targetPosition - sourcePosition).norm()
+      distanceSourceToTarget = targetPosition.norm()
       luminosity = luminosityModel.evaluateLuminosity()
       irradiance = luminosity / (4 * PI * distanceSourceToTarget**2)  # Eq. 1
       return [(irradiance, sourcePosition)]
 
 
 abstract class LuminosityModel:
-   """Gives radiant power for a point source"""
+   """Gives luminosity for a point source"""
 
    def evaluateLuminosity() -> double:
       pass
 
 
 class ConstantLuminosityModel(LuminosityModel):
-   """Gives radiant power directly"""
+   """Gives luminosity directly"""
    luminosity: double
 
    def evaluateLuminosity():
       return luminosity
 
 
-class IrradianceLuminosityModel(LuminosityModel):
-   """Gives radiant power from irradiance at certain distance (e.g., TSI at 1 AU)"""
+class IrradianceBasedLuminosityModel(LuminosityModel):
+   """Gives luminosity from irradiance at certain distance (e.g., TSI at 1 AU)"""
    irradianceAtDistance: double  # could also be a time series from TSI observations
    distance: double
 
    def evaluateLuminosity():
-      luminosity = irradianceAtDistance * 4 * PI * distance
+      luminosity = irradianceAtDistance * 4 * PI * distance**2
       return luminosity
 
 
@@ -156,7 +161,6 @@ class PaneledRadiationSourceModel(RadiationSourceModel):
    occultingBodies: list[Body]  # For Moon as source, only Earth occults
 
    panels: list[SourcePanel]
-   radiationModels: list[RadiationModel]
 
    def _generatePanels():
       # Panelize body and evaluate albedo for panels. For static paneling
@@ -169,13 +173,14 @@ class PaneledRadiationSourceModel(RadiationSourceModel):
       # For dynamic paneling (depending on target position, spherical cap centered
       # at subsatellite point as in Knocke 1988), could regenerate panels here
       # (possibly with caching), or create separate class
+      sourceBodyPosition = source.position
+
       ret = []
       for panel in panels: # i=1..m
-         sourcePosition = panel.absoluteCenter
-         distanceSourceToTarget = (targetPosition - sourcePosition).norm()
+         sourcePosition = sourceBodyPosition + panel.relativeCenter
 
          irradiance = 0
-         for radiationModel in radiationModels:
+         for radiationModel in panel.radiationModels:
             irradiance += radiationModel.evaluateIrradianceAtPosition(
                panel, targetPosition)
 
@@ -186,24 +191,20 @@ class PaneledRadiationSourceModel(RadiationSourceModel):
 class RadiationSourcePanel:
    area: double
    relativeCenter: Vector3  # Panel center relative to source center
-   absoluteCenter: Vector3  # Panel center relative to global origin
    normal: Vector3  # body-fixed
-   longitude: double
-   latitude: center
+
+   radiationModels: list[PanelRadiationModel]
 
 
-abstract class RadiationModel:
+abstract class PanelRadiationModel:
    def evaluateIrradianceAtPosition(panel: RadiationSourcePanel, targetPosition: Vector3) \
          -> double:
       pass
 
-   def getIsotropicEmittedToReceivedIrradianceFactor():
-      return dA * cos(alpha) / (4 * PI * r**2)
 
-
-class AlbedoRadiationModel(RadiationModel):
+class AlbedoPanelRadiationModel(PanelRadiationModel):
    # Usually LambertianReflectionLaw
-   reflectionLaw: Function[RadiationSourcePanel -> ReflectionLaw]
+   reflectionLaw: ReflectionLaw
 
    def evaluateIrradianceAtPosition(panel: RadiationSourcePanel, targetPosition: Vector3) \
          -> double:
@@ -221,7 +222,8 @@ class AlbedoRadiationModel(RadiationModel):
       return albedoIrradiance
 
 
-class KnockeThermalRadiationModel(RadiationModel):
+class DelayedThermalPanelRadiationModel(PanelRadiationModel):
+   # Based on Knocke (1988)
    emissivity: double
    temperature: double
 
@@ -231,7 +233,8 @@ class KnockeThermalRadiationModel(RadiationModel):
       return thermalIrradiance
 
 
-class LemoineThermalRadiationModel(RadiationModel):
+class AngleBasedThermalPanelRadiationModel(PanelRadiationModel):
+   # Based on Lemoine (2013)
    emissivity: double
 
    def evaluateIrradianceAtPosition(panel: RadiationSourcePanel, targetPosition: Vector3) \
@@ -241,7 +244,7 @@ class LemoineThermalRadiationModel(RadiationModel):
       return thermalIrradiance
 
 
-class ObservedRadiationModel(RadiationModel):
+class ObservedPanelRadiationModel(PanelRadiationModel):
    """Based on observed fluxes (e.g. from CERES, also requires angular distribution model)"""
    def evaluateIrradianceAtPosition(targetPosition: Vector3):
       observedIrradiance = ...
