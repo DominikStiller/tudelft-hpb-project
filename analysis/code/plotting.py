@@ -37,10 +37,15 @@ def save_plot(results_folder: str, name: str, fig=None, type="pdf"):
 
 
 def format_plot(
-    xlocator=matplotlib.ticker.AutoMinorLocator(),
-    ylocator=matplotlib.ticker.AutoMinorLocator(),
+    xlocator=None,
+    ylocator=None,
     zeroline=False,
 ):
+    if not xlocator:
+        xlocator = matplotlib.ticker.AutoMinorLocator()
+    if not ylocator:
+        ylocator = matplotlib.ticker.AutoMinorLocator()
+
     fig = plt.gcf()
     for ax in fig.axes:
         if zeroline:
