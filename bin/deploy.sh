@@ -5,3 +5,7 @@ rsync -avzh --delete \
 	../tudat-bundle/ \
 	eudoxos:~/dev/tudat-bundle
 
+rsync -avzh --delete \
+	--exclude __pycache__ --exclude *.pyc --exclude ".*" --exclude /results \
+	lropy/ \
+	eudoxos:~/dev/lropy
