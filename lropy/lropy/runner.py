@@ -3,7 +3,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from threading import Lock
 
-from lropy.simulation_run import SimulationRun, TargetType
+from lropy.simulation_run import SimulationRun, TargetType, ThermalType
 
 
 class Runner:
@@ -67,10 +67,15 @@ if __name__ == "__main__":
     run = SimulationRun(Path("results"))
 
     run.simulation_start = "2010 JUN 26 06:00:00"
-    run.simulation_duration_revolutions(5)
+    run.simulation_duration = 100
+    # run.simulation_duration_revolutions(5)
     run.target_type = TargetType.Cannonball
+    run.use_occultation = True
     run.use_moon_radiation = True
     run.number_of_panels_moon = 2000
+    run.thermal_type = ThermalType.Delayed
+    run.use_instantaneous_reradiation = True
     run.step_size = 10
 
-    Runner().run_single(run)
+    print(run.write_json())
+    # Runner().run_single(run)

@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
+from typing import Self, Any
 
 from lropy.util import generate_id, generate_folder_name
 
@@ -9,6 +10,11 @@ from lropy.util import generate_id, generate_folder_name
 class TargetType(Enum):
     Cannonball = 1
     Paneled = 2
+
+
+class ThermalType(Enum):
+    Delayed = 1
+    AngleBased = 2
 
 
 class SimulationRun:
@@ -19,11 +25,15 @@ class SimulationRun:
     start_timestamp: datetime
     base_dir: Path
     save_dir: Path
+
     simulation_start: str
     simulation_duration: float
     target_type: TargetType
+    use_occultation: bool
     use_moon_radiation: bool
     number_of_panels_moon: int
+    thermal_type: ThermalType
+    use_instantaneous_reradiation: bool
     step_size: float
 
     def __init__(self, base_dir: Path, run_number: int = None):
@@ -37,6 +47,22 @@ class SimulationRun:
         else:
             self.save_dir = self.base_dir / generate_folder_name(self.start_timestamp, self.id)
 
+    @classmethod
+    def from_dict(cls, settings: dict[str, Any], base_dir: Path, run_number: int = None) -> Self:
+        run = SimulationRun(base_dir, run_number)
+
+        run.simulation_start = settings["simulation_start"]
+        run.simulation_duration_revolutions(settings["simulation_duration_rev"])
+        run.target_type = settings["target_type"]
+        run.use_occultation = settings["use_occultation"]
+        run.use_moon_radiation = settings["use_moon_radiation"]
+        run.number_of_panels_moon = settings["number_of_panels_moon"]
+        run.thermal_type = settings["thermal_type"]
+        run.use_instantaneous_reradiation = settings["use_instantaneous_reradiation"]
+        run.step_size = settings["step_size"]
+
+        return run
+
     def simulation_duration_revolutions(self, revolutions: float):
         # Averave orbit duration is 113 min
         self.simulation_duration = revolutions * 113 * 60
@@ -49,9 +75,14 @@ class SimulationRun:
                 "save_dir": str(self.save_dir.resolve()),
                 "simulation_start": self.simulation_start,
                 "target_type": self.target_type.name,
+                "use_occultation": self.use_occultation,
                 "use_moon_radiation": self.use_moon_radiation,
                 "number_of_panels_moon": (
                     self.number_of_panels_moon if self.use_moon_radiation else 0
+                ),
+                "thermal_type": (self.thermal_type.name if self.use_moon_radiation else ""),
+                "use_instantaneous_reradiation": (
+                    self.use_instantaneous_reradiation if self.use_moon_radiation else False
                 ),
                 "simulation_duration": self.simulation_duration,
                 "step_size": self.step_size,
