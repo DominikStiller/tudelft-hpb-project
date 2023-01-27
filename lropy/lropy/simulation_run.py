@@ -1,4 +1,5 @@
 import json
+import os
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
@@ -22,6 +23,7 @@ class SimulationRun:
 
     id: str
     run_number: int
+    hostname: str
     start_timestamp: datetime
     base_dir: Path
     save_dir: Path
@@ -40,6 +42,7 @@ class SimulationRun:
         self.base_dir = base_dir
         self.id = generate_id()
         self.run_number = run_number
+        self.hostname = os.getenv("HOSTNAME", "unknown")
         self.start_timestamp = datetime.now()
 
         if self.run_number is not None:
@@ -71,6 +74,7 @@ class SimulationRun:
         return json.dumps(
             {
                 "id": self.id,
+                "hostname": self.hostname,
                 "start_timestamp": self.start_timestamp.isoformat(),
                 "save_dir": str(self.save_dir.resolve()),
                 "simulation_start": self.simulation_start,

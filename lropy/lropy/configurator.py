@@ -1,26 +1,16 @@
 import itertools
 from pathlib import Path
 from typing import Any
+from abc import ABC
 
 from lropy.simulation_run import SimulationRun, TargetType, ThermalType
 from lropy.util import generate_folder_name
 
 
-class Configurator:
+class Configurator(ABC):
     """Generates runs as combinations of settings"""
-
-    def __init__(self):
-        self.settings = {
-            "simulation_start": ["2010 JUN 26 06:00:00", "2010 SEP 26 06:00:00"],
-            "simulation_duration_rev": [5],  # 565 min, about 5 orbital revolutions
-            "target_type": [TargetType.Cannonball, TargetType.Paneled],
-            "use_occultation": [False, True],
-            "use_moon_radiation": [False, True],
-            "number_of_panels_moon": [2000, 5000, 20000],
-            "thermal_type": [ThermalType.Delayed, ThermalType.AngleBased],
-            "use_instantaneous_reradiation": [False, True],
-            "step_size": [10],
-        }
+    settings: dict[str, list[Any]]
+    configuration_name: str
 
     def _get_settings(self) -> list[dict[str, Any]]:
         # Produce combinations of settings
@@ -44,10 +34,42 @@ class Configurator:
         all_settings = self._get_settings()
         print(f"Generated {len(all_settings)} run settings")
 
-        run_set_dir = Path("results") / generate_folder_name()
+        results_dir = Path("results") / (self.configuration_name + "-" + generate_folder_name())
         runs = [
-            SimulationRun.from_dict(settings, run_set_dir, i + 1)
+            SimulationRun.from_dict(settings, results_dir, i + 1)
             for i, settings in enumerate(all_settings)
         ]
 
         return runs
+
+
+class FullConfigurator(Configurator):
+    def __init__(self):
+        self.configuration_name = "full"
+        self.settings = {
+            "simulation_start": ["2010 JUN 26 06:00:00", "2010 SEP 26 06:00:00"],
+            "simulation_duration_rev": [5],  # 565 min, about 5 orbital revolutions
+            "target_type": [TargetType.Cannonball, TargetType.Paneled],
+            "use_occultation": [False, True],
+            "use_moon_radiation": [False, True],
+            "number_of_panels_moon": [2000, 5000, 20000],
+            "thermal_type": [ThermalType.Delayed, ThermalType.AngleBased],
+            "use_instantaneous_reradiation": [False, True],
+            "step_size": [10],
+        }
+
+
+class NumberOfPanelsConfigurator(Configurator):
+    def __init__(self):
+        self.configuration_name = "number_of_panels_test"
+        self.settings = {
+            "simulation_start": ["2010 JUN 26 06:00:00"],
+            "simulation_duration_rev": [2],
+            "target_type": [TargetType.Cannonball],
+            "use_occultation": [True],
+            "use_moon_radiation": [True],
+            "number_of_panels_moon": [2000, 5000, 10000, 20000, 50000],
+            "thermal_type": [ThermalType.AngleBased],
+            "use_instantaneous_reradiation": [False],
+            "step_size": [10],
+        }

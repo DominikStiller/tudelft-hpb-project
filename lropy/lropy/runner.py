@@ -69,13 +69,13 @@ if __name__ == "__main__":
     run.simulation_start = "2010 JUN 26 06:00:00"
     run.simulation_duration = 100
     # run.simulation_duration_revolutions(5)
-    run.target_type = TargetType.Cannonball
+    run.target_type = TargetType.Paneled
     run.use_occultation = True
     run.use_moon_radiation = True
     run.number_of_panels_moon = 2000
     run.thermal_type = ThermalType.Delayed
-    run.use_instantaneous_reradiation = True
+    run.use_instantaneous_reradiation = False
     run.step_size = 10
 
-    print(run.write_json())
-    # Runner().run_single(run)
+    # print(run.write_json())
+    Runner().run_single(run)
