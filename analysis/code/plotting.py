@@ -41,15 +41,22 @@ def format_plot(
     ylocator=None,
     zeroline=False,
 ):
-    if not xlocator:
-        xlocator = matplotlib.ticker.AutoMinorLocator()
-    if not ylocator:
-        ylocator = matplotlib.ticker.AutoMinorLocator()
 
     fig = plt.gcf()
     for ax in fig.axes:
         if zeroline:
             ax.axhline(0, linewidth=1.5, c="black")
+
+        if not xlocator:
+            if ax.get_xscale() == "log":
+                xlocator = matplotlib.ticker.LogLocator(base=10, subs="all", numticks=100)
+            else:
+                xlocator = matplotlib.ticker.AutoMinorLocator()
+        if not ylocator:
+            if ax.get_yscale() == "log":
+                ylocator = matplotlib.ticker.LogLocator(base=10, subs="all", numticks=100)
+            else:
+                ylocator = matplotlib.ticker.AutoMinorLocator()
 
         ax.get_xaxis().set_minor_locator(xlocator)
         ax.get_yaxis().set_minor_locator(ylocator)
