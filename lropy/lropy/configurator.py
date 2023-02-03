@@ -3,12 +3,13 @@ from pathlib import Path
 from typing import Any
 from abc import ABC
 
-from lropy.simulation_run import SimulationRun, TargetType, ThermalType
+from lropy.simulation_run import SimulationRun, TargetType, ThermalType, AlbedoDistribution
 from lropy.util import generate_folder_name
 
 
 class Configurator(ABC):
     """Generates runs as combinations of settings"""
+
     settings: dict[str, list[Any]]
     configuration_name: str
 
@@ -21,8 +22,9 @@ class Configurator(ABC):
             use_moon_radiation = single_run_settings[4]
             if not use_moon_radiation:
                 single_run_settings[5] = 0  # number_of_panels_moon
-                single_run_settings[6] = None  # thermal_type
-                single_run_settings[7] = False  # use_instantaneous_reradiation
+                single_run_settings[6] = None  # albedo_distribution_moon
+                single_run_settings[7] = None  # thermal_type
+                single_run_settings[8] = False  # use_instantaneous_reradiation
             all_run_settings.add(tuple(single_run_settings))
 
         return [
@@ -52,6 +54,7 @@ class FullConfigurator(Configurator):
             "target_type": [TargetType.Cannonball, TargetType.Paneled],
             "use_occultation": [False, True],
             "use_moon_radiation": [False, True],
+            "albedo_distribution_moon": [AlbedoDistribution.Constant, AlbedoDistribution.DLAM1],
             "number_of_panels_moon": [2000, 5000, 20000],
             "thermal_type": [ThermalType.Delayed, ThermalType.AngleBased],
             "use_instantaneous_reradiation": [False, True],

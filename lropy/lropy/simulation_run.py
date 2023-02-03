@@ -18,6 +18,11 @@ class ThermalType(Enum):
     AngleBased = 2
 
 
+class AlbedoDistribution(Enum):
+    Constant = 1
+    DLAM1 = 2
+
+
 class SimulationRun:
     """Models a single simulation run"""
 
@@ -33,6 +38,7 @@ class SimulationRun:
     target_type: TargetType
     use_occultation: bool
     use_moon_radiation: bool
+    albedo_distribution_moon: AlbedoDistribution
     number_of_panels_moon: int
     thermal_type: ThermalType
     use_instantaneous_reradiation: bool
@@ -59,6 +65,7 @@ class SimulationRun:
         run.target_type = settings["target_type"]
         run.use_occultation = settings["use_occultation"]
         run.use_moon_radiation = settings["use_moon_radiation"]
+        run.albedo_distribution_moon = settings["albedo_distribution_moon"]
         run.number_of_panels_moon = settings["number_of_panels_moon"]
         run.thermal_type = settings["thermal_type"]
         run.use_instantaneous_reradiation = settings["use_instantaneous_reradiation"]
@@ -83,6 +90,9 @@ class SimulationRun:
                 "use_moon_radiation": self.use_moon_radiation,
                 "number_of_panels_moon": (
                     self.number_of_panels_moon if self.use_moon_radiation else 0
+                ),
+                "albedo_distribution_moon": (
+                    self.albedo_distribution_moon.name if self.use_moon_radiation else ""
                 ),
                 "thermal_type": (self.thermal_type.name if self.use_moon_radiation else ""),
                 "use_instantaneous_reradiation": (

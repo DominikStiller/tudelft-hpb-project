@@ -31,5 +31,5 @@ def get_average_load(normalize=True):
     return load_averages[2]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(get_average_load())
