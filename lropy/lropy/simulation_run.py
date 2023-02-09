@@ -23,6 +23,11 @@ class AlbedoDistribution(Enum):
     DLAM1 = 2
 
 
+class PanelingType(Enum):
+    Static = 1
+    Dynamic = 2
+
+
 class SimulationRun:
     """Models a single simulation run"""
 
@@ -38,10 +43,11 @@ class SimulationRun:
     target_type: TargetType
     use_occultation: bool
     use_moon_radiation: bool
+    paneling_moon: PanelingType
     albedo_distribution_moon: AlbedoDistribution
     number_of_panels_moon: int
-    thermal_type: ThermalType
-    use_instantaneous_reradiation: bool
+    number_of_panels_per_ring_moon: list[int]
+    thermal_type_moon: ThermalType
     step_size: float
 
     def __init__(self, base_dir: Path, run_number: int = None):
@@ -65,10 +71,11 @@ class SimulationRun:
         run.target_type = settings["target_type"]
         run.use_occultation = settings["use_occultation"]
         run.use_moon_radiation = settings["use_moon_radiation"]
+        run.paneling_moon = settings["paneling_moon"]
         run.albedo_distribution_moon = settings["albedo_distribution_moon"]
         run.number_of_panels_moon = settings["number_of_panels_moon"]
-        run.thermal_type = settings["thermal_type"]
-        run.use_instantaneous_reradiation = settings["use_instantaneous_reradiation"]
+        run.number_of_panels_per_ring_moon = settings["number_of_panels_per_ring_moon"]
+        run.thermal_type_moon = settings["thermal_type_moon"]
         run.step_size = settings["step_size"]
 
         return run
@@ -88,16 +95,19 @@ class SimulationRun:
                 "target_type": self.target_type.name,
                 "use_occultation": self.use_occultation,
                 "use_moon_radiation": self.use_moon_radiation,
+                "paneling_moon": (
+                    self.paneling_moon.name if self.use_moon_radiation else ""
+                ),
                 "number_of_panels_moon": (
-                    self.number_of_panels_moon if self.use_moon_radiation else 0
+                    self.number_of_panels_moon if (self.use_moon_radiation and self.paneling_moon == PanelingType.Static) else 0
+                ),
+                "number_of_panels_per_ring_moon": (
+                    self.number_of_panels_per_ring_moon if (self.use_moon_radiation and self.paneling_moon == PanelingType.Dynamic) else []
                 ),
                 "albedo_distribution_moon": (
                     self.albedo_distribution_moon.name if self.use_moon_radiation else ""
                 ),
-                "thermal_type": (self.thermal_type.name if self.use_moon_radiation else ""),
-                "use_instantaneous_reradiation": (
-                    self.use_instantaneous_reradiation if self.use_moon_radiation else False
-                ),
+                "thermal_type_moon": (self.thermal_type_moon.name if self.use_moon_radiation else ""),
                 "simulation_duration": self.simulation_duration,
                 "step_size": self.step_size,
             },

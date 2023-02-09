@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Any
 from abc import ABC
 
-from lropy.simulation_run import SimulationRun, TargetType, ThermalType, AlbedoDistribution
+from lropy.simulation_run import SimulationRun, TargetType, ThermalType, AlbedoDistribution, PanelingType
 from lropy.util import generate_folder_name
 
 
@@ -20,11 +20,24 @@ class Configurator(ABC):
         for single_run_settings in itertools.product(*self.settings.values()):
             single_run_settings = list(single_run_settings)
             use_moon_radiation = single_run_settings[4]
+            paneling_moon = single_run_settings[5]
+
             if not use_moon_radiation:
-                single_run_settings[5] = 0  # number_of_panels_moon
+                single_run_settings[5] = None  # paneling_moon
                 single_run_settings[6] = None  # albedo_distribution_moon
-                single_run_settings[7] = None  # thermal_type
-                single_run_settings[8] = False  # use_instantaneous_reradiation
+                single_run_settings[7] = 0  # number_of_panels_moon
+                single_run_settings[8] = []  # number_of_panels_per_ring_moon
+                single_run_settings[9] = None  # thermal_type_moon
+
+            if paneling_moon != PanelingType.Static:
+                single_run_settings[7] = 0  # number_of_panels_moon
+
+            if paneling_moon != PanelingType.Dynamic:
+                single_run_settings[8] = []  # number_of_panels_per_ring_moon
+
+            # Necessary to allow hashing for set
+            single_run_settings[8] = tuple(single_run_settings[8])
+
             all_run_settings.add(tuple(single_run_settings))
 
         return [
@@ -54,10 +67,11 @@ class FullConfigurator(Configurator):
             "target_type": [TargetType.Cannonball, TargetType.Paneled],
             "use_occultation": [False, True],
             "use_moon_radiation": [False, True],
+            "paneling_moon": [PanelingType.Dynamic],
             "albedo_distribution_moon": [AlbedoDistribution.Constant, AlbedoDistribution.DLAM1],
-            "number_of_panels_moon": [2000, 5000, 20000],
-            "thermal_type": [ThermalType.Delayed, ThermalType.AngleBased],
-            "use_instantaneous_reradiation": [False, True],
+            "number_of_panels_moon": [2000],
+            "number_of_panels_per_ring_moon": [[6, 12]],
+            "thermal_type_moon": [ThermalType.Delayed, ThermalType.AngleBased],
             "step_size": [10],
         }
 
@@ -71,8 +85,46 @@ class NumberOfPanelsConfigurator(Configurator):
             "target_type": [TargetType.Cannonball],
             "use_occultation": [True],
             "use_moon_radiation": [True],
+            "paneling_moon": [PanelingType.Static],
+            "albedo_distribution_moon": [AlbedoDistribution.DLAM1],
             "number_of_panels_moon": [2000, 5000, 10000, 20000, 50000],
-            "thermal_type": [ThermalType.AngleBased],
-            "use_instantaneous_reradiation": [False],
+            "number_of_panels_per_ring_moon": [[]],
+            "thermal_type_moon": [ThermalType.AngleBased],
+            "step_size": [10],
+        }
+
+
+class NumberOfPanelsPerRingConfigurator(Configurator):
+    def __init__(self):
+        self.configuration_name = "number_of_panels_per_ring_test"
+        self.settings = {
+            "simulation_start": ["2010 JUN 26 06:00:00"],
+            "simulation_duration_rev": [2],
+            "target_type": [TargetType.Cannonball],
+            "use_occultation": [True],
+            "use_moon_radiation": [True],
+            "paneling_moon": [PanelingType.Dynamic],
+            "albedo_distribution_moon": [AlbedoDistribution.DLAM1],
+            "number_of_panels_moon": [2000],
+            "number_of_panels_per_ring_moon": [[6, 12], [12, 24], [12, 24, 36], [24, 36, 48]],
+            "thermal_type_moon": [ThermalType.AngleBased],
+            "step_size": [10],
+        }
+
+
+class StaticVsDynamicConfigurator(Configurator):
+    def __init__(self):
+        self.configuration_name = "static_vs_dynamic"
+        self.settings = {
+            "simulation_start": ["2010 JUN 26 06:00:00"],
+            "simulation_duration_rev": [2],
+            "target_type": [TargetType.Cannonball],
+            "use_occultation": [True],
+            "use_moon_radiation": [True],
+            "paneling_moon": [PanelingType.Static, PanelingType.Dynamic],
+            "albedo_distribution_moon": [AlbedoDistribution.Constant, AlbedoDistribution.DLAM1],
+            "number_of_panels_moon": [5000],
+            "number_of_panels_per_ring_moon": [[24, 36, 48]],
+            "thermal_type_moon": [ThermalType.AngleBased],
             "step_size": [10],
         }
