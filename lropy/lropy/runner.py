@@ -70,6 +70,7 @@ if __name__ == "__main__":
     run.simulation_duration = 100
     # run.simulation_duration_revolutions(5)
     run.target_type = TargetType.Paneled
+    run.with_instantaneous_reradiation = False
     run.use_occultation = True
     run.use_moon_radiation = True
     run.paneling_moon = PanelingType.Dynamic

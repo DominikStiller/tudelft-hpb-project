@@ -19,15 +19,16 @@ class Configurator(ABC):
         all_run_settings = set()
         for single_run_settings in itertools.product(*self.settings.values()):
             single_run_settings = list(single_run_settings)
-            use_moon_radiation = single_run_settings[4]
-            paneling_moon = single_run_settings[5]
+            target_type = single_run_settings[2]
+            use_moon_radiation = single_run_settings[5]
+            paneling_moon = single_run_settings[6]
 
             if not use_moon_radiation:
-                single_run_settings[5] = None  # paneling_moon
-                single_run_settings[6] = None  # albedo_distribution_moon
-                single_run_settings[7] = 0  # number_of_panels_moon
-                single_run_settings[8] = []  # number_of_panels_per_ring_moon
-                single_run_settings[9] = None  # thermal_type_moon
+                single_run_settings[6] = None  # paneling_moon
+                single_run_settings[7] = None  # albedo_distribution_moon
+                single_run_settings[8] = 0  # number_of_panels_moon
+                single_run_settings[9] = []  # number_of_panels_per_ring_moon
+                single_run_settings[10] = None  # thermal_type_moon
 
             if paneling_moon != PanelingType.Static:
                 single_run_settings[7] = 0  # number_of_panels_moon
@@ -35,8 +36,11 @@ class Configurator(ABC):
             if paneling_moon != PanelingType.Dynamic:
                 single_run_settings[8] = []  # number_of_panels_per_ring_moon
 
+            if target_type != TargetType.Paneled:
+                single_run_settings[3] = False  # with_instantaneous_reradiation
+
             # Necessary to allow hashing for set
-            single_run_settings[8] = tuple(single_run_settings[8])
+            single_run_settings[9] = tuple(single_run_settings[9])
 
             all_run_settings.add(tuple(single_run_settings))
 
@@ -65,6 +69,7 @@ class FullConfigurator(Configurator):
             "simulation_start": ["2010 JUN 26 06:00:00", "2010 SEP 26 06:00:00"],
             "simulation_duration_rev": [5],  # 565 min, about 5 orbital revolutions
             "target_type": [TargetType.Cannonball, TargetType.Paneled],
+            "with_instantaneous_reradiation": [False, True],
             "use_occultation": [False, True],
             "use_moon_radiation": [False, True],
             "paneling_moon": [PanelingType.Dynamic],
@@ -83,6 +88,7 @@ class NumberOfPanelsConfigurator(Configurator):
             "simulation_start": ["2010 JUN 26 06:00:00"],
             "simulation_duration_rev": [2],
             "target_type": [TargetType.Cannonball],
+            "with_instantaneous_reradiation": [False],
             "use_occultation": [True],
             "use_moon_radiation": [True],
             "paneling_moon": [PanelingType.Static],
@@ -101,6 +107,7 @@ class NumberOfPanelsPerRingConfigurator(Configurator):
             "simulation_start": ["2010 JUN 26 06:00:00"],
             "simulation_duration_rev": [2],
             "target_type": [TargetType.Cannonball],
+            "with_instantaneous_reradiation": [False],
             "use_occultation": [True],
             "use_moon_radiation": [True],
             "paneling_moon": [PanelingType.Dynamic],
@@ -119,6 +126,7 @@ class StaticVsDynamicConfigurator(Configurator):
             "simulation_start": ["2010 JUN 26 06:00:00"],
             "simulation_duration_rev": [2],
             "target_type": [TargetType.Cannonball],
+            "with_instantaneous_reradiation": [False],
             "use_occultation": [True],
             "use_moon_radiation": [True],
             "paneling_moon": [PanelingType.Static, PanelingType.Dynamic],

@@ -41,6 +41,7 @@ class SimulationRun:
     simulation_start: str
     simulation_duration: float
     target_type: TargetType
+    with_instantaneous_reradiation: bool
     use_occultation: bool
     use_moon_radiation: bool
     paneling_moon: PanelingType
@@ -69,6 +70,7 @@ class SimulationRun:
         run.simulation_start = settings["simulation_start"]
         run.simulation_duration_revolutions(settings["simulation_duration_rev"])
         run.target_type = settings["target_type"]
+        run.with_instantaneous_reradiation = settings["with_instantaneous_reradiation"]
         run.use_occultation = settings["use_occultation"]
         run.use_moon_radiation = settings["use_moon_radiation"]
         run.paneling_moon = settings["paneling_moon"]
@@ -93,6 +95,7 @@ class SimulationRun:
                 "save_dir": str(self.save_dir.resolve()),
                 "simulation_start": self.simulation_start,
                 "target_type": self.target_type.name,
+                "with_instantaneous_reradiation": self.with_instantaneous_reradiation,
                 "use_occultation": self.use_occultation,
                 "use_moon_radiation": self.use_moon_radiation,
                 "paneling_moon": (

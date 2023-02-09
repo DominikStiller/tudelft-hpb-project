@@ -17,9 +17,9 @@ if __name__ == "__main__":
     #     sys.exit(-1)
 
     runner = Runner(n_threads)
-    # configurator = FullConfigurator()
+    configurator = FullConfigurator()
     # configurator = NumberOfPanelsConfigurator()
     # configurator = NumberOfPanelsPerRingConfigurator()
-    configurator = StaticVsDynamicConfigurator()
+    # configurator = StaticVsDynamicConfigurator()
     runs = configurator.get_runs()
     runner.run_all(runs)
