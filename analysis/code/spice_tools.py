@@ -42,6 +42,23 @@ def generate_lro_ephemeris(timestamps):
     return df
 
 
+def get_lro_orbital_plane_normal(t):
+    pos1 = spice.spkezr("LRO", t, "ECLIPJ2000", "NONE", "Moon")[0][3:]
+    # Quarter of a period later
+    pos2 = spice.spkezr("LRO", t + 113 * 60 /4, "ECLIPJ2000", "NONE", "Moon")[0][3:]
+    normal = np.cross(pos1, pos2)
+    return normal / np.linalg.norm(normal)
+
+def get_lro_beta_angle(t):
+    normal = get_lro_orbital_plane_normal(t)
+
+    sun_pos = spice.spkezr("Sun", t, "ECLIPJ2000", "NONE", "Moon")[0][:3]
+    sun_dir = sun_pos / np.linalg.norm(sun_pos)
+
+    beta_angle = np.degrees(np.arccos(sun_dir @ normal)) - 90
+    return beta_angle
+
+
 def get_frame(body):
     if body == "Moon":
         return "MOON_PA"

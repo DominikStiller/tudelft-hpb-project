@@ -47,19 +47,22 @@ def format_plot(
         if zeroline:
             ax.axhline(0, linewidth=1.5, c="black")
 
-        if not xlocator:
+        xlocator_ax = xlocator
+        if not xlocator_ax:
             if ax.get_xscale() == "log":
-                xlocator = matplotlib.ticker.LogLocator(base=10, subs="all", numticks=100)
+                xlocator_ax = matplotlib.ticker.LogLocator(base=10, subs="auto", numticks=100)
             else:
-                xlocator = matplotlib.ticker.AutoMinorLocator()
-        if not ylocator:
-            if ax.get_yscale() == "log":
-                ylocator = matplotlib.ticker.LogLocator(base=10, subs="all", numticks=100)
-            else:
-                ylocator = matplotlib.ticker.AutoMinorLocator()
+                xlocator_ax = matplotlib.ticker.AutoMinorLocator()
 
-        ax.get_xaxis().set_minor_locator(xlocator)
-        ax.get_yaxis().set_minor_locator(ylocator)
+        ylocator_ax = ylocator
+        if not ylocator_ax:
+            if ax.get_yscale() == "log":
+                ylocator_ax = matplotlib.ticker.LogLocator(base=10, subs="auto", numticks=100)
+            else:
+                ylocator_ax = matplotlib.ticker.AutoMinorLocator()
+
+        ax.get_xaxis().set_minor_locator(xlocator_ax)
+        ax.get_yaxis().set_minor_locator(ylocator_ax)
         ax.grid(visible=True, which="major", linewidth=1.0)
         ax.grid(visible=True, which="minor", linewidth=0.5, linestyle="-.")
 

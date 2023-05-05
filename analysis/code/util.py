@@ -18,6 +18,16 @@ def cart2spher(x, y, z):
     return radius, polar, azimuth
 
 
+def cart2track(acc, vel, pos):
+    radialUnit = pos / np.linalg.norm(pos)
+    alongTrackUnit = (vel - radialUnit * (vel @ radialUnit))
+    alongTrackUnit /= np.linalg.norm(alongTrackUnit)
+    crossTrackUnit = np.cross(radialUnit, alongTrackUnit)
+    crossTrackUnit /= np.linalg.norm(crossTrackUnit)
+
+    return acc.dot(radialUnit), acc.dot(alongTrackUnit), acc.dot(crossTrackUnit)
+
+
 def align_vectors(from_vec, to_vec):
     # From https://stackoverflow.com/a/67767180
     a, b = (from_vec / np.linalg.norm(from_vec)).reshape(3), (to_vec / np.linalg.norm(to_vec)).reshape(3)
