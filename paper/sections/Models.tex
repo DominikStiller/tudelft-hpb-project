@@ -1,3 +1,27 @@
 \section{Models}
 
 every irradiance in the list can be thought of as ray
+
+effect of self-shadowing on LRO orbit is small~\cite{Loecher2018}
+
+no seasonal or diurnal albedo variation on Moon, as opposed to Earth~\cite{Knocke1989}
+
+use angle-based model from Lemoine
+Constant-emission model from Knocke is not appropriate for moon since it gets very cold
+Flux from Lemoine agrees with \cite[Table~8]{Tooley2010}
+
+
+Cannonball area assumptions:
+\begin{itemize}
+    \item No self shadowing
+    \item SA and HGA areas are scaled by factor $2/\pi$ (average of $A|\cos\theta|$)
+\end{itemize}
+to find equivalent rp coefficient, some authors use raytracing~\cite{Hattori2019}, we just use weighted average
+finding a single rp coefficien is virtually impossible since it changes~\cite[p~580]{Vallado2013}
+
+Different values for A and Cr in literature:
+\cite{Nicholson2010}: 14, 1.0 (for daily/not precision OD, no changing orientation, solar only)
+\cite{Bauer2016}: 10, 1.2 (no changing orientation, solar only)
+\cite{Slojkowski2015}: first 1.67, then 0.96 after estimation
+\cite{Mazarico2018}: 1.03 +- 0.24 (1.04 in sep, 1.4 in jun)
+

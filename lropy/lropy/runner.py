@@ -3,7 +3,13 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from threading import Lock
 
-from lropy.simulation_run import SimulationRun, TargetType, ThermalType, AlbedoDistribution, PanelingType
+from lropy.simulation_run import (
+    SimulationRun,
+    TargetType,
+    ThermalType,
+    AlbedoDistribution,
+    PanelingType,
+)
 
 
 class Runner:
@@ -72,6 +78,7 @@ if __name__ == "__main__":
     run.target_type = TargetType.Paneled
     run.with_instantaneous_reradiation = False
     run.use_occultation = True
+    run.use_solar_radiation = True
     run.use_moon_radiation = True
     run.paneling_moon = PanelingType.Dynamic
     run.albedo_distribution_moon = AlbedoDistribution.DLAM1

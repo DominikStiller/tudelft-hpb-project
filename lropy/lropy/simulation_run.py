@@ -16,6 +16,7 @@ class TargetType(Enum):
 class ThermalType(Enum):
     Delayed = 1
     AngleBased = 2
+    NoThermal = 3
 
 
 class AlbedoDistribution(Enum):
@@ -43,6 +44,7 @@ class SimulationRun:
     target_type: TargetType
     with_instantaneous_reradiation: bool
     use_occultation: bool
+    use_solar_radiation: bool
     use_moon_radiation: bool
     paneling_moon: PanelingType
     albedo_distribution_moon: AlbedoDistribution
@@ -72,6 +74,7 @@ class SimulationRun:
         run.target_type = settings["target_type"]
         run.with_instantaneous_reradiation = settings["with_instantaneous_reradiation"]
         run.use_occultation = settings["use_occultation"]
+        run.use_solar_radiation = settings["use_solar_radiation"]
         run.use_moon_radiation = settings["use_moon_radiation"]
         run.paneling_moon = settings["paneling_moon"]
         run.albedo_distribution_moon = settings["albedo_distribution_moon"]
@@ -97,20 +100,25 @@ class SimulationRun:
                 "target_type": self.target_type.name,
                 "with_instantaneous_reradiation": self.with_instantaneous_reradiation,
                 "use_occultation": self.use_occultation,
+                "use_solar_radiation": self.use_solar_radiation,
                 "use_moon_radiation": self.use_moon_radiation,
-                "paneling_moon": (
-                    self.paneling_moon.name if self.use_moon_radiation else ""
-                ),
+                "paneling_moon": (self.paneling_moon.name if self.use_moon_radiation else ""),
                 "number_of_panels_moon": (
-                    self.number_of_panels_moon if (self.use_moon_radiation and self.paneling_moon == PanelingType.Static) else 0
+                    self.number_of_panels_moon
+                    if (self.use_moon_radiation and self.paneling_moon == PanelingType.Static)
+                    else 0
                 ),
                 "number_of_panels_per_ring_moon": (
-                    self.number_of_panels_per_ring_moon if (self.use_moon_radiation and self.paneling_moon == PanelingType.Dynamic) else []
+                    self.number_of_panels_per_ring_moon
+                    if (self.use_moon_radiation and self.paneling_moon == PanelingType.Dynamic)
+                    else []
                 ),
                 "albedo_distribution_moon": (
                     self.albedo_distribution_moon.name if self.use_moon_radiation else ""
                 ),
-                "thermal_type_moon": (self.thermal_type_moon.name if self.use_moon_radiation else ""),
+                "thermal_type_moon": (
+                    self.thermal_type_moon.name if self.use_moon_radiation else ""
+                ),
                 "simulation_duration": self.simulation_duration,
                 "step_size": self.step_size,
             },

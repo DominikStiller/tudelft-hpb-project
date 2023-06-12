@@ -1,13 +1,19 @@
 import os
 import sys
 
-from lropy.configurator import FullConfigurator, NumberOfPanelsConfigurator, NumberOfPanelsPerRingConfigurator, StaticVsDynamicConfigurator
+from lropy.configurator import (
+    FullConfigurator,
+    LightConfigurator,
+    NumberOfPanelsConfigurator,
+    NumberOfPanelsPerRingConfigurator,
+    StaticVsDynamicConfigurator,
+)
 from lropy.runner import Runner
 from lropy.util import get_average_load
 
 if __name__ == "__main__":
     if os.getenv("HOSTNAME") == "eudoxos":
-        n_threads = 8
+        n_threads = 24
     else:
         n_threads = 4
 
@@ -17,9 +23,12 @@ if __name__ == "__main__":
     #     sys.exit(-1)
 
     runner = Runner(n_threads)
-    configurator = FullConfigurator()
+    # configurator = FullConfigurator()
+    configurator = LightConfigurator()
     # configurator = NumberOfPanelsConfigurator()
     # configurator = NumberOfPanelsPerRingConfigurator()
     # configurator = StaticVsDynamicConfigurator()
     runs = configurator.get_runs()
+    # for run in runs:
+    #     print(run.as_json())
     runner.run_all(runs)

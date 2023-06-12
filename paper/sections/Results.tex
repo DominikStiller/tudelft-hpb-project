@@ -1,6 +1,36 @@
 \section{Results}
 
+beta angle slightly less than 90 degrees leads to sinusoidal acceleration
+
+IAU\_MOON is in worst case 155 m off~\cite{NAIF2020} (Special PCK and FK for Earth and Moon, slide 14)
+
 for radiation pressure acceleration, add partial/full eclipse to time axis
 
 absolute acceleration magnitude likely influenced by mass uncertainty
 rp acceleration magnitude increases as mass decreases
+
+plots for beta = 80 (constant sunlight, Jun 26) and beta = 0 (orbital plane intersects sun, Sep 26)
+
+start at 2010-06-26 06:00:00 UTC, which corresponds to 2010-06-26 06:01:06 TDB
+
+effect of instantaneous reradiation
+
+static vs dynamic performance
+static number of panels
+dynamic number of panels per ring
+
+variation in altitude is in part due to assumption of spherical moon (polar radius is 2.1 km less than equatorial)
+
+static vs dynamic have different types of inaccuracy
+dynamic at low resolution has bias and converges globally towards accurate version
+static at low resolution looks like noise and noise is reduced when increasing resolution
+
+arc length 2.5 days, which is also used for LRO orbit determination~\cite{Mazarico2011}
+
+neglecting self-shadowing overestimates area~\cite{Mazarico2009}, but minimal self-shadowing in most cases for LRO~\cite{Slojkowski2015}
+
+Thermal radiation may cause an offset of 1-2 meters over an arclength of 2.5 days~\cite{Bauer2016}
+
+our maximum eclipse time of 48 min agrees with \cite{Tooley2010}
+
+kink in cross-track SRP also seen in SELENE \cite{Kubooka1999}, search for explanation
