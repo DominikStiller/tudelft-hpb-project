@@ -1,0 +1,81 @@
+% Gemini theme
+% https://github.com/anishathalye/gemini
+
+
+% ====================
+% Packages
+% ====================
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[orientation=landscape,size=a1,scale=1.3]{beamerposter}
+\usetheme{gemini}
+\usecolortheme{tudelft}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{amsmath}
+\usepackage{physics}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.14}
+\usepackage{anyfontsize}
+\usepackage[
+    bibencoding=utf8,
+	url=false,
+    doi=false,
+	style=ieee,
+    citestyle=numeric-comp,
+    maxcitenames=2,
+]{biblatex}
+\usepackage[labelfont=bf]{caption}
+\usepackage{hyperref}
+\usepackage[capitalize,noabbrev,nameinlink]{cleveref}
+
+\DeclareGraphicsRule{.ai}{pdf}{.ai}{}
+
+\hypersetup{
+    colorlinks=true,
+    allcolors=cyan,
+}
+\urlstyle{same}
+
+\let\chyperref\cref
+\renewcommand{\cref}[1]{\hyperlink{#1}{\chyperref{#1}}} 
+
+
+% ====================
+% Lengths
+% ====================
+
+% If you have N columns, choose \sepwidth and \colwidth such that
+% (N+1)*\sepwidth + N*\colwidth = \paperwidth
+\newlength{\sepwidth}
+\newlength{\colwidth}
+\setlength{\sepwidth}{0.025\paperwidth}
+\setlength{\colwidth}{0.3\paperwidth}
+
+\newcommand{\separatorcolumn}{\begin{column}{\sepwidth}\end{column}}
+
+\setlength{\leftmargini}{12mm}
+
+\renewcommand*{\bibfont}{\footnotesize}
+
+\setlength{\biblabelsep}{0.3\labelsep}
+
+
+% ====================
+% Logo
+% ====================
+
+% use this to include logos on the left and/or right side of the header:
+\logoright{\includegraphics[width=11cm]{logo_tudelft.pdf}}
+\logoleft{\includegraphics[width=8.5cm]{logo_hpd.png}}
+
+
+% ====================
+% Header
+% ====================
+
+\institute[shortinst]{Faculty of Aerospace Engineering, TU Delft, Netherlands}
