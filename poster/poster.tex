@@ -27,16 +27,14 @@
 
     Centimeter-scale orbit determination is necessary for satellite navigation and spaceborne geodesy. Orbits are sensitive to perturbations such as radiation pressure (RP) due to solar radiation as well as planetary albedo and thermal emissions. This project investigated sensitivities of orbit predictions to varying complexity in RP models for the Lunar Reconnaissance Orbiter (LRO) at $\beta \approx \ang{0}$. We found that solar RP dominates but lunar RP affects secular variations in semi-major axis and argument of periapsis. A constant-albedo lunar model and a paneled LRO model are recommended for precise radial and along-track positioning.
 
-
   \end{exampleblock}
 
 
   \begin{block}{Background}
 
-    LRO was launched in June 2009 and mapped the Moon from a circular orbit at 50 km altitude. To exploit the accuracy of its laser altimeter, errors of at most 50--100 m (total) and 1 m (radial) are required. Understanding the effect of RP modeling choices on LRO's orbit can contribute to a more robust error budget of orbit determination results.
+    LRO was launched in June 2009 and mapped the Moon from a polar orbit at 50 km altitude~\cite{Tooley2010}. To exploit the accuracy of its laser altimeter, errors of at most 50--100 m (total) and 1 m (radial) are required. Even minor dynamic mismodeling impacts altimetry data reduction and may bias scientific interpretation. Understanding the effect of RP modeling choices on LRO's orbit can contribute to a more robust error budget of orbit determination results.
 
-    All models were implemented in and results were obtained with the TU Delft Astrodynamics Toolbox (\url{http://tudat.tudelft.nl/}).
-    
+    The models from this work were integrated into and results were obtained with the TU Delft Astrodynamics Toolbox (\url{http://tudat.tudelft.nl/}). They will be used for future research and education activities at TU Delft.
 
   \end{block}
 
@@ -44,18 +42,16 @@
 
     \begin{itemize}
       \item Sun: Point source with position from ephemeris.
-      \item Moon: Discretized into 70 000 uniform panels (\geq 770 visible). Albedo distribution can vary in space due to a low-resolution spherical harmonics expansion (DLAM-1~\cite{Floberghagen1999}) or constant (with DLAM-1 mean). Thermal emissions are based on spacecraft--subsolar point angle.
-      \item LRO: Can be paneled (10 panels, SA tracks Sun, HGA tracks Earth) or a "cannonball" (sphere of paneled-equivalent cross section with fixed reflectivity). The bus attitude is based on definitive ephemerides.
+      \item Moon: Discretized into 70 000 uniform panels (\geq 770 visible). Albedo distribution can vary spatially due to a low-resolution spherical harmonics expansion (DLAM-1~\cite{Floberghagen1999}) or constant (with DLAM-1 mean). Thermal emissions are based on the spacecraft--subsolar point angle.
+      \item LRO: Can be paneled (10 panels, SA tracks Sun) or a "cannonball" (sphere of paneled-equivalent cross section with fixed reflectivity). % The bus attitude is based on definitive ephemerides.
     \end{itemize}
 
-    \begin{figure}[B]
+    \begin{figure}[b]
       \centering
-      \includegraphics[width=\linewidth]{/mnt/c/Cloud/Google Drive/TU Delft/HPB/poster/models.pdf}
+      \includegraphics[width=\linewidth]{models.pdf}
       \caption{RP components and their models of varying complexity.}
       \label{fig:models}
     \end{figure}
-
-    
 
   \end{block}
 
@@ -69,7 +65,7 @@
 
     We predicted a 2.5-day arc (32 revolutions) with ephemeris-based initial conditions such that $\beta = \ang{1.7}$, i.e., LRO crosses above the subsolar point. RP accelerations due to Sun ($\vb a_\text{sun}$) and Moon ($\vb a_\text{moon}$) are shown in \cref{fig:acc}. Noteworthy observations:
     \begin{itemize}
-      \item Radial RP: The radial components (top row) dominate, particularly above the subsolar point. Since they oppose each other, considering lunar RP reduces periodic change in radial position (\cref{fig:error}).
+      \item Radial RP: The radial components (top row) dominate, particularly above the subsolar point. Since they oppose each other, considering lunar RP dampens periodic change in radial position (\cref{fig:error}).
       \item Along-track RP: The along-track component of $\vb a_\text{sun}$ (middle row) is large away from but symmetric about the subsolar point. This leads to along-track drift, which changes the argument of periapsis (\cref{fig:kepler}).
       \item Along-track and cross-track components of $\vb a_\text{moon}$ have opposite signs for cannonball and paneled target models.
       \item All accelerations vanish in the eclipse region, including thermal. The Sun is occulted for 42\% of the orbit (47 min out of 113 min).
@@ -85,9 +81,6 @@
     % TODO increase height if space permits
 
   \end{block}
-
-  
-
 
 \end{column}
 
