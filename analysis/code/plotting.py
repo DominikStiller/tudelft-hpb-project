@@ -7,31 +7,36 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 
-sb.set(
-    context="paper",
-    style="ticks",
-    palette=[
-        "#0C2340",
-        "#A50034",
-        "#00A6D6",
-        "#EF60A3",
-        "#FFB81C",
-        "#EC6842",
-        "#6F1D77",
-        "#009B77",
-    ],
-    font_scale=1.7,
-    font="sans-serif",
-    rc={
-        "font.family": "sans-serif",
-        "lines.linewidth": 1.2,
-        "font.sans-serif": "Lato",
-        # "axes.titleweight": "bold",
-        # "axes.labelweight": "light",
-        # "font.weight": "light",
-        "mathtext.default": "regular",
-    },
-)
+def set_plotting_theme():
+    dark = plt.rcParams["figure.facecolor"] == "black"
+    sb.set(
+        context="paper",
+        style="whitegrid",
+        palette=[
+            "#0C2340",
+            "#A50034",
+            "#00A6D6",
+            "#EF60A3",
+            "#FFB81C",
+            "#EC6842",
+            "#6F1D77",
+            "#009B77",
+        ],
+        font_scale=1.7,
+        font="sans-serif",
+        rc={
+            "font.family": "sans-serif",
+            "lines.linewidth": 1.2,
+            "font.sans-serif": "Lato",
+            # "axes.titleweight": "bold",
+            # "axes.labelweight": "light",
+            # "font.weight": "light",
+            "mathtext.default": "regular",
+        },
+    )
+    if dark:
+        # For example, due to VS Code dark theme
+        plt.style.use("dark_background")
 
 
 def save_plot(results_folder: Union[Path, str], name: str, fig=None, type="pdf"):
@@ -92,3 +97,6 @@ def format_plot(
 
     if tight_layout:
         fig.tight_layout(pad=0.1, h_pad=0.4, w_pad=0.4)
+
+
+set_plotting_theme()
