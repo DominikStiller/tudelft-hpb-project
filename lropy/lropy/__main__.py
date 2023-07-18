@@ -4,9 +4,10 @@ import sys
 from lropy.configurator import (
     FullConfigurator,
     LightConfigurator,
-    NumberOfPanelsConfigurator,
     NumberOfPanelsPerRingConfigurator,
     StaticVsDynamicConfigurator,
+    InstantaneousReradiationConfigurator,
+    AlbedoThermalConfigurator,
 )
 from lropy.runner import Runner
 from lropy.util import get_average_load
@@ -23,11 +24,13 @@ if __name__ == "__main__":
     #     sys.exit(-1)
 
     runner = Runner(n_threads)
+
     # configurator = FullConfigurator()
-    configurator = LightConfigurator()
-    # configurator = NumberOfPanelsConfigurator()
     # configurator = NumberOfPanelsPerRingConfigurator()
+    # configurator = InstantaneousReradiationConfigurator()
+    configurator = AlbedoThermalConfigurator()
     # configurator = StaticVsDynamicConfigurator()
+
     runs = configurator.get_runs()
     # for run in runs:
     #     print(run.as_json())

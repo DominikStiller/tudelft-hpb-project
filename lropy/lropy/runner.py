@@ -55,7 +55,10 @@ class Runner:
             print(f"[{self.n_started}/{self.n_total}] Run {run.id} started")
 
         p = subprocess.Popen(
-            [executable, str(json_path)], cwd=tudat_dir, stdout=output_file, stderr=output_file
+            [executable, str(json_path)],
+            cwd=tudat_dir,
+            stdout=output_file,
+            stderr=output_file,
         )
         return_code = p.wait()
 

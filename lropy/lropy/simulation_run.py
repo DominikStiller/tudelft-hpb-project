@@ -22,6 +22,7 @@ class ThermalType(Enum):
 class AlbedoDistribution(Enum):
     Constant = 1
     DLAM1 = 2
+    NoAlbedo = 3
 
 
 class PanelingType(Enum):
