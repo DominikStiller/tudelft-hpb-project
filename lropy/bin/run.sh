@@ -5,4 +5,4 @@ then
   source venv/bin/activate
 fi
 
-python -m lropy $@
+python -m lropy.run $@
