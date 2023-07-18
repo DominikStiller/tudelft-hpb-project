@@ -1,8 +1,8 @@
 import os
+import pickle
 
-from lropy.run.configurator import (
-    AlbedoThermalConfigurator,
-)
+from lropy.analysis.io import load_all_simulation_results
+from lropy.run.configurator import *
 from lropy.run.runner import Runner
 
 if __name__ == "__main__":
@@ -28,4 +28,12 @@ if __name__ == "__main__":
     # print(len(runs))
     # for run in runs:
     #     print(run.as_json())
+
+    print(f"======== RUNNING {len(runs)} SIMULATIONS ======== ")
     runner.run_all(runs)
+
+    print(f"======== PROCESSING RESULTS ======== ")
+    base_dir = runs[0].base_dir
+    results = load_all_simulation_results(base_dir, load_runs=True, do_tf=True)
+    with (base_dir / "results.pkl").open("wb") as f:
+        pickle.dump(results, f)
