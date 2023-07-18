@@ -9,8 +9,3 @@ rsync -avzh --delete \
 	--exclude __pycache__ --exclude *.pyc --exclude ".*" --exclude venv/ --exclude /results \
 	lropy/ \
 	eudoxos:~/dev/lropy
-
-rsync -avzh --delete \
-	--exclude __pycache__ --exclude *.pyc --exclude ".*" --exclude venv/ \
-	analysis/ \
-	eudoxos:~/dev/analysis

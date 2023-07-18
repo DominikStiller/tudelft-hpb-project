@@ -1,5 +1,5 @@
-import os
 import glob
+import os
 
 import numpy as np
 import pandas as pd
@@ -7,7 +7,6 @@ import spiceypy as spice
 import spiceypy.utils.support_types as stypes
 
 from lropy.constants import moon_polar_radius
-
 
 if os.getenv("HOSTNAME") == "eudoxos":
     lro_spice_base = "/home2/dominik/dev/tudat-bundle/spice/lro/data"

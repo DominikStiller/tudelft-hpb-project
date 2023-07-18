@@ -1,7 +1,7 @@
 import itertools
+from abc import ABC
 from pathlib import Path
 from typing import Any
-from abc import ABC
 
 from lropy.run.simulation_run import (
     SimulationRun,
@@ -207,7 +207,7 @@ class AlbedoThermalConfigurator(Configurator):
             "simulation_start": [
                 "2010 JUN 26 06:00:00",
                 "2010 AUG 26 06:00:00",
-                "2010 SEP 26 06:00:00"
+                "2010 SEP 26 06:00:00",
             ],
             "simulation_duration_rev": [2],
             "target_type": [TargetType.Cannonball, TargetType.Paneled],
@@ -223,7 +223,11 @@ class AlbedoThermalConfigurator(Configurator):
             ],
             "number_of_panels_moon": [2000],
             "number_of_panels_per_ring_moon": [[6, 12]],
-            "thermal_type_moon": [ThermalType.NoThermal, ThermalType.AngleBased, ThermalType.Delayed],
+            "thermal_type_moon": [
+                ThermalType.NoThermal,
+                ThermalType.AngleBased,
+                ThermalType.Delayed,
+            ],
             "step_size": [10],
         }
 

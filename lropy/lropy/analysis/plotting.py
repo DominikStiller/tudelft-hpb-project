@@ -2,9 +2,9 @@ import os
 from pathlib import Path
 from typing import Union
 
-import seaborn as sb
 import matplotlib
 import matplotlib.pyplot as plt
+import seaborn as sb
 
 
 def set_plotting_theme():

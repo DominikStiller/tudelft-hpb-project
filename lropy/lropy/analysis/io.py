@@ -1,16 +1,14 @@
 import csv
 import json
 from pathlib import Path
-from typing import Union
+from typing import Union, Tuple
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 from tqdm import tqdm
-import swifter
 
 from lropy.analysis.spice_tools import as_utc
 from lropy.analysis.transform import cart2track
-
 
 pos_names = ["pos_x", "pos_y", "pos_z"]
 vel_names = ["vel_x", "vel_y", "vel_z"]
@@ -96,23 +94,17 @@ def load_simulation_results(result_dir: Union[Path, str], do_tf=False):
 
     df = pd.read_csv(dependent_variable_history_file, names=colnames)
     df["t_et"] = df.index
-    df.index = pd.to_datetime(
-        df["t_et"].swifter.apply(lambda t: as_utc(t, sec_prec=6))
-    ).rename("t")
+    df.index = pd.to_datetime(df["t_et"].swifter.apply(lambda t: as_utc(t, sec_prec=6))).rename("t")
     # df.index = pd.to_datetime(
     #     df["t_et"].swifter.apply(lambda t: as_utc(t, sec_prec=6)),
     #     format="%Y-%m-%d %H:%M:%S.%f UTC").rename("t")
 
     df["r"] = np.sqrt(np.square(df[pos_names]).sum(axis=1))
     if "pos_sun_x" in colnames:
-        df["r_sun"] = np.sqrt(
-            np.square(df[["pos_sun_x", "pos_sun_y", "pos_sun_z"]]).sum(axis=1)
-        )
+        df["r_sun"] = np.sqrt(np.square(df[["pos_sun_x", "pos_sun_y", "pos_sun_z"]]).sum(axis=1))
     for acc in acc_names:
         if f"{acc}_x" in colnames:
-            df[acc] = np.sqrt(
-                np.square(df[[f"{acc}_x", f"{acc}_y", f"{acc}_z"]]).sum(axis=1)
-            )
+            df[acc] = np.sqrt(np.square(df[[f"{acc}_x", f"{acc}_y", f"{acc}_z"]]).sum(axis=1))
     for angle in ["lat_moon", "lon_moon"]:
         if angle in colnames:
             df[angle] = np.degrees(df[angle])
@@ -126,9 +118,7 @@ def load_simulation_results(result_dir: Union[Path, str], do_tf=False):
             if f"acc_rp_{source}_x" not in row.index:
                 continue
 
-            acc = row[
-                [f"acc_rp_{source}_x", f"acc_rp_{source}_y", f"acc_rp_{source}_z"]
-            ].to_numpy()
+            acc = row[[f"acc_rp_{source}_x", f"acc_rp_{source}_y", f"acc_rp_{source}_z"]].to_numpy()
             (
                 row[f"acc_rp_{source}_radial"],
                 row[f"acc_rp_{source}_along"],
@@ -138,9 +128,7 @@ def load_simulation_results(result_dir: Union[Path, str], do_tf=False):
         pos_norm = pos / np.linalg.norm(pos)
         pos_sun_norm = pos_sun / np.linalg.norm(pos_sun)
 
-        row["angle_subsolar"] = np.degrees(
-            np.arccos(np.clip(pos_norm @ pos_sun_norm, -1, 1))
-        )
+        row["angle_subsolar"] = np.degrees(np.arccos(np.clip(pos_norm @ pos_sun_norm, -1, 1)))
 
         return row
 
@@ -160,7 +148,7 @@ def load_walltime_duration(result_dir: Union[Path, str]):
     return walltime.iloc[-1] - walltime.iloc[0]
 
 
-def load_all_simulation_results(results_base: Path, load_runs=False, do_tf=False):
+def load_all_simulation_results(results_base: Union[Path, str], load_runs=False, do_tf=False):
     if isinstance(results_base, str):
         results_base = Path(results_base)
 
@@ -187,3 +175,12 @@ def load_all_simulation_results(results_base: Path, load_runs=False, do_tf=False
         return metadata, runs
     else:
         return metadata
+
+
+def load_pickled_simulation_results(
+    results_base: Path,
+) -> Tuple[pd.DataFrame, dict[int, pd.DataFrame]]:
+    if isinstance(results_base, str):
+        results_base = Path(results_base)
+
+    return pd.read_pickle(results_base / "results.pkl")
