@@ -32,6 +32,7 @@ def set_plotting_theme():
             # "axes.labelweight": "light",
             # "font.weight": "light",
             "mathtext.default": "regular",
+            "figure.figsize": (12, 3),
         },
     )
     if dark:
