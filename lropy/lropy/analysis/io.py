@@ -1,5 +1,6 @@
 import csv
 import json
+import re
 from pathlib import Path
 from typing import Union, Tuple
 
@@ -21,38 +22,10 @@ acc_names = [
     "acc_rp_sun",
     "acc_rp_moon",
     "acc_rp_earth",
+    "acc_rp_mercury",
 ]
 irr_names = ["irr_sun", "irr_moon"]
 panels_count_names = ["panels_vis_moon", "panels_ill_moon", "panels_vis_ill_moon"]
-
-dependent_variable_names = {
-    "Relative position of LRO w.r.t. Moon": "pos",
-    "Relative position of Vehicle w.r.t. Earth": "pos",
-    "Relative velocity of LRO w.r.t. Moon": "vel",
-    "Relative velocity of Vehicle w.r.t. Earth": "vel",
-    "Kepler elements of LRO w.r.t. Moon": "kepler",
-    "Altitude of LRO w.r.t. Moon": "h",
-    "Relative position of Sun w.r.t. Moon": "pos_sun",
-    "Relative position of Earth w.r.t. Moon": "pos_earth",
-    "Spherical position angle latitude angle of LRO w.r.t. Moon": "lat_moon",
-    "Spherical position angle longitude angle of LRO w.r.t. Moon": "lon_moon",
-    "Single acceleration in inertial frame of type spherical harmonic gravity , acting on LRO, exerted by Moon": "acc_grav_moon",
-    "Single acceleration in inertial frame of type spherical harmonic gravity , acting on LRO, exerted by Earth": "acc_grav_earth",
-    "Single acceleration in inertial frame of type central gravity , acting on LRO, exerted by Sun": "acc_grav_sun",
-    "Single acceleration in inertial frame of type radiation pressure acceleration, acting on LRO, exerted by Sun": "acc_rp_sun",
-    "Single acceleration in inertial frame of type cannonball radiation pressure , acting on LRO, exerted by Sun": "acc_rp_sun",
-    "Single acceleration in inertial frame of type panelled radiation pressure acceleration , acting on LRO, exerted by Sun": "acc_rp_sun",
-    "Single acceleration in inertial frame of type radiation pressure acceleration, acting on Vehicle, exerted by Earth": "acc_rp_earth",
-    "Received irradiance at LRO due to Sun": "irr_sun",
-    "Received fraction of irradiance at LRO due to Sun": "occ_sun",
-    "Single acceleration in inertial frame of type radiation pressure acceleration, acting on LRO, exerted by Moon": "acc_rp_moon",
-    "Received irradiance at LRO due to Moon": "irr_moon",
-    "Number of visible source panels of Moon as seen from LRO": "panels_vis_moon",
-    "Number of illuminated source panels of Moon as seen from LRO": "panels_ill_moon",
-    "Number of visible and illuminated source panels of Moon as seen from LRO": "panels_vis_ill_moon",
-    "Visible area of Earth as seen from Vehicle": "area_vis_earth",
-    "Visible area of Moon as seen from LRO": "area_vis_moon",
-}
 
 
 def get_column_names(result_dir: Path):
@@ -60,7 +33,7 @@ def get_column_names(result_dir: Path):
 
     with (result_dir / "dependent_variable_names.csv").open(newline="") as f:
         for var in csv.DictReader(f, delimiter=";"):
-            name = dependent_variable_names[var["ID"]]
+            name = _get_column_name(var["ID"])
             size = int(var["Size"])
             if size == 1:
                 # Scalar
@@ -77,6 +50,55 @@ def get_column_names(result_dir: Path):
                 colnames.extend([f"{name}_{elem}" for elem in elements])
 
     return colnames
+
+
+def _get_column_name(id: str) -> str:
+    if match := re.fullmatch(r"Relative (position|velocity) of (\S+) w.r.t. (\S+)", id):
+        type, target, observer = match.groups()
+
+        prefix = type[:3]
+
+        if target in ["LRO", "MPO", "Vehicle"]:
+            return prefix
+        else:
+            return f"{prefix}_{target.lower()}"
+    elif match := re.fullmatch(r"Kepler elements of (\S+) w.r.t. (\S+)", id):
+        return "kepler"
+    elif match := re.fullmatch(r"Altitude of (\S+) w.r.t. (\S+)", id):
+        return "h"
+    elif match := re.fullmatch(
+        r"Spherical position angle (latitude|longitude) angle of (\S+) w.r.t. (\S+)", id
+    ):
+        type, target, observer = match.groups()
+        return f"{type[:3]}_{observer.lower()}"
+    elif match := re.fullmatch(
+        r"Single acceleration in inertial frame of type (.+), acting on (\S+), exerted by (\S+)",
+        id,
+    ):
+        type, target, exerter = match.groups()
+        if "gravity" in type:
+            return f"acc_grav_{exerter.lower()}"
+        elif "radiation pressure" in type:
+            return f"acc_rp_{exerter.lower()}"
+    elif match := re.fullmatch(r"Received irradiance at (\S+) due to (\S+)", id):
+        target, source = match.groups()
+        return f"irr_{source.lower()}"
+    elif match := re.fullmatch(r"Received fraction of irradiance at (\S+) due to (\S+)", id):
+        target, source = match.groups()
+        return f"occ_{source.lower()}"
+    elif match := re.fullmatch(r"Number of (.+) source panels of (\S+) as seen from (\S+)", id):
+        type, source, target = match.groups()
+        if type == "visible":
+            return f"panels_vis_{source.lower()}"
+        elif type == "illuminated":
+            return f"panels_ill_{source.lower()}"
+        elif type == "visible and illuminated":
+            return f"panels_vis_ill_{source.lower()}"
+    elif match := re.fullmatch(r"Visible area of (\S+) as seen from (\S+)", id):
+        source, target = match.groups()
+        return f"area_vis_{source.lower()}"
+
+    raise Exception(f'Unknown variable id "{id}"')
 
 
 def _get_number_of_columns(dependent_variable_history_file: str):
@@ -116,7 +138,7 @@ def load_simulation_results(result_dir: Union[Path, str], do_tf=False):
         vel = row[vel_names].to_numpy()
         pos_sun = row[["pos_sun_x", "pos_sun_y", "pos_sun_z"]].to_numpy()
 
-        for source in ["sun", "moon"]:
+        for source in ["sun", "moon", "mercury", "earth"]:
             if f"acc_rp_{source}_x" not in row.index:
                 continue
 
