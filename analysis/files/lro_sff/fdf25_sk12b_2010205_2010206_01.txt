@@ -1,0 +1,45 @@
+Maneuver Plan
+
+Plan Date (UTCG): 2010 207 20:07:08  Burn Start (UTCG): 2010 205 18:39:35.3  Pre-burn fuel mass (kg):   176.746  official
+Maneuver:         SK12b              Burn Stop (UTCG):  2010 205 18:40:58.9  Post-burn fuel mass (kg):  173.750  official
+Planned dV (m/s): 5.417              Duration (s):      83.6                 Fuel mass used (kg):         2.996  official
+                                                                             Average SC Mass (kg):     1196.120  official
+Notes:                        SK12b Calibration
+Ephemeris File Name:           
+Thrust Vector File Name:      W:\LRO\ManeuverTeam\Products\STK Processed Att File\MOC68_SK12b_RECON_2010205_183435.a
+
+Maneuver Configuration:         Bank      1              2              
+                                  NT      OFF            OFF                 Prop Mode: PressureReg    
+                                 ACS      Off-Pulsed     OFF             ACS Stop Mode: Time           
+
+Initial Thruster Data:        
+                                             Calculated     Calculated         Thrust      Effective           Duty
+      Bank    Press (PSI)    Temp (degC)      Isp (sec)     Thrust (N)     Efficiency     Thrust (N)      Cycle (%)
+  NT1    1        272.200           20.0                                                                           
+  NT2    2        272.200           20.0                                                                           
+  NT3    1        272.200           20.0                                                                           
+  NT4    2        272.200           20.0                                                                           
+  AT1    1        272.200           20.0        230.585         16.325       0.983111         16.049             66
+  AT2    2        272.200           20.0                                                                           
+  AT3    1        272.200           20.0        232.471         21.932       0.983111         21.562             89
+  AT4    2        272.200           20.0                                                                           
+  AT5    1        272.200           20.0        233.588         24.578       0.983111         24.163            100
+  AT6    2        272.200           20.0                                                                           
+  AT7    1        272.200           20.0        231.420         18.772       0.983111         18.455             76
+  AT8    2        272.200           20.0                                                                           
+
+Final Thruster Data:          
+                                             Calculated     Calculated         Thrust      Effective           Duty
+      Bank    Press (PSI)    Temp (degC)      Isp (sec)     Thrust (N)     Efficiency     Thrust (N)      Cycle (%)
+  NT1    1        272.200           20.0                                                                           
+  NT2    2        272.200           20.0                                                                           
+  NT3    1        272.200           20.0                                                                           
+  NT4    2        272.200           20.0                                                                           
+  AT1    1        272.200           20.0        230.585         16.325       0.983111         16.049             66
+  AT2    2        272.200           20.0                                                                           
+  AT3    1        272.200           20.0        232.471         21.932       0.983111         21.562             89
+  AT4    2        272.200           20.0                                                                           
+  AT5    1        272.200           20.0        233.588         24.578       0.983111         24.163            100
+  AT6    2        272.200           20.0                                                                           
+  AT7    1        272.200           20.0        231.420         18.772       0.983111         18.455             76
+  AT8    2        272.200           20.0                                                                           
