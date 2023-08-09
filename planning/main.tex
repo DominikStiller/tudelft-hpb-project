@@ -178,7 +178,6 @@ The lunar radiation model can be rougly validated with the peak lunar irradiance
 
 
 
-
 \section{Result analysis}\label{sec:result-analysis}
 The question to be answered is \textit{What is the quantitative influence of using high-accuracy radiation pressure models on the attainable orbit precision for the Lunar Reconaissance Orbiter?} The answer will not include statements about absolute or relative precision improvements, since there is no ground truth. Rather, the answer will give tendencies about how different models and parameters influence orbital elements.
 
@@ -199,7 +198,7 @@ The simulation setup for gathering results will be varied to investigate differe
    \item Moon:
    \begin{itemize}
       \item Global origin
-      \item Ephemeris from DE 421
+      \item Ephemeris and MOON\_PA frame from DE 421
       \item Gravity field
       \item Albedo radiation source (paneled Moon with albedo obtained from DLAM-1)
       \item Thermal radiation source (paneled Moon)
@@ -223,8 +222,8 @@ The result analysis is inspired by \textcite{Vielberg2020} for LEO satellites, b
    \item Effect of different levels of detail of radiation pressure models on accelerations (cf.~\cite[Fig.~8]{Vielberg2020}) and Keplerian orbit elements (e.g., how does addition of albedo radiation change semi-major axis?), moving from baseline model towards extended model
    \begin{itemize}
       \item Baseline model: only direct solar radiation source, cannonball target, no occultation
-      \item For source, add albedo and thermal radiation (vary paneling resolution, constant and spherical harmonics albedo, constant or varying thermal radiation from \cref{eq:source-thermal-knocke,eq:source-thermal-lemoine}, dynamic/static paneling)
-      \item For target, switch to paneled model with/without self-shadowing
+      \item For source, add albedo and thermal radiation (vary paneling resolution, constant and spherical harmonics albedo, constant or varying thermal radiation from \cref{eq:source-thermal-knocke,eq:source-thermal-lemoine}, with/without instantaneous reradiation, dynamic/static paneling)
+      \item For target, switch to paneled model
       \item Add multiple occultation
       \item Compare mean difference and RMS difference w.r.t. baseline in radial, cross-track and along-track directions after propagation arc
       \item Compare Keplerian orbits w.r.t. baseline after propagation arc
