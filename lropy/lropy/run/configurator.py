@@ -88,13 +88,14 @@ class Configurator(ABC):
 
 
 class FullConfigurator(Configurator):
+    # Used for paper
     def __init__(self):
         self.configuration_name = "full"
         self.settings = {
             "simulation_start": ["2010 JUN 26 06:00:00", "2010 SEP 26 06:00:00"],
             "simulation_duration_rev": [32],  # 2.5 days, about 32 orbital revolutions
             "target_type": [TargetType.Cannonball, TargetType.Paneled],
-            "with_instantaneous_reradiation": [False, True],
+            "with_instantaneous_reradiation": [True],
             "use_occultation": [False, True],
             "use_solar_radiation": [False, True],
             "use_moon_radiation": [False, True],
@@ -166,7 +167,10 @@ class NumberOfPanelsPerRingConfigurator(Configurator):
             "use_solar_radiation": [True],
             "use_moon_radiation": [True],
             "paneling_moon": [PanelingType.Dynamic],
-            "albedo_distribution_moon": [AlbedoDistribution.Constant, AlbedoDistribution.DLAM1],
+            "albedo_distribution_moon": [
+                AlbedoDistribution.Constant,
+                AlbedoDistribution.DLAM1,
+            ],
             "number_of_panels_moon": [2000],
             "number_of_panels_per_ring_moon": [
                 [6],
@@ -199,7 +203,7 @@ class InstantaneousReradiationConfigurator(Configurator):
             "paneling_moon": [PanelingType.Dynamic],
             "albedo_distribution_moon": [AlbedoDistribution.Constant],
             "number_of_panels_moon": [2000],
-            "number_of_panels_per_ring_moon": [[6, 12]],
+            "number_of_panels_per_ring_moon": [[6, 12, 18, 24, 30]],
             "thermal_type_moon": [ThermalType.AngleBased],
             "step_size": [10],
         }

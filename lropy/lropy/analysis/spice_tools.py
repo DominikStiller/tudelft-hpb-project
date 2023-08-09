@@ -9,16 +9,20 @@ import spiceypy.utils.support_types as stypes
 from lropy.constants import moon_polar_radius
 
 if os.getenv("HOSTNAME") == "eudoxos":
-    lro_spice_base = "/home2/dominik/dev/tudat-bundle/spice/lro/data"
+    spice_base = "/home2/dominik/dev/tudat-bundle/spice"
 else:
-    lro_spice_base = "/home/dominik/dev/tudat-bundle/spice/lro/data"
+    spice_base = "/home/dominik/dev/tudat-bundle/spice"
 
 
-def init_spice():
+def init_spice_lro():
     spice.kclear()
+
+    lro_spice_base = f"{spice_base}/lro/data"
+    generic_spice_base = f"{spice_base}/generic"
 
     spice.furnsh(f"{lro_spice_base}/lsk/naif0012.tls")
     spice.furnsh(f"{lro_spice_base}/pck/pck00010.tpc")
+    spice.furnsh(f"{generic_spice_base}/spk/de421.bsp")
     spice.furnsh(f"{lro_spice_base}/fk/moon_080317.tf")
     spice.furnsh(f"{lro_spice_base}/pck/moon_pa_de421_1900_2050.bpc")
     spice.furnsh(f"{lro_spice_base}/fk/lro_frames_2012255_v02.tf")
@@ -30,7 +34,22 @@ def init_spice():
         spice.furnsh(file)
 
 
-init_spice()
+init_spice_lro()
+
+
+def init_spice_bepicolombo():
+    spice.kclear()
+
+    bepicolombo_spice_base = f"{spice_base}/bepicolombo/kernels"
+
+    spice.furnsh(f"{bepicolombo_spice_base}/lsk/naif0012.tls")
+    spice.furnsh(f"{bepicolombo_spice_base}/pck/pck00010.tpc")
+    spice.furnsh(f"{bepicolombo_spice_base}/pck/gm_de431.tpc")
+    spice.furnsh(f"{bepicolombo_spice_base}/fk/bc_mpo_v33.tf")
+    spice.furnsh(f"{bepicolombo_spice_base}/fk/bc_sci_v12.tf")
+
+    for file in glob.glob(f"{bepicolombo_spice_base}/spk/*.bsp"):
+        spice.furnsh(file)
 
 
 def generate_lro_ephemeris(timestamps):
@@ -50,10 +69,10 @@ def generate_lro_ephemeris(timestamps):
 
 
 def get_lro_orbital_plane_normal(t):
-    pos1 = spice.spkezr("LRO", t, "ECLIPJ2000", "NONE", "Moon")[0][3:]
+    vel1 = spice.spkezr("LRO", t, "ECLIPJ2000", "NONE", "Moon")[0][3:]
     # Quarter of a period later
-    pos2 = spice.spkezr("LRO", t + 113 * 60 / 4, "ECLIPJ2000", "NONE", "Moon")[0][3:]
-    normal = np.cross(pos1, pos2)
+    vel2 = spice.spkezr("LRO", t + lro_period / 4, "ECLIPJ2000", "NONE", "Moon")[0][3:]
+    normal = np.cross(vel1, vel2)
     return normal / np.linalg.norm(normal)
 
 

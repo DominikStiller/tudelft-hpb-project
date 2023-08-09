@@ -1,5 +1,5 @@
 import subprocess
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, wait
 from pathlib import Path
 from threading import Lock
 
@@ -37,15 +37,11 @@ class Runner:
         self.n_total = len(runs)
 
         with ThreadPoolExecutor(max_workers=self.n_threads) as executor:
-            futures = []
-            for run in runs:
-                futures.append(executor.submit(self.run_single, run))
-            for future in as_completed(futures):
-                future.result()
+            wait([executor.submit(self.run_single, run) for run in runs])
 
     def run_single(self, run: SimulationRun):
         tudat_dir = Path.home() / "dev/tudat-bundle"
-        executable = tudat_dir / "build/tudat/bin/application_lro_json"
+        executable = tudat_dir / "build-release/tudat/bin/application_lro_json"
         json_path = run.write_json()
 
         output_file = open(run.save_dir / "out.txt", "w")
@@ -76,18 +72,18 @@ if __name__ == "__main__":
     run = SimulationRun(Path("results"))
 
     run.simulation_start = "2010 JUN 26 06:00:00"
-    run.simulation_duration = 100
-    # run.simulation_duration_revolutions(5)
+    # run.simulation_duration = 100
+    run.simulation_duration_revolutions(2)
     run.target_type = TargetType.Paneled
     run.with_instantaneous_reradiation = False
-    run.use_occultation = True
+    run.use_occultation = False
     run.use_solar_radiation = True
     run.use_moon_radiation = True
     run.paneling_moon = PanelingType.Dynamic
     run.albedo_distribution_moon = AlbedoDistribution.DLAM1
-    run.number_of_panels_moon = 2000
-    run.number_of_panels_per_ring_moon = [6, 15]
-    run.thermal_type_moon = ThermalType.Delayed
+    run.number_of_panels_moon = 70000
+    run.number_of_panels_per_ring_moon = [6, 12, 18, 24]
+    run.thermal_type_moon = ThermalType.NoThermal
     run.step_size = 10
 
     # print(run.write_json())

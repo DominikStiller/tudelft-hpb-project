@@ -5,6 +5,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Self, Any
 
+from lropy.constants import lro_period
 from lropy.run.util import generate_id, generate_folder_name
 
 
@@ -87,8 +88,7 @@ class SimulationRun:
         return run
 
     def simulation_duration_revolutions(self, revolutions: float):
-        # Averave orbit duration is 113 min
-        self.simulation_duration = revolutions * 113 * 60
+        self.simulation_duration = revolutions * lro_period
 
     def as_json(self) -> str:
         return json.dumps(

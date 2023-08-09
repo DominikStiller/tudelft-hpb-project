@@ -1,13 +1,19 @@
 import os
+
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+os.environ["NUMEXPR_NUM_THREADS"] = "1"
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["VECLIB_MAXIMUM_THREADS"] = "1"
+
 import pickle
 
 from lropy.analysis.io import load_all_simulation_results
-from lropy.run.configurator import *
 from lropy.run.runner import Runner
 
 if __name__ == "__main__":
     if os.getenv("HOSTNAME") == "eudoxos":
-        n_threads = 24
+        n_threads = 30
     else:
         n_threads = 4
 
@@ -18,10 +24,10 @@ if __name__ == "__main__":
 
     runner = Runner(n_threads)
 
-    # configurator = FullConfigurator()
+    configurator = FullConfigurator()
     # configurator = NumberOfPanelsPerRingConfigurator()
     # configurator = InstantaneousReradiationConfigurator()
-    configurator = AlbedoThermalConfigurator()
+    # configurator = AlbedoThermalConfigurator()
     # configurator = StaticVsDynamicConfigurator()
 
     runs = configurator.get_runs()
@@ -34,6 +40,6 @@ if __name__ == "__main__":
 
     print(f"======== PROCESSING RESULTS ======== ")
     base_dir = runs[0].base_dir
-    results = load_all_simulation_results(base_dir, load_runs=True, do_tf=True)
+    results = load_all_simulation_results(base_dir, load_runs=True, do_tf=True, n_workers=n_threads)
     with (base_dir / "results.pkl").open("wb") as f:
         pickle.dump(results, f)

@@ -58,8 +58,10 @@ def save_plot(results_folder: Union[Path, str], name: str, fig=None, type="pdf")
 
 
 def format_plot(
-    xlocator=None,
-    ylocator=None,
+    x_major_locator=None,
+    y_major_locator=None,
+    x_minor_locator=None,
+    y_minor_locator=None,
     tight_layout=True,
     zeroline=False,
     xgrid=True,
@@ -67,25 +69,49 @@ def format_plot(
 ):
     fig = plt.gcf()
     for ax in fig.axes:
+        if hasattr(ax, "_colorbar"):
+            continue
+
         if zeroline:
             ax.axhline(0, linewidth=1.5, c="black")
 
-        xlocator_ax = xlocator
-        if not xlocator_ax:
+        x_major_locator_ax = x_major_locator
+        if not x_major_locator_ax:
             if ax.get_xscale() == "log":
-                xlocator_ax = matplotlib.ticker.LogLocator(base=10, subs="auto", numticks=100)
+                x_major_locator_ax = matplotlib.ticker.LogLocator()
             else:
-                xlocator_ax = matplotlib.ticker.AutoMinorLocator()
+                x_major_locator_ax = matplotlib.ticker.AutoLocator()
 
-        ylocator_ax = ylocator
-        if not ylocator_ax:
+        y_major_locator_ax = y_major_locator
+        if not y_major_locator_ax:
             if ax.get_yscale() == "log":
-                ylocator_ax = matplotlib.ticker.LogLocator(base=10, subs="auto", numticks=100)
+                y_major_locator_ax = matplotlib.ticker.LogLocator()
             else:
-                ylocator_ax = matplotlib.ticker.AutoMinorLocator()
+                y_major_locator_ax = matplotlib.ticker.AutoLocator()
 
-        ax.get_xaxis().set_minor_locator(xlocator_ax)
-        ax.get_yaxis().set_minor_locator(ylocator_ax)
+        ax.get_xaxis().set_major_locator(x_major_locator_ax)
+        ax.get_yaxis().set_major_locator(y_major_locator_ax)
+
+        x_minor_locator_ax = x_minor_locator
+        if not x_minor_locator_ax:
+            if ax.get_xscale() == "log":
+                x_minor_locator_ax = matplotlib.ticker.LogLocator(
+                    base=10, subs="auto", numticks=100
+                )
+            else:
+                x_minor_locator_ax = matplotlib.ticker.AutoMinorLocator()
+
+        y_minor_locator_ax = y_minor_locator
+        if not y_minor_locator_ax:
+            if ax.get_yscale() == "log":
+                y_minor_locator_ax = matplotlib.ticker.LogLocator(
+                    base=10, subs="auto", numticks=100
+                )
+            else:
+                y_minor_locator_ax = matplotlib.ticker.AutoMinorLocator()
+
+        ax.get_xaxis().set_minor_locator(x_minor_locator_ax)
+        ax.get_yaxis().set_minor_locator(y_minor_locator_ax)
 
         if xgrid:
             ax.grid(visible=True, which="major", linewidth=1.0)
