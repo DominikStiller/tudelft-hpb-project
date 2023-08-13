@@ -1,36 +1,49 @@
 \section{Results}
 
-beta angle slightly less than 90 degrees leads to sinusoidal acceleration
+no knowledge of true RP accelerations
+therefore, compare to baseline
 
-IAU\_MOON is in worst case 155 m off~\cite{NAIF2020} (Special PCK and FK for Earth and Moon, slide 14)
+Also use ~\cite{Borderies1990} as reference for plots and discussion, especially about relation of acc and change in elements
 
-for radiation pressure acceleration, add partial/full eclipse to time axis
+\subsection{Simulation setups}
 
-absolute acceleration magnitude likely influenced by mass uncertainty
-rp acceleration magnitude increases as mass decreases
+Solar with/without
+Lunar with/without
+Albedo constant/dlam
+LRO cannonball/paneled
+Occultation with/without (for solar only?)
 
-plots for beta = 80 (constant sunlight, Jun 26) and beta = 0 (orbital plane intersects sun, Sep 26)
 
-start at 2010-06-26 06:00:00 UTC, which corresponds to 2010-06-26 06:01:06 TDB
-
-effect of instantaneous reradiation
-
-static vs dynamic performance
-static number of panels
-dynamic number of panels per ring
-
-variation in altitude is in part due to assumption of spherical moon (polar radius is 2.1 km less than equatorial)
-
-static vs dynamic have different types of inaccuracy
-dynamic at low resolution has bias and converges globally towards accurate version
-static at low resolution looks like noise and noise is reduced when increasing resolution
-
-arc length 2.5 days, which is also used for LRO orbit determination~\cite{Mazarico2011}
-
-neglecting self-shadowing overestimates area~\cite{Mazarico2009}, but minimal self-shadowing in most cases for LRO~\cite{Slojkowski2015}
-
-Thermal radiation may cause an offset of 1-2 meters over an arclength of 2.5 days~\cite{Bauer2016}
-
-our maximum eclipse time of 48 min agrees with \cite{Tooley2010}
+\subsection{Accelerations}
+thermal vs albedo
 
 kink in cross-track SRP also seen in SELENE \cite{Kubooka1999}, search for explanation
+
+Variation with orbital position and time of year (correlate with relative sun position and albedo map)
+
+beta angle slightly less than 90 degrees leads to sinusoidal acceleration
+
+show partial/full eclipse on time axis
+
+absolute acceleration magnitude influenced by mass uncertainty
+rp acceleration magnitude increases as mass decreases
+17\% higher mass at start -> 17 \% lower acceleration magnitude
+
+angle-based thermal behaves quite similar to albedo, but does not vanish in eclipse
+
+
+
+\subsection{Change in orbital element}
+
+compare wih Gauss perturbing equations (analytical solution to change of osculating elements based on accelerations), e.g. ~\cite[Sec.~3.2]{Lucchesi2006}
+
+
+\subsection{Performance}
+no special setup like cpu pinning or disabled hyperthreading for benchmarking
+only on one setup
+Performance may vary in other situations~\cite{Mytkowicz2009}
+still, a good indication
+also mention minimum
+
+albedo model can increase computational demand by several hundred pct \cite{Nicholson2010}
+

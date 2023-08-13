@@ -1,0 +1,89 @@
+\section{Radiation pressure modeling for LRO}
+
+\subsection{Lunar radiation pressure}
+use 5 rings for moon due to convergence analysis and results from~\cite{Floberghagen1999}
+\cite{Nicholson2010} also uses 5 rings for LRO
+Need more with DLAM-1 than knocke due to higher frequency albedo dist or lower altitude?
+
+%Albedo
+
+no seasonal or diurnal albedo variation on Moon, as opposed to Earth~\cite{Knocke1989}
+
+Knocke argues that Earth can be reasonably represented using diffuse albedo reflection only
+Is this the case also for moon?
+
+find source for how much lunar albedo varies with viewing angle, i.e. if the moon albedo would benefit from an angular distribution model
+
+albedo value used should be for broadband shortwave (\SIrange{0.2}{4}{\micro\meter}, peak at \SI{0.4}{\micro\meter})~\cite{Knocke1989}, which accounts for most of solar radiation
+albedo used for moon is 0.19 (750 nm, which corresponds to maximum reflectivity~\cite{Floberghagen1999}), which is mean of DLAM-1, even though 0.12 is commonly cited
+DLAM-1 is derived from clementine imagery, which is known to overestimate albedo~\cite{Shkuratov2011}
+This is to enable better comparison, but if a constant albedo value were used, this amounts to linear scaling
+
+
+% Thermal
+
+use angle-based model from Lemoine
+Flux from Lemoine agrees with \cite[Table~8]{Tooley2010}
+
+Constant-emission model from Knocke is not appropriate for moon since it gets very cold -> Knocke would result in constant emission (only varies by XX\% due to change in Moon--Sun distance), will not be investigated further here
+
+\subsection{LRO target}
+
+to find cannonball area and coefficient, some authors use raytracing~\cite{Hattori2019}, we just use weighted average
+finding a single rp coefficien is virtually impossible since it changes~\cite[p~580]{Vallado2013}
+
+Different values for A and Cr in literature:
+\cite{Nicholson2010}: 14, 1.0 (for daily/not precision OD, no changing orientation, solar only) --> use this one
+\cite{Bauer2016}: 10, 1.2 (no changing orientation, solar only)
+\cite{Slojkowski2015}: first 1.67, then 0.96 after estimation
+\cite{Mazarico2018}: 1.03 +- 0.24 (1.04 in sep, 1.4 in jun, but rather a scale factor for paneling than cannonball coefficient)
+
+mass at start of science orbit (15 Sep 2009): 1271.9 kg
+mass at end of science orbit (11 Dec 2011): 1087.0 kg
+use end of science orbit mass for all scenarios to get worst case scenario
+fixed mass to enable comparison
+also show mass history
+
+effect of self-shadowing on LRO orbit is small~\cite{Loecher2018}
+neglecting self-shadowing overestimates area~\cite{Mazarico2009}, but minimal self-shadowing in most cases for LRO~\cite{Slojkowski2015}
+
+instantaneous reradiation
+will not be investigated further
+describe how results change (simple scaling?)
+Thermal radiation may cause an offset of 1-2 meters over an arclength of 2.5 days~\cite{Bauer2016}
+
+
+
+\subsection{LRO orbit geometry}
+variation in altitude is in part due to assumption of spherical moon (polar radius is 2.1 km less than equatorial) -> leads to change in lunar RP magnitude over orbit
+sun beta over year + eclipse periods
+
+our maximum eclipse time of 48 min agrees with \cite{Tooley2010}
+
+
+
+\subsection{Simulation setup}
+
+earth albedo + thermal radiation can be neglected for LRO since it is less than 0.1\% of solar radiation at moon
+
+solar array tracks Sun, HGA tracks Earth~\cite{Tooley2010}
+start at start at 26 June 2010 06:00:00
+Earth eclipses Sun during this time
+Moon does not eclipse Sun (Sun beta angle is about -90 deg, see~\cite{Tooley2010})
+
+
+Operational LRO OD does not use lunar albedo due to computational demand, but used for offline reprocessing.
+Self-shadowing from \citeauthor{Mazarico2009} is used for reprocessing~\cite{Nicholson2010}
+
+arc length 2.5 days, which is also used for LRO orbit determination~\cite{Mazarico2011}
+step 5 s, which is also used for LRO orbit determination~\cite{Mazarico2018}
+
+MOON\_PA frame, IAU\_MOON is in worst case 155 m off~\cite{NAIF2020} (Special PCK and FK for Earth and Moon, slide 14)
+
+integrator + propagator params
+
+
+maybe show figure from poster
+
+
+two arcs, one for beta = 0 and beta = 90

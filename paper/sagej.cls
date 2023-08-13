@@ -15,7 +15,7 @@
 \RequirePackage{graphicx}
 \RequirePackage{latexsym,ifthen,rotating,calc,textcase,booktabs,color,endnotes}
 \RequirePackage{amsfonts,amssymb,amsbsy,amsmath,amsthm}
-%\RequirePackage{bm}
+\RequirePackage{bm,csquotes}
 \RequirePackage[errorshow]{tracefnt}
 \usepackage[inline]{enumitem}
 

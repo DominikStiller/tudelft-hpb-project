@@ -1,19 +1,20 @@
 \section{Introduction}
 \gls{lro}
 
+Describe LRO mission
+Describe need for POD
+
+sub-meter accuracy in radial component~\cite{Zuber2009}
+50-100 m in total position~\cite{Chin2007}
+
+figure with magnitudes of perturbations
+
 "SRP is the largest non-gravitational perturbation affecting the LRO orbit and inadequate modeling of SRP is the primary cause of large prediction errors for LRO, particularly during high-beta angle periods"~\cite{Slojkowski2015}
-
-Operational LRO OD does not use lunar albedo due to computational demand, but used for offline reprocessing. Self-shadowing from \citeauthor{Mazarico2009} is used~\cite{Nicholson2010}
-
+albedo modeling on moon necessary for selenodetic mapping~\cite{Floberghagen1999}
+albedo radiation significant on moon since no atmosphere exists and surface of lunar highlands is rather reflective \%~\cite{Floberghagen1999}
 High OD error during full-sun periods with cannonball model, but acceptable with multi-panel model and real attitude for SA and HGA~\cite[]{Slojkowski2014}
 
-albedo radiation significant since no atmosphere exists, up to 30 \%~\cite{Floberghagen1999}
+in this paper, only investigate orbital variations over 2.5 day arc -> goal is to improve force models for POD
+Long-term effect of RP would also be interesting (forces could cancel out over time or always act in same direction), but not considered here
 
-model setup:
-solar array tracks Sun, HGA tracks Earth~\cite{Tooley2010}
-start at start at 26 June 2010 06:00:00
-Earth eclipses Sun during this time
-Moon does not eclipse Sun (Sun beta angle is about -90 deg, see~\cite{Tooley2010})
-
-mass:
-1208 kg (1915 kg loaded mass, 644 kg prop used after mission orbit insertion, then 6.315 kg prop used for each of 10 sk maneuvers till 26 june 2010~\cite{Mesarch2010})
+Tudat is used and models are used for future research
