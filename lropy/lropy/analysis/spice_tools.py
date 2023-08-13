@@ -69,10 +69,8 @@ def generate_lro_ephemeris(timestamps):
 
 
 def get_lro_orbital_plane_normal(t):
-    vel1 = spice.spkezr("LRO", t, "ECLIPJ2000", "NONE", "Moon")[0][3:]
-    # Quarter of a period later
-    vel2 = spice.spkezr("LRO", t + lro_period / 4, "ECLIPJ2000", "NONE", "Moon")[0][3:]
-    normal = np.cross(vel1, vel2)
+    state = spice.spkezr("LRO", t, "ECLIPJ2000", "NONE", "Moon")[0]
+    normal = np.cross(state[:3], state[3:])  # angular momentum vector
     return normal / np.linalg.norm(normal)
 
 

@@ -54,6 +54,7 @@ class SimulationRun:
     number_of_panels_per_ring_moon: list[int]
     thermal_type_moon: ThermalType
     step_size: float
+    save_results: bool
 
     def __init__(self, base_dir: Path, run_number: int = None):
         self.base_dir = base_dir
@@ -84,6 +85,7 @@ class SimulationRun:
         run.number_of_panels_per_ring_moon = settings["number_of_panels_per_ring_moon"]
         run.thermal_type_moon = settings["thermal_type_moon"]
         run.step_size = settings["step_size"]
+        run.save_results = settings["save_results"]
 
         return run
 
@@ -122,12 +124,13 @@ class SimulationRun:
                 ),
                 "simulation_duration": self.simulation_duration,
                 "step_size": self.step_size,
+                "save_results": self.save_results,
             },
             indent=3,
         )
 
     def write_json(self) -> Path:
-        self.save_dir.mkdir(parents=True, exist_ok=False)
+        self.save_dir.mkdir(parents=True, exist_ok=True)
         path = self.save_dir / "settings.json"
         with open(path, "w") as f:
             f.write(self.as_json())

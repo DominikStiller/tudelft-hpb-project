@@ -7,7 +7,6 @@ from typing import Union, Tuple
 
 import numpy as np
 import pandas as pd
-
 # noinspection PyUnresolvedReferences
 import swifter
 from tqdm import tqdm
@@ -44,9 +43,12 @@ def _get_column_names(result_dir: Path):
                 # Scalar
                 colnames.append(name)
             else:
-                # Vector
                 if size == 3:
+                    # Vector
                     elements = ["x", "y", "z"]
+                elif size == 9:
+                    # Row-major matrix
+                    elements = ["r11", "r12", "r13", "r21", "r22", "r23", "r31", "r32", "r33"]
                 elif name == "kepler":
                     elements = ["a", "e", "i", "argPeri", "longAscNode", "trueAnom"]
                 else:
@@ -71,6 +73,9 @@ def _get_column_name(id: str) -> str:
         return "kepler"
     elif match := re.fullmatch(r"Altitude of (\S+) w.r.t. (\S+)", id):
         return "h"
+    elif match := re.fullmatch(r"TNW to inertial frame rotation matrix of (\S+) w.r.t. (\S+)", id):
+        target, central = match.groups()
+        return f"rot_{target}_{central}"
     elif match := re.fullmatch(
         r"Spherical position angle (latitude|longitude) angle of (\S+) w.r.t. (\S+)", id
     ):
@@ -178,8 +183,16 @@ def load_walltime_duration(result_dir: Union[Path, str]):
         result_dir = Path(result_dir)
 
     cpu_time = pd.read_csv(result_dir / "cpu_time.csv", names=["t_sim", "t_wall"])
-    walltime = cpu_time["t_wall"]
-    return walltime.iloc[-1] - walltime.iloc[0]
+    walltime_propagation = cpu_time["t_wall"].iloc[-1] - cpu_time["t_wall"].iloc[0]
+
+    walltime_file_total = result_dir / "walltime.txt"
+    if walltime_file_total.exists():
+        with walltime_file_total.open() as f:
+            walltime_total = list(map(float, f.read().strip().split("\n")))
+    else:
+        walltime_total = []
+
+    return walltime_propagation, walltime_total
 
 
 def load_all_simulation_results(
@@ -225,7 +238,9 @@ def _load_metadata_and_run(result_dir, load_run, do_tf):
     run_no = int(result_dir.name)
     with (result_dir / "settings.json").open() as f:
         metadata = json.load(f)
-    metadata["walltime_duration"] = load_walltime_duration(result_dir)
+    metadata["walltime_propagation"], metadata["walltime_total"] = load_walltime_duration(
+        result_dir
+    )
 
     if load_run:
         run = load_simulation_results(result_dir, do_tf=do_tf)

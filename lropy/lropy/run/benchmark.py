@@ -1,4 +1,5 @@
 import os
+import random
 
 os.environ["OPENBLAS_NUM_THREADS"] = "1"
 os.environ["MKL_NUM_THREADS"] = "1"
@@ -14,25 +15,25 @@ from lropy.run.configurator import *
 
 if __name__ == "__main__":
     if os.getenv("HOSTNAME") == "eudoxos":
-        n_threads = 42
+        n_threads = 35
     else:
         n_threads = 4
 
-    # if get_average_load() > 0.2:
-    #     # Prevent interference with other users
-    #     print(f"Current average load of {get_average_load()} too high")
-    #     sys.exit(-1)
+    n_iterations = 50
 
     runner = Runner(n_threads)
 
-    # configurator = SingleConfigurator()
-    configurator = FullConfigurator()
-    # configurator = NumberOfPanelsPerRingConfigurator()
-    # configurator = InstantaneousReradiationConfigurator()
-    # configurator = AlbedoThermalConfigurator()
-    # configurator = StaticVsDynamicConfigurator()
+    configurator = FullConfigurator(True)
+    # configurator = NumberOfPanelsPerRingConfigurator(True)
+    # configurator = InstantaneousReradiationConfigurator(True)
+    # configurator = AlbedoThermalConfigurator(True)
+    # configurator = StaticVsDynamicConfigurator(True)
 
     runs = configurator.get_runs()
+    runs = runs * n_iterations
+    random.shuffle(runs)
+
+    # print(len(runs))
     # for run in runs:
     #     print(run.as_json())
 
@@ -41,6 +42,6 @@ if __name__ == "__main__":
 
     print(f"======== PROCESSING RESULTS ======== ")
     base_dir = runs[0].base_dir
-    results = load_all_simulation_results(base_dir, load_runs=True, do_tf=True, n_workers=n_threads)
+    results = load_all_simulation_results(base_dir, load_runs=False, n_workers=n_threads)
     with (base_dir / "results.pkl").open("wb") as f:
         pickle.dump(results, f)

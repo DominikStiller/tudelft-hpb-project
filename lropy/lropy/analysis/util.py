@@ -49,6 +49,11 @@ def get_minute_index(df: pd.DataFrame) -> pd.Index:
     return diff.days * 24 * 60 + diff.seconds / 60 + diff.microseconds / (60 * 1e6)
 
 
+def get_hour_index(df: pd.DataFrame) -> pd.Index:
+    diff = df.index - df.index[0]
+    return diff.days * 24 + diff.seconds / 3600 + diff.microseconds / (3600 * 1e6)
+
+
 def get_revolutions_index(df: pd.DataFrame, orbit_period: float = lro_period) -> pd.Index:
     """
     Get the index in number of revolutions.

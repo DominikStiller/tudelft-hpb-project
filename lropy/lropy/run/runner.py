@@ -1,4 +1,6 @@
+import os
 import subprocess
+import time
 from concurrent.futures import ThreadPoolExecutor, wait
 from pathlib import Path
 from threading import Lock
@@ -37,19 +39,28 @@ class Runner:
         self.n_total = len(runs)
 
         with ThreadPoolExecutor(max_workers=self.n_threads) as executor:
-            wait([executor.submit(self.run_single, run) for run in runs])
+            fut = [executor.submit(self.run_single, run) for run in runs]
+            wait(fut)
+            for f in fut:
+                f.result()
 
     def run_single(self, run: SimulationRun):
         tudat_dir = Path.home() / "dev/tudat-bundle"
         executable = tudat_dir / "build-release/tudat/bin/application_lro_json"
         json_path = run.write_json()
 
-        output_file = open(run.save_dir / "out.txt", "w")
-
         with self.lock:
             self.n_started += 1
             print(f"[{self.n_started}/{self.n_total}] Run {run.id} started")
 
+        time_start = time.perf_counter()
+
+        if run.save_results:
+            output_file = run.save_dir / "out.txt"
+        else:
+            output_file = os.devnull
+
+        output_file = open(output_file, "w")
         p = subprocess.Popen(
             [executable, str(json_path)],
             cwd=tudat_dir,
@@ -57,8 +68,11 @@ class Runner:
             stderr=output_file,
         )
         return_code = p.wait()
-
+        time_end = time.perf_counter()
         output_file.close()
+
+        with open(run.save_dir / "walltime.txt", "a") as f:
+            f.write(f"{time_end - time_start}\n")
 
         with self.lock:
             self.n_finished += 1
@@ -71,20 +85,21 @@ class Runner:
 if __name__ == "__main__":
     run = SimulationRun(Path("results"))
 
-    run.simulation_start = "2010 JUN 26 06:00:00"
+    run.simulation_start = "2010 SEP 26 16:30:00"
     # run.simulation_duration = 100
-    run.simulation_duration_revolutions(2)
+    run.simulation_duration_revolutions(1)
     run.target_type = TargetType.Paneled
-    run.with_instantaneous_reradiation = False
-    run.use_occultation = False
+    run.with_instantaneous_reradiation = True
+    run.use_occultation = True
     run.use_solar_radiation = True
     run.use_moon_radiation = True
     run.paneling_moon = PanelingType.Dynamic
     run.albedo_distribution_moon = AlbedoDistribution.DLAM1
     run.number_of_panels_moon = 70000
-    run.number_of_panels_per_ring_moon = [6, 12, 18, 24]
-    run.thermal_type_moon = ThermalType.NoThermal
+    run.number_of_panels_per_ring_moon = [6, 12, 18, 24, 30]
+    run.thermal_type_moon = ThermalType.AngleBased
     run.step_size = 10
+    run.save_results = True
 
     # print(run.write_json())
     Runner().run_single(run)

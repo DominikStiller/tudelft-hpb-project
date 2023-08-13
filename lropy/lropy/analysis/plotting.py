@@ -40,11 +40,10 @@ def set_plotting_theme():
         plt.style.use("dark_background")
 
 
-def save_plot(results_folder: Union[Path, str], name: str, fig=None, type="pdf"):
-    if isinstance(results_folder, str):
-        results_folder = Path(results_folder)
+def save_plot(plots_folder: Union[Path, str], name: str, fig=None, type="pdf"):
+    if isinstance(plots_folder, str):
+        plots_folder = Path(plots_folder)
 
-    plots_folder = "plots" / results_folder
     plots_folder.mkdir(parents=True, exist_ok=True)
 
     if fig is None:
