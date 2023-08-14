@@ -14,10 +14,12 @@
 
 \RequirePackage{graphicx}
 \RequirePackage{latexsym,ifthen,rotating,calc,textcase,booktabs,color,endnotes}
-\RequirePackage{amsfonts,amssymb,amsbsy,amsmath,amsthm}
+\RequirePackage{amsfonts,amssymb,amsbsy,amsmath,amsthm,physics}
 \RequirePackage{bm,csquotes}
 \RequirePackage[errorshow]{tracefnt}
 \usepackage[inline]{enumitem}
+
+\DeclareGraphicsRule{.ai}{pdf}{.ai}{}
 
 \definecolor{tudelft-cyan}{cmyk}{1,0,0,0}
 \definecolor{tudelft-petrol}{RGB}{97,164,180}
@@ -111,7 +113,7 @@ centering]{geometry}
 \def\footnoterule{\kern-3\p@
   \hrule \@width \columnwidth \kern 3mm}
 
-\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\renewcommand{\thefootnote}{\arabic{footnote}}
 \long\def\@makefntext#1{\parindent 1em%
 \noindent{$\m@th^{\@thefnmark}$}#1}
 
@@ -225,7 +227,7 @@ centering]{geometry}
 \renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
                                      {0.9\@bls plus .3\@bls minus .1\@bls}%
                                      {4pt\@afterindentfalse}%
-                                     {\sagesf\large\itshape\raggedright}}
+                                     {\sagesf\normalsize\bfseries\raggedright}}
 \renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
                                      {0.5\@bls plus .3\@bls minus .1\@bls}%
                                      {-0.5em\@afterindentfalse}%
@@ -255,6 +257,7 @@ centering]{geometry}
 \DeclareCaptionLabelSeparator{sageperiod}{.\hspace*{1ex}}
 \captionsetup[figure]{font=small,labelfont={sf,bf},textfont=sf,labelsep=sageperiod,justification=raggedright,singlelinecheck=false}
 \captionsetup[table]{position=top,labelsep=sageperiod,font=small,labelfont={sf,bf},textfont=sf,justification=raggedright,skip=2pt,singlelinecheck=false}
+\usepackage{subcaption}
 
 
 \def\thmhead@plain#1#2#3{%
@@ -305,7 +308,7 @@ centering]{geometry}
 	bibencoding=utf8,
 	sortlocale=en_US,
 	url=false,
-	style=ieee,
+	style=ieee-custom,
   citestyle=numeric-comp,
   isbn=false
 ]{biblatex}
@@ -333,7 +336,18 @@ centering]{geometry}
 \microtypecontext{spacing=nonfrench}
 
 \usepackage{siunitx}
-\sisetup{detect-all}
+\sisetup{
+  detect-all,
+  per-mode=symbol,
+  propagate-math-font,
+  mode=math
+  % inter-unit-product=\ensuremath{{}\cdot{}}
+}
+
+\DeclareSIUnit{\irr}{\W\per\square\m}
+\DeclareSIUnit{\acc}{\m\per\square\s}
+\DeclareSIUnit{\vel}{\m\per\s}
+\AtBeginDocument{\RenewCommandCopy\qty\SI}
 
 \usepackage{tabularx}
 

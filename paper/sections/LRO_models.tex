@@ -10,11 +10,13 @@ Need more with DLAM-1 than knocke due to higher frequency albedo dist or lower a
 no seasonal or diurnal albedo variation on Moon, as opposed to Earth~\cite{Knocke1989}
 
 Knocke argues that Earth can be reasonably represented using diffuse albedo reflection only
-Is this the case also for moon?
+this is not the case for moon, particularly at low phase angles~\cite{Shkuratov2011}
+However, this is only relevant for small beta angles, and even then only small fractions of orbit (would increase radial magnitude over subsolar point?)
+therefore, beyond scope of the paper
 
-find source for how much lunar albedo varies with viewing angle, i.e. if the moon albedo would benefit from an angular distribution model
+actual hapke parameter map in \cite{Sato2014}
 
-albedo value used should be for broadband shortwave (\SIrange{0.2}{4}{\micro\meter}, peak at \SI{0.4}{\micro\meter})~\cite{Knocke1989}, which accounts for most of solar radiation
+albedo value used should be for broadband shortwave (\qtyrange{0.2}{4}{\micro\meter}, peak at \qty{0.4}{\micro\meter})~\cite{Knocke1989}, which accounts for most of solar radiation
 albedo used for moon is 0.19 (750 nm, which corresponds to maximum reflectivity~\cite{Floberghagen1999}), which is mean of DLAM-1, even though 0.12 is commonly cited
 DLAM-1 is derived from clementine imagery, which is known to overestimate albedo~\cite{Shkuratov2011}
 This is to enable better comparison, but if a constant albedo value were used, this amounts to linear scaling
@@ -64,6 +66,8 @@ our maximum eclipse time of 48 min agrees with \cite{Tooley2010}
 
 \subsection{Simulation setup}
 
+simulation setup in table, explanations in text
+
 earth albedo + thermal radiation can be neglected for LRO since it is less than 0.1\% of solar radiation at moon
 
 solar array tracks Sun, HGA tracks Earth~\cite{Tooley2010}
@@ -85,5 +89,5 @@ integrator + propagator params
 
 maybe show figure from poster
 
-
 two arcs, one for beta = 0 and beta = 90
+describe why these
