@@ -12,18 +12,26 @@
 \RequirePackage{times}
 \usepackage[scaled=.95]{helvet}
 
+\usepackage[utf8x]{inputenc}
+\usepackage{pifont}
 \RequirePackage{graphicx}
 \RequirePackage{latexsym,ifthen,rotating,calc,textcase,booktabs,color,endnotes}
 \RequirePackage{amsfonts,amssymb,amsbsy,amsmath,amsthm,physics}
-\RequirePackage{bm,csquotes}
+\RequirePackage{bm,csquotes,xcolor}
 \RequirePackage[errorshow]{tracefnt}
 \usepackage[inline]{enumitem}
+\usepackage{moreverb,url}
 
 \DeclareGraphicsRule{.ai}{pdf}{.ai}{}
 
 \definecolor{tudelft-cyan}{cmyk}{1,0,0,0}
 \definecolor{tudelft-petrol}{RGB}{97,164,180}
-\usepackage{moreverb,url}
+\definecolor{mpl-darkblue}{RGB}{12, 35, 64}
+\definecolor{mpl-red}{RGB}{165, 0, 52}
+\definecolor{mpl-lightblue}{RGB}{0, 166, 214}
+\definecolor{mpl-pink}{RGB}{239, 96, 163}
+\definecolor{mpl-yellow}{RGB}{255, 184, 28}
+\definecolor{mpl-orange}{RGB}{236, 104, 66}
 
 \usepackage[colorlinks,bookmarksopen,bookmarksnumbered,citecolor=tudelft-petrol,urlcolor=tudelft-petrol,linkcolor=tudelft-petrol]{hyperref}
 \usepackage[noabbrev,capitalise]{cleveref}
