@@ -27,7 +27,7 @@ def set_plotting_theme():
         rc={
             "font.family": "sans-serif",
             "lines.linewidth": 1.2,
-            "font.sans-serif": "Lato",
+            "font.sans-serif": "Nimbus Sans",
             # "axes.titleweight": "bold",
             # "axes.labelweight": "light",
             # "font.weight": "light",

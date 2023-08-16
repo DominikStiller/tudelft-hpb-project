@@ -1,33 +1,78 @@
 \section{Radiation pressure modeling for LRO}
 
-\subsection{Lunar radiation pressure}
-use 5 rings for moon due to convergence analysis and results from~\cite{Floberghagen1999}
-\cite{Nicholson2010} also uses 5 rings for LRO
-Need more with DLAM-1 than knocke due to higher frequency albedo dist or lower altitude?
+\subsection{Lunar albedo radiation}
+\label{subsec:lunar-albedo}
 
-%Albedo
+\begin{figure*}[t]
+    \centering
 
-no seasonal or diurnal albedo variation on Moon, as opposed to Earth~\cite{Knocke1989}
+    \begin{subfigure}[c]{0.49\textwidth}
+        \includegraphics[width=\textwidth]{figures/plots/lunar_map_photo.pdf}
+        \subcaption{}
+        \label{fig:lunar-albedo-map-photo}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.49\textwidth}
+        \includegraphics[width=\textwidth]{figures/plots/lunar_map_dlam1.pdf}
+        \subcaption{}
+        \label{fig:lunar-albedo-map-dlam1}
+    \end{subfigure}
 
-Knocke argues that Earth can be reasonably represented using diffuse albedo reflection only
-this is not the case for moon, particularly at low phase angles~\cite{Shkuratov2011}
-However, this is only relevant for small beta angles, and even then only small fractions of orbit (would increase radial magnitude over subsolar point?)
-therefore, beyond scope of the paper
+    \bigskip
 
-actual hapke parameter map in \cite{Sato2014}
+    \begin{subfigure}[c]{0.49\textwidth}
+        \includegraphics[width=\textwidth]{figures/plots/lunar_hist_photo.pdf}
+        \subcaption{Mosaic (mean = 0.12, minimum = 0.05, 99th percentile = 0.29)~\cite{UASC2009}}
+    \end{subfigure}
+   \hfill
+    \begin{subfigure}[c]{0.49\textwidth}
+        \includegraphics[width=\textwidth]{figures/plots/lunar_hist_dlam1.pdf}
+        \subcaption{\acrshort{DLAM1} (mean = 0.15, minimum = 0.04, 99th percentile = 0.22)}
+    \end{subfigure}
 
-albedo value used should be for broadband shortwave (\qtyrange{0.2}{4}{\micro\meter}, peak at \qty{0.4}{\micro\meter})~\cite{Knocke1989}, which accounts for most of solar radiation
-albedo used for moon is 0.19 (750 nm, which corresponds to maximum reflectivity~\cite{Floberghagen1999}), which is mean of DLAM-1, even though 0.12 is commonly cited
-DLAM-1 is derived from clementine imagery, which is known to overestimate albedo~\cite{Shkuratov2011}
-This is to enable better comparison, but if a constant albedo value were used, this amounts to linear scaling
+   \caption{Lunar albedo distribution from Clementine. Both the mosaic and \acrshort{DLAM1} are based on 750 nm reflectivity, but \acrshort{DLAM1} has been corrected to the average solar wavelength. Bright features like the Tycho and Giardini Bruno craters (\textcolor{mpl-pink}{\ding{108}}) can be registered. Note that the maximum of the albedo scales is 0.5 to increase contrast; in reality, the Moon appears half as bright.}
+   \label{fig:lunar-albedo-map}
+\end{figure*}
+
+The Moon is a major source of radiation in \gls{LRO}'s orbit, with lunar irradiance magnitudes approaching half of the Sun's. Therefore, albedo and thermal radiation due to the Moon will be modeled. While lunar albedo is only \qty{40}{\percent} of Earth's albedo~\cite{Goode2001}, albedo radiation is still substantial, particularly over the subsolar point~\cite{Floberghagen1999}. However, lunar albedo varies significantly with geology: the highlands (mean $a = 0.16$, maximum $a=0.25$) are much more reflective than the maria (mean $a = 0.07$, minimum $a = 0.05$) due to their respective regolith composition~\cite{Vasavada2012,Hayne2017,Sato2014}. The mosaic of calibrated albedo imagery from Clementine in \cref{fig:lunar-albedo-map-photo} clearly shows the differences between highlands and marias. The mean of 0.12 agrees with other literature~\cite{Vasavada2012}, and most of the lunar surface has an albedo below 0.20. Higher values are only found at the poles, where the imagery represents topographic shading rather than actual albedo~\cite{McEwen1997}. Note that the mosaic is for albedo of light at \qty{750}{\nm} wavelength, which is slightly longer than the average solar wavelength. Even though solar radiation has most energy within the \qtyrange{300}{2400}{\nm} band, the spectrum peaks at around \qty{470}{\nm}. Lunar reflectivity increases with increasing wavelength~\cite{Shkuratov2011}.
+
+\citeauthor{Floberghagen1999}'s \numproduct{15x15} spherical harmonics expansion called \gls{DLAM1}~\cite{Floberghagen1999} is often used to represent this spatial albedo variability in lunar \gls{RP} models. \gls{DLAM1} was fitted from Clementine imagery and was designed to work with Knocke's dynamic paneling. Due to the nature of spherical harmonics, the model cannot resolve features smaller than \ang{12} (\qty{360}{\km} at the equator). The expansion is shown in \cref{fig:lunar-albedo-map-dlam1}, along with direct imagery from Clementine. \gls{DLAM1} was also derived from 750 nm imagery, but we scale the original values by $1/1.3$ to account for the reduced reflectivity at the average solar solar wavelength. This factor was proposed by \citeauthor{Vasavada2012}~\cite{Vasavada2012}. Even with the correction, the mean albedo of the expansion is still roughly \qty{30}{\percent} above the commonly accepted mean of 0.12. This is possibly due to a different calibration of the imagery that \gls{DLAM1} is based on compared to the mosaic from \cref{fig:lunar-albedo-map-photo}. In fact, Clementine is known to overestimate albedo due to bad calibration~\cite{Shkuratov2011}. Apart from the difference in magnitude, the patterns agree reasonably well: maria and highlands are distinct and bright features like the ray system around the Tycho and Giordano Bruno craters can be recognized (marked in \cref{fig:lunar-albedo-map-dlam1}).
+
+Despite the shortcomings of \gls{DLAM1}, spherical harmonics are convenient: they are smooth and do not require interpolation like a gridded map. They can easily be truncated to trade detail for computational efficiency. Therefore, we will use \gls{DLAM1} in this paper but consider that the magnitude overestimated by \qty{30}{\percent} during the analysis of results. For an equivalent albedo, we use the mean of 0.15 instead of 0.12 to facilitate comparison between a constant and location-dependent albedo model. Note that the spatial variability described above suggests that a single albedo value cannot represent lunar radiation accurately.
+
+Albedo radiation assumes ideal, diffuse Lambertian reflectance, which decreases with the cosine of the viewing angle. This assumption is especially appropriate for Earth, for which purely specular radiosity only amounts to \qty{10}{\percent} of the purely diffuse radiosity. However, this is not the case for the Moon: the opposition effect increases the reflectance at low phase angles (when the source is behind the observer, see \cref{fig:eclipse-geometry}) much more than would be expected from a cosine law. In fact, the brightness increases more than \qty{40}{\percent} between phase angles of \ang{4} and \ang{0}~\cite{Buratti1996}. This is primarily caused by shadow hiding. To account for non-diffuse reflectance of the lunar surface, the Hapke \gls{BRDF} was developed~\cite{Hapke2012}. This \gls{BRDF} is an empirical relation based on nine parameters that control, among other phenomena, the strength and directionality of the opposition effect. Near-global maps for these parameters have been fitted from \gls{LRO} observations and could be used for a radiosity model~\cite{Sato2014}. For \gls{RP} acceleration modeling, opposition effect is only of concern when the target is above the subsolar point. For \gls{LRO}, this only occurs for a few days twice a year, and even then only for a small fraction of the orbit. Therefore, we will neglect opposition effect in this study.
 
 
-% Thermal
+
+\subsection{Lunar thermal radiation}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{figures/plots/thermal_map.pdf}
+    \caption{Map of lunar thermal emissions from the angle-based model (\cref{eq:radiosity-thermal-anglebased}). The emissivity is 0.95 and surface temperatures range between \qty{100}{K} and \qty{375}{K}, depending on the subsolar angle.}
+    \label{fig:thermal-map}
+\end{figure}
 
 use angle-based model from Lemoine
 Flux from Lemoine agrees with \cite[Table~8]{Tooley2010}
 
 Constant-emission model from Knocke is not appropriate for moon since it gets very cold -> Knocke would result in constant emission (only varies by XX\% due to change in Moon--Sun distance), will not be investigated further here
+
+rapid cooling at sunset, slower cooling during night~\cite{Vasavada2012} sec 4.1
+
+emissivity 0.95, although 0.90 during night~\cite{Bandfield2015}
+high degree of spatial uniformity in these thermophysical properties~\cite{Hayne2017} -> constant is good
+
+angle-based model assumes symmetry, while actually slightly asymmetric due to cooling during night (e.g. Vasavada Fig 4)
+
+\subsection{Paneling of the Moon}
+
+use 5 rings for moon due to convergence analysis and results from~\cite{Floberghagen1999}
+\cite{Nicholson2010} also uses 5 rings for LRO
+Need more with DLAM-1 than knocke due to higher frequency albedo dist or lower altitude?
+
+show convergence plot
+is within XX pct of 10 rings for 5 rings
 
 \subsection{LRO target}
 
@@ -49,10 +94,7 @@ also show mass history
 effect of self-shadowing on LRO orbit is small~\cite{Loecher2018}
 neglecting self-shadowing overestimates area~\cite{Mazarico2009}, but minimal self-shadowing in most cases for LRO~\cite{Slojkowski2015}
 
-instantaneous reradiation
-will not be investigated further
-describe how results change (simple scaling?)
-Thermal radiation may cause an offset of 1-2 meters over an arclength of 2.5 days~\cite{Bauer2016}
+
 
 
 

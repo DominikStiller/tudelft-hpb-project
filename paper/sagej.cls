@@ -12,7 +12,7 @@
 \RequirePackage{times}
 \usepackage[scaled=.95]{helvet}
 
-\usepackage[utf8x]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage{pifont}
 \RequirePackage{graphicx}
 \RequirePackage{latexsym,ifthen,rotating,calc,textcase,booktabs,color,endnotes}

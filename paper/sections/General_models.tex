@@ -1,4 +1,5 @@
-\section{General radiation pressure modeling}
+\section{Radiation pressure modeling}
+\gls{RP} modeling needs to consider the causes and effects of radiation. This section presents a range of cooperating models for both that can be flexibly composed.
 
 
 \subsection{Mechanics of radiation pressure}
@@ -32,7 +33,7 @@ where $dL_r$ is the reflected radiance (the directional counterpart to radiosity
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/reflection_geometry.ai}
-    \caption{Geometry of a \gls{BRDF} for a surface with normal $\vb N$, incoming direction $\vb L$, and observer direction $\vb V$. The viewing angle $\theta_r$ is between $\vb V$ and $\vb N$. Adapted from \cite{Wetterer2014}.}
+    \caption{Geometry of a \gls{BRDF} for a surface with normal $\vb N$, incoming direction $\vb L$, and observer direction $\vb V$. The viewing angle $\theta_r$ is between $\vb N$ and $\vb V$. The phase angle (not labeled) is between $\vb L$ and $\vb V$. Adapted from \cite{Wetterer2014}.}
     \label{fig:reflection-geometry}
 \end{figure}
 
@@ -83,7 +84,7 @@ Alternatively, a reference irradiance $E_\text{ref}$ observed at a distance $\vb
 The solar luminosity is \qty{3.828e26}{\W}~\cite{Prsa2016}, which corresponds to an irradiance of \qty{1361}{\irr} at \qty{1}{\astronomicalunit}. Note that these values are averages, which vary with the 11-year solar cycle by about \qty{0.1}{\percent} and more on shorter timescales due to sunspot darkening and facular brightening~\cite{Kopp2016}. Observational time series exist to account for these variations~\cite{Dewitte2017}.
 
 \subsubsection{Paneled sources: Discretization}
-Radiation due to planets and moons requires more involved source models. Planetary emissions comprise reflected solar radiation and thermal infrared radiation~\cite{Knocke1988}. The fraction of reflected sunlight is called albedo $a$; the corresponding type is therefore also called albedo radiation. Thermal radiation is due to absorbed solar energy that is re-emitted in a delayed fashion. Observation time series of albedo and thermal fluxes exist for Earth~\cite{Dewitte2017}, but physical modeling is required for the Moon.
+Radiation due to planets and moons requires more involved source models. Planetary emissions comprise reflected solar radiation and thermal infrared radiation~\cite{Knocke1988}. The fraction of reflected sunlight is called albedo\footnote{Two types of albedo exist: spherical/Bond albedo is the fraction of sunlight reflected in all directions, while geometrical albedo is the fraction of sunlight reflected with respect to an ideal diffuse surface for normal incidence and viewing directions~\cite{Heiken1991}. For our purpose, spherical albedo is appropriate and will be used synonymously with albedo in this paper.} $a$; the corresponding type is therefore also called albedo radiation. Thermal radiation is due to absorbed solar energy that is re-emitted in a delayed fashion. Observation time series of albedo and thermal fluxes exist for Earth~\cite{Dewitte2017}, but physical modeling is required for the Moon.
 
 Since planetary radiation is not isotropic and the spacecraft is typically much closer to the body than to the Sun, the source extent has to be considered. In contrast to the previously described point source, we therefore model Earth and Moon as extended sources. These are discretized into sub-sources, from which rays emanate that are, in general, not parallel. The sub-sources can be thought of as panels with an area, orientation, position, and radiosity model. The panel extent is represented by the area but any other panel properties are only evaluated at its center. A panel only radiates from the positive normal side, not from the backside.
 
@@ -131,7 +132,7 @@ The delayed thermal radiosity model assumes that absorbed radiation is emitted i
     \label{eq:radiosity-thermal-delayed}
     J_\text{thermal} = e \frac{E_s}{4},
 \end{align}
-where $e$ is the emissivity of the panel, evaluated at its center. The factor 1/4 is the ratio of absorbing area (a circle) to emitting area (a sphere).
+where $e$ is the emissivity of the panel, evaluated at its center. The factor 1/4 is the ratio of absorbing area (a circle) to emitting area (a sphere). The albedo and delayed thermal model were originally used by \citeauthor{Knocke1988} for Earth emissions~\cite{Knocke1988}.
 
 The angle-based thermal radiosity model is more appropriate than the delayed model if the surface experience significant diurnal cooling and heating. The surface temperature is modeled as a function of the solar incidence angle $\theta_i$ and related to the radiosity through the Stefan--Boltzmann law. The surface temperature is interpolated between the minimum and maximum temperatures, $T_\text{min}$ and $T_\text{max}$ as
 \begin{align}
@@ -143,14 +144,16 @@ The angle-based thermal radiosity of a panel is then~\cite{Lemoine2013}
     \label{eq:radiosity-thermal-anglebased}
     J_\text{thermal} = e \sigma T^4,
 \end{align}
-where $T$ is the surface temperature from \cref{eq:surface-temperature} at the panel center and $\sigma = \qty{5.670e-8}{\W\per\m\squared\per\K\tothe{4}}$ is the Stefan--Boltzmann constant. The maximum radiosity of $e \sigma T_\text{max}^4$ is usually larger than the near-constant $e E_s/4$ from \cref{eq:radiosity-thermal-delayed}, but quickly decreases as the panel moves away from the subsolar point (where $\theta_i = \ang{0}$). On the nightside, the thermal radiosity reduces to $e \sigma T_\text{min}^4$.
+where $T$ is the surface temperature from \cref{eq:surface-temperature} at the panel center and $\sigma = \qty{5.670e-8}{\W\per\m\squared\per\K\tothe{4}}$ is the Stefan--Boltzmann constant. The maximum radiosity of $e \sigma T_\text{max}^4$ is usually larger than the near-constant $e E_s/4$ from \cref{eq:radiosity-thermal-delayed}, but quickly decreases as the panel moves away from the subsolar point (where $\theta_i = \ang{0}$). On the nightside, the thermal radiosity reduces to $e \sigma T_\text{min}^4$. Some authors~\cite{Park2011} include the factor $1/4$ from the delayed model also in the angle-based model, although this is incorrect.
+
+The albedo and thermal radiosity models depend on the distribution of $a$ and $e$ over the planetary surface. The values may be assumed constant but generally vary with longitude, latitude, and time. Particularly for Earth, seasons and weather greatly affect reflectivity and emissivity~\cite{Goode2001}. Since the Moon lacks seasons, distributions that only vary spatially are appropriate.
 
 To obtain the irradiance at the target due to the panel radiosity, we assume that the emission follows Lambert's cosine law and account for the projected, attenuated area of the source panel. The irradiance therefore is
 \begin{align}
     \label{eq:irradiance-from-radiosity}
     E = \left(\sum_{J_i \in \mathcal{J}} J_i\right) \frac{dA \left(\cos\theta_r\right)_+}{\pi\norm{\vb r_{t/s}}^2},
 \end{align}
-where $\mathcal{J}$ is the set of radiosities from any of the previous radiosity models. Usually, a panel has the albedo model and one thermal model. Here, the source--to--target vector $\vb r_{t/s}$ uses the panel center position, not the source body center. The direction $\vu r_{t/s}$ of the corresponding directional irradiance $\vb E = E \vu r_{t/s}$  is therefore not the same for each panel and thus accounts for the extent of the source. The radiosities $J_i$ in \cref{eq:irradiance-from-radiosity} can be summed since their radiation emanates from the same point, the panel center. Contrarily, the directional irradiances $\vb E$ can generally not be summed since the their  individual directions need to be retained: the reflectance model of the target may be sensitive to the incoming direction of each ray. Therefore, a set of directional radiances $\mathcal{E}$ is handed to the \gls{RP} target model for acceleration calculations.
+where $\mathcal{J}$ is the set of radiosities from any of the previous radiosity models. Usually, a panel has the albedo model and one thermal model. Here, the source--to--target vector $\vb r_{t/s}$ uses the panel center position, not the source body center. The direction $\vu r_{t/s}$ of the corresponding directional irradiance $\vb E = E \vu r_{t/s}$  is therefore not the same for each panel and thus considers the extent of the source. The radiosities $J_i$ in \cref{eq:irradiance-from-radiosity} can be summed since their radiation emanates from the same point, the panel center. Contrarily, the directional irradiances $\vb E$ can generally not be summed since the their  individual directions need to be retained: the reflectance model of the target may be sensitive to the incoming direction of each ray. Therefore, a set of directional radiances $\mathcal{E}$ is handed to the \gls{RP} target model for acceleration calculations.
 
 
 
@@ -168,7 +171,7 @@ where the sum is vectorial and $\sum\vb E_j/c$ is the total \gls{RP} as describe
 
 
 \subsubsection{Paneled target}
-In reality, the cross-section and optical properties of a spacecraft change with orientation and incident direction. This effect is particularly noticeable for solar panels, which are large and usually track the Sun. To account for the geometry and differences in materials, a spacecraft can be represented as a collection of $n$ panels. Each panel is characterized by its area, surface normal, and reflectance distribution. In case of moving parts, the surface normal may change over time. The reflectance distribution can be given as generic \gls{BRDF}, but is often a specular--diffuse \gls{BRDF}. The \gls{RP} acceleration of a paneled target is~\cite{Marshall1992}
+In reality, the cross-section and optical properties of a spacecraft change with orientation and incident direction. This effect is particularly noticeable for solar panels, which are large and usually track the Sun. To account for the geometry and differences in materials, a spacecraft can be represented as a collection of $n$ panels. Each panel is characterized by its area, surface normal, and reflectance distribution. The position would only be relevant for rotational but not for linear accelerations. In case of moving parts, the surface normal may change over time. The reflectance distribution can be given as generic \gls{BRDF}, but is often a specular--diffuse \gls{BRDF}. The \gls{RP} acceleration of a paneled target is~\cite{Marshall1992}
 \begin{align}
     \vb a = \frac{1}{m} \sum_{\vb E_j \in \mathcal{E}} \left( \frac{\norm{\vb E_j}}{c} \sum_{k=1}^n A_k \left(\cos\theta_{i,k}\right)_+ \vb R_k\right),
 \end{align}
@@ -199,7 +202,7 @@ In the framework of models previously defined, the shadow function needs to be c
 
 The conical model can only account for one occulting body. In case of multiple occulting bodies, shadows might overlap and the product of their shadow functions would underestimate the actual received fraction. Knowledge of the shadow intersection would be required to avoid this. \citeauthor{Zhang2019} derived a model for two occulting bodies~\cite{Zhang2019}. However, only single occultations will be considered in this paper.
 
-More involved shadow models exist that improve prediction of the penumbra passage. These models can account for planetary oblateness and atmospheric effects like absorption, scattering and refraction~\cite{Li2019}. Other models can account for topography by combining a paneled Sun model with topography map~\cite{Mazarico2018}. These modification usually prolong the penumbra duration.
+More involved shadow models exist that improve prediction of the penumbra passage. These models can consider planetary oblateness and atmospheric effects like absorption, scattering and refraction~\cite{Li2019}. Other models can account for topography by combining a paneled Sun model with topography map~\cite{Mazarico2018}. These modification usually prolong the penumbra duration.
 
 
 \subsubsection{Point-to-point visibility}

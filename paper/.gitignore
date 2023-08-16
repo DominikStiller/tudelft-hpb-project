@@ -269,4 +269,5 @@ TSWLatexianTemp*
 # standalone packages
 *.sta
 
-
+!figures/plots/
+!figures/plots/*
