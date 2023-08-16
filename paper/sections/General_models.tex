@@ -139,12 +139,12 @@ The angle-based thermal radiosity model is more appropriate than the delayed mod
     \label{eq:surface-temperature}
     T = \max\left( T_\text{max} \left(\cos\theta_i\right)_+^{1/4}, T_\text{min} \right).
 \end{align}
-The angle-based thermal radiosity of a panel is then~\cite{Lemoine2013}
+These temperatures typically correspond to the nighttime temperature and the temperature at the subsolar point. The angle-based thermal radiosity of a panel is then~\cite{Lemoine2013}
 \begin{align}
     \label{eq:radiosity-thermal-anglebased}
     J_\text{thermal} = e \sigma T^4,
 \end{align}
-where $T$ is the surface temperature from \cref{eq:surface-temperature} at the panel center and $\sigma = \qty{5.670e-8}{\W\per\m\squared\per\K\tothe{4}}$ is the Stefan--Boltzmann constant. The maximum radiosity of $e \sigma T_\text{max}^4$ is usually larger than the near-constant $e E_s/4$ from \cref{eq:radiosity-thermal-delayed}, but quickly decreases as the panel moves away from the subsolar point (where $\theta_i = \ang{0}$). On the nightside, the thermal radiosity reduces to $e \sigma T_\text{min}^4$. Some authors~\cite{Park2011} include the factor $1/4$ from the delayed model also in the angle-based model, although this is incorrect.
+where $T$ is the surface temperature from \cref{eq:surface-temperature} at the panel center and $\sigma = \qty{5.670e-8}{\W\per\m\squared\per\K\tothe{4}}$ is the Stefan--Boltzmann constant. On the dayside, the radiosity is proportional to $T_\text{max}^4\cos\theta_i$. The maximum radiosity of $e \sigma T_\text{max}^4$ is usually larger than the near-constant $e E_s/4$ from \cref{eq:radiosity-thermal-delayed}, but quickly decreases as the panel moves away from the subsolar point (where $\theta_i = \ang{0}$). On the nightside, the thermal radiosity reduces to $e \sigma T_\text{min}^4$.
 
 The albedo and thermal radiosity models depend on the distribution of $a$ and $e$ over the planetary surface. The values may be assumed constant but generally vary with longitude, latitude, and time. Particularly for Earth, seasons and weather greatly affect reflectivity and emissivity~\cite{Goode2001}. Since the Moon lacks seasons, distributions that only vary spatially are appropriate.
 
