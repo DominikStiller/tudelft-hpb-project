@@ -348,7 +348,9 @@ centering]{geometry}
   detect-all,
   per-mode=symbol,
   propagate-math-font,
-  mode=math
+  mode=math,
+  separate-uncertainty=true,
+  multi-part-units=single,
   % inter-unit-product=\ensuremath{{}\cdot{}}
 }
 

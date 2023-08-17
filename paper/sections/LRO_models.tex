@@ -1,5 +1,7 @@
 \section{Radiation pressure modeling for LRO}
 
+TODO write intro
+
 \subsection{Lunar albedo radiation}
 \label{subsec:lunar-albedo}
 
@@ -94,7 +96,7 @@ We choose six rings as sufficiently accurate, which contain 127 panels in total.
 \gls{LRO} consists of a cubical bus with a large solar array and a protruding high gain antenna (\cref{fig:lro-rendering}). The solar array tracks the Sun in two axes, and the antenna points towards Earth whenever it is visible. This leads to large variations in cross-section over time, and different sides are presented to incoming solar and lunar radiation.
 
 
-\begin{table}[t]
+\begin{table}[b]
     \centering
     \caption{Panels for \gls{LRO} target model from \citeauthor{Smith2008}~\cite{Smith2008}. The coefficients are for absorptivity and specular/diffuse reflectivity. The solar array is by far the largest surface, followed by the Z-facing panels.}
     \label{tab:target-model}
@@ -103,7 +105,7 @@ We choose six rings as sufficiently accurate, which contain 127 panels in total.
 
 \gls{LRO} can be modeled as paneled target (\cref{eq:paneled-target}) to account for this variability. The panels are summarized in \cref{tab:target-model}. There are six panels for the bus, with surface normals along the positive and negative axes of the \gls{LRO} bus frame (cf. \cref{fig:lro-rendering}). The solar array and high gain antenna are modeled separately, again with frontside and backside panels. The solar array is almost as large as all other panels combined. Since it always points towards Sun, the solar \gls{RP} will have a large effect. Note that, while tracking of the solar array and antenna are constrained to two axes in reality, we allow three-axis tracking for simplicity. The definitive attitudes of both are also available but were not used since their data volume is prohibitively large. We also neglect self-shadowing, which was shown to only have a minor impact in most cases~\cite{Slojkowski2015,Loecher2018}, but can be significant for solar radiation~\cite{Mazarico2009}.
 
-We also model \gls{LRO} as a cannonball (\cref{eq:cannonball-target}), a model which is often used for orbit determination. Finding a single equivalent cross-section area $A_c$ and \gls{RP} coefficient $C_r$ is virtually impossible~\cite{Vallado2013}. Different values for \gls{LRO} exist in literature: \citeauthor{Bauer2016} use $A_c = \qty{10}{\m\squared}$ and $C_r = 1.2$~\cite{Bauer2016}, while \citeauthor{Nicholson2010} use $A_c=\qty{14}{\m\squared}$ and $C_r = 1.0$~\cite{Nicholson2010}. The acceleration should differ by about \qty{15}{\percent} between them. We choose the latter since it is used for operational orbit estimation of \gls{LRO}.
+We also model \gls{LRO} as a cannonball (\cref{eq:cannonball-target}), a model which is often used for orbit determination. Finding a single equivalent cross-section area $A_c$ and \gls{RP} coefficient $C_r$ is virtually impossible~\cite{Vallado2013}. Different values for \gls{LRO} exist in literature: \citeauthor{Bauer2016} use $A_c = \qty{10}{\m\squared}$ and $C_r = 1.2$~\cite{Bauer2016}, while \citeauthor{Nicholson2010} use $A_c=\qty{14}{\m\squared}$ and $C_r = 1.0$~\cite{Nicholson2010}. Their acceleration should differ by about \qty{15}{\percent}. We choose the latter since it is used for operational orbit estimation of \gls{LRO}.
 
 \begin{figure}[t]
     \centering
@@ -119,17 +121,29 @@ To complete the target model, the mass is required to convert forces into accele
 
 
 \subsection{LRO orbit geometry}
-% TODO check results quickly if we use both arcs
 
-variation in altitude is in part due to assumption of spherical moon (polar radius is 2.1 km less than equatorial) -> leads to change in lunar RP magnitude over orbit
-sun beta over year + eclipse periods
+\begin{table}[b]
+    \centering
+    \caption{Orbit geometry for selected arcs over 2.5 days. The June arc gives full illumination, the September arc the maximum eclipse duration.}
+    \label{tab:orbit-geometry}
+    \begin{tabularx}{\linewidth}{Xrrr}
+        \toprule
+        & \bfseries 28 June 2010 & \bfseries 26 Sept. 2011 \\
+        \midrule
+        \bfseries $\mathbf \beta$~[\unit{\degree}] & \numrange{88.8}{88.9} & \numrange{-1.71}{-3.56} \\
+        \bfseries Sun distance~[\unit{\astronomicalunit}] & 1.019 & 1.000 \\
+        \bfseries Eclipse time~[\unit{\min}] & 0 & 48 \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
 
-our maximum eclipse time of 48 min agrees with \cite{Tooley2010}
+\gls{LRO}'s polar science mission orbit has a low altitude of \qty{50 \pm 15}{km}. The difference between periselene and aposelene is mostly due to a slight eccentricity, but also due to an equatorial radios that is \qty{2}{\km} larger than the polar radius. The altitude variation affects the lunar irradiance received by \gls{LRO}. The spacecraft has a period of \qty{113}{\min}.
 
-describe beta angle
-maybe figure with orbit geometry for simulated arcs
+Visibility of the Sun is determined by the beta angle $\beta$, which is the angle between the orbital plane and the Moon-to-Sun vector. It is zero when the Sun is within the plane and \qty{\pm 90}{\degree} when the orbit normal points towards the Sun. Since \gls{LRO}'s orbit is polar, it undergoes all $\beta$ within a year. For $\beta = \qty{0}{\degree}$, \gls{LRO} is moving towards and away from the Sun above the polar, experiences the maximum eclipse duration, and passes over the subsolar point.  For $\beta = \qty{90}{\degree}$, \gls{LRO} is in full view of the Sun throughout the orbit, and there is no along-track component of the solar radiation. The spacecraft does not pass over hot or well-illuminated lunar regions.
 
-table for dates with beta angle, distance from sun
+Since the effect of \gls{RP} varies greatly with $\beta$, we will investigate two arcs in this paper. They are summarized in \cref{tab:orbit-geometry}. In June, Moon is at aphelion and no eclipses occur. In September, the beta angle is just below \qty{0}{\degree}; \gls{LRO} will experience the maximum solar eclipse duration of \qty{48}{\min}. No lunar eclipses occur during any of the arcs. Both arcs have a length of 2.5 days, which is used for orbit determination of \gls{LRO}~\cite{Nicholson2010,Mazarico2011}. Choosing the same length ensures our results are relevant for error estimation in force modeling for orbit determination.
+
+
 
 
 \subsection{Simulation setup}
@@ -143,6 +157,7 @@ start at start at 26 June 2010 06:00:00
 Earth eclipses Sun during this time
 Moon does not eclipse Sun (Sun beta angle is about -90 deg, see~\cite{Tooley2010})
 
+occultations
 lunar eclipses avoided since we cannot represent multiple occultations
 
 effects of neglecting terrain and self shadowing~\cite{Mazarico2018} sec 4.2 and 4.3
@@ -151,7 +166,6 @@ effects of neglecting terrain and self shadowing~\cite{Mazarico2018} sec 4.2 and
 Operational LRO OD does not use lunar albedo due to computational demand, but used for offline reprocessing.
 Self-shadowing from \citeauthor{Mazarico2009} is used for reprocessing~\cite{Nicholson2010}
 
-arc length 2.5 days, which is also used for LRO orbit determination~\cite{Mazarico2011}
 step 5 s, which is also used for LRO orbit determination~\cite{Mazarico2018}
 
 MOON\_PA frame, IAU\_MOON is in worst case 155 m off~\cite{NAIF2020} (Special PCK and FK for Earth and Moon, slide 14)
