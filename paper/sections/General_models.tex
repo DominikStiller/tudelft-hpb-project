@@ -5,9 +5,9 @@
 \subsection{Mechanics of radiation pressure}
 \label{subsec:general-rp-mechanics}
 
-\gls{RP} results from the momentum transfer between electromagnetic radiation and a surface. A spacecraft may receive such radiation from the Sun but also from other celestial bodies: planets and moons emit albedo radiation through reflection of sunlight and thermal radiation depending on surface temperature. The \gls{RP} exerts a force on the spacecraft governed by surface properties such as area, reflectivity and absorptivity. The resulting acceleration is the result of a complex interplay of the bodies emitting radiation (the "sources") and the spacecraft receiving the radiation (the "target").
+\gls{RP} results from the momentum transfer between electromagnetic radiation and a surface. A spacecraft may receive such radiation from the Sun but also from other celestial bodies: planets and moons emit albedo radiation through reflection of sunlight and thermal radiation depending on surface temperature. The \gls{RP} exerts a force on the spacecraft governed by surface properties such as area, reflectivity and absorptivity. The resulting acceleration is the result of a complex interplay of the bodies emitting radiation (the ``sources'') and the spacecraft receiving the radiation (the ``target'').
 
-Radiation can characterized by the radiant flux density, which commonly has units of \unit{\irr}. Radiosity is the \emph{emitted and reflected} radiant flux density of an opaque surface. The irradiance $E$ is the \emph{incident} radiant flux density on a surface and provides a convenient way to decouple source and target models: the irradiance and the direction of incidence are sufficient to determine the target acceleration, independent of the actual source. We can combine this information into a vector quantity which we call directional irradiance $\vb E = E \vu r_{t/s}$, where $\vu r_{t/s}$ is the unit vector in the source--to--target direction. One or more directional irradiances, which can be though of as light rays, are the output of a source model and used as input to the target model. The \gls{RP} exerted on an irradiated surface is proportional to $1/c$, where $c = \qty{299792458}{m/s}$ is the speed of light. Given the magnitude of $c$, \gls{RP} is usually small (around \qty{4.5e-6}{\N\per\m\squared} for solar radiation at Earth, where $E=\qty{1361}{\irr}$~\cite{Kopp2011}).
+Radiation can characterized by the radiant flux density, which commonly has units of \unit{\irr}. Radiosity is the \emph{emitted and reflected} radiant flux density of an opaque surface. The irradiance $E$ is the \emph{incident} radiant flux density on a surface and provides a convenient way to decouple source and target models: the irradiance and the direction of incidence are sufficient to determine the target acceleration, independent of the actual source. We can combine this information into a vector quantity which we call directional irradiance $\vb E = E \vu r_{t/s}$, where $\vu r_{t/s}$ is the unit vector in the source-to-target direction. One or more directional irradiances, which can be though of as light rays, are the output of a source model and used as input to the target model. The \gls{RP} exerted on an irradiated surface is proportional to $1/c$, where $c = \qty{299792458}{m/s}$ is the speed of light. Given the magnitude of $c$, \gls{RP} is usually small (around \qty{4.5e-6}{\N\per\m\squared} for solar radiation at Earth, where $E=\qty{1361}{\irr}$~\cite{Kopp2011}).
 
 Electromagnetic radiation is often composed not just of a single wavelength but rather a range of wavelengths. The distribution can be described by the spectral irradiance in units of \unit{\W\per\square\m\per\Hz}. Since surface properties are often wavelength-dependent, the target model would also have to be aware of the distribution. However, the surface properties as a function of wavelength are often not known, which is also the case for \gls{LRO}. Therefore, we assume the irradiance from source models to be integrated over the whole spectrum and the surface properties of the target model to be valid for all wavelengths.
 
@@ -33,7 +33,7 @@ where $dL_r$ is the reflected radiance (the directional counterpart to radiosity
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/reflection_geometry.ai}
-    \caption{Geometry of a \gls{BRDF} for a surface with normal $\vb N$, incoming direction $\vb L$, and observer direction $\vb V$. The viewing angle $\theta_r$ is between $\vb N$ and $\vb V$. The phase angle (not labeled) is between $\vb L$ and $\vb V$. Adapted from \cite{Wetterer2014}.}
+    \caption{Geometry of a \gls{BRDF} for a surface with normal $\vb N$, incoming direction $\vb L$, and observer direction $\vb V$. The viewing angle $\theta_r$ is between $\vb N$ and $\vb V$. The phase angle (not labeled) is between $\vb L$ and $\vb V$. Adapted from~\cite{Wetterer2014}.}
     \label{fig:reflection-geometry}
 \end{figure}
 
@@ -69,17 +69,19 @@ The specular contribution is strictly along the surface normal direction since i
 
 
 \subsection{Radiation sources}
+\label{subsec:radiation-sources}
+
 Radiation sources emit or reflect radiation, which exerts \gls{RP} onto the target. As explained in \cref{subsec:general-rp-mechanics}, the incident radiation at a target due to a source can be thought of as light rays, which are described by their directional irradiance at the target. How the directional irradiance is calculated depends on the type of source.
 
 \subsubsection{Isotropic point sources}
-The simplest source model is a point source that isotropically radiates in all directions. This model is appropriate for far-away sources such as the Sun at \qty{1}{\astronomicalunit} distance. Due to the distance, all rays are effectively parallel and can be merged into a single ray parallel to the source--to--target vector $\vb r_{t/s}$. For an isotropic source, the total luminosity $L$ (units of \unit{\W}) is uniformly distributed over a sphere, leading to an inverse square law. Therefore, the irradiance at the target is
+The simplest source model is a point source that isotropically radiates in all directions. This model is appropriate for far-away sources such as the Sun at \qty{1}{\astronomicalunit} distance. Due to the distance, all rays are effectively parallel and can be merged into a single ray parallel to the source-to-target vector $\vb r_{t/s}$. For an isotropic source, the total luminosity $L$ (units of \unit{\W}) is uniformly distributed over a sphere, leading to an inverse square law. Therefore, the irradiance at the target is
 \begin{align}
     \label{eq:irradiance-point-luminosity}
     E = \frac{L}{4\pi\norm{\vb r_{t/s}}^2}.
 \end{align}
-Alternatively, a reference irradiance $E_\text{ref}$ observed at a distance $\vb r_\text{ref}$ can be scaled:
+Alternatively, a reference irradiance $E_\textnormal{ref}$ observed at a distance $\vb r_\textnormal{ref}$ can be scaled:
 \begin{align}
-    E = E_\text{ref} \frac{r_\text{ref}}{\norm{\vb r_{t/s}}^2}.
+    E = E_\textnormal{ref} \frac{r_\textnormal{ref}}{\norm{\vb r_{t/s}}^2}.
 \end{align}
 The solar luminosity is \qty{3.828e26}{\W}~\cite{Prsa2016}, which corresponds to an irradiance of \qty{1361}{\irr} at \qty{1}{\astronomicalunit}. Note that these values are averages, which vary with the 11-year solar cycle by about \qty{0.1}{\percent} and more on shorter timescales due to sunspot darkening and facular brightening~\cite{Kopp2016}. Observational time series exist to account for these variations~\cite{Dewitte2017}.
 
@@ -94,9 +96,9 @@ Different algorithms exist to divide the planet ellipsoid into panels. Some auth
 
 In Knocke's method, only the visible area of the planet is paneled. This area is a spherical cap, centered at the subsatellite point and divided into concentric rings that are, again, divided into equal-area segments. A central panel is located at the subsatellite point. All panels contribute to the irradiance received by the target. However, the effective area of each panel is projected by its viewing angle $\theta_r$ (see \cref{fig:reflection-geometry}) and the irradiance is attenuated by an inverse square law. In Knocke's method, the rings are spaced such that each panel has the same projected, attenuated area. The projected, attenuated area of a panel is defined as~\cite{Knocke1988}
 \begin{align}
-    \frac{dA \cos \theta_r}{\norm{\vb r_{t/s}}^2},
+    \frac{\dd{A} \cos \theta_r}{\norm{\vb r_{t/s}}^2},
 \end{align}
-where $dA$ is the geometric panel area and $r_{t/s}$ is the source--to--target vector (in this case, the panel--to--target vector). More rings and more panels per ring will improve the fidelity of the calculated irradiance, barring the resolution limit of the radiosity model (e.g., the albedo distribution). While arbitrary numbers of panels per ring are possible, Knocke suggests multiples of 6 (i.e., six panels in the first ring, twelve panels in the second ring, \dots). The algorithm is elaborated in~\cite{Knocke1989}.
+where $\dd{A}$ is the geometric panel area and $r_{t/s}$ is the source-to-target vector (in this case, the panel-to-target vector). More rings and more panels per ring will improve the fidelity of the calculated irradiance, barring the resolution limit of the radiosity model (e.g., the albedo distribution). While arbitrary numbers of panels per ring are possible, Knocke suggests multiples of 6 (i.e., six panels in the first ring, twelve panels in the second ring, \dots). The algorithm is elaborated in~\cite{Knocke1989}.
 
 \begin{figure*}[t]
     \centering
@@ -108,10 +110,11 @@ where $dA$ is the geometric panel area and $r_{t/s}$ is the source--to--target v
    \hfill
     \begin{subfigure}[c]{0.49\textwidth}
         \includegraphics[width=\textwidth]{figures/plots/knocke_paneling_low.pdf}
-        \subcaption{Low altitude: $h = \qty{50}{\km}$, 5 rings, angular diameter of cap = \ang{27}.}
+        \subcaption{Low altitude: $h = \qty{50}{\km}$, 6 rings, angular diameter of cap = \ang{27}.}
+        \label{fig:general-knocke-paneling-low}
     \end{subfigure}
 
-   \caption{Panels generated with Knocke's algorithm for the Moon, which has a polar radius of \qty{1737}{\km}. The spacecraft (\textcolor{mpl-pink}{\ding{54}}) sees a spherical cap (\textcolor{mpl-red}{\textbf{---}}), which contains rings of panels and is larger at higher altitudes $h$. Panel centers (\textcolor{mpl-lightblue}{\ding{108}}) are scaled proportional to the panel area. The panels have equal projected, attenuated areas and are therefore concentrated around the subsatellite point.}
+   \caption{Panels generated with Knocke's algorithm for the Moon, which has a polar radius of \qty{1737}{\km}. The spacecraft (\textcolor{mpl-pink}{\ding{54}}) sees a spherical cap (\textcolor{mpl-red}{\textbf{---}}), which contains rings of panels and is larger at higher altitudes $h$. Panel centers (\textcolor{mpl-lightblue}{\ding{108}}) are scaled proportional to the panel area. The panels have equal projected, attenuated areas and are therefore concentrated around the subsatellite point. The scenario in \protect\subref{fig:general-knocke-paneling-low} corresponds to LRO's orbit and the paneling used in this paper.}
    \label{fig:general-knocke-paneling}
 \end{figure*}
 
@@ -123,59 +126,63 @@ The emitted and reflected fluxes of a panel are described by a radiosity model. 
 The albedo radiosity model accounts for diffuse Lambertian reflection of solar radiation. It implements the specular--diffuse \gls{BRDF} from \cref{eq:brdf-specular-diffuse} with $C_s = 0$ and the albedo value $C_d = a$ at the panel center. The albedo radiosity of a panel is~\cite{Knocke1988}
 \begin{align}
     \label{eq:radiosity-albedo}
-    J_\text{albedo} = a \left(\cos\theta_i\right)_+ E_s,
+    J_\textnormal{albedo} = a \left(\cos\theta_i\right)_+ E_s,
 \end{align}
 where $E_s$ is the incoming solar irradiance at the panel (e.g., as found from \cref{eq:irradiance-point-luminosity}) and the solar incidence angle $\theta_i$ is defined in \cref{fig:reflection-geometry}. The operator $(\cdot)_+$ restricts the input to positive values or zero otherwise. This ensures that no radiation is reflected from the backside.
 
 The delayed thermal radiosity model assumes that absorbed radiation is emitted independently of incident solar radiation and the radiosity is thus not a function of $\theta_i$. The only spatial variations arise from emissivity differences. The emissivity $e$ of a surface is the ratio of the actual radiosity to the ideal black body radiosity. The delay arises from the planet's large thermal inertia. The delayed thermal radiosity of a panel is~\cite{Knocke1988}
 \begin{align}
     \label{eq:radiosity-thermal-delayed}
-    J_\text{thermal} = e \frac{E_s}{4},
+    J_\textnormal{thermal} = e \frac{E_s}{4},
 \end{align}
 where $e$ is the emissivity of the panel, evaluated at its center. The factor 1/4 is the ratio of absorbing area (a circle) to emitting area (a sphere). The albedo and delayed thermal model were originally used by \citeauthor{Knocke1988} for Earth emissions~\cite{Knocke1988}.
 
-The angle-based thermal radiosity model is more appropriate than the delayed model if the surface experience significant diurnal cooling and heating. The surface temperature is modeled as a function of the solar incidence angle $\theta_i$ and related to the radiosity through the Stefan--Boltzmann law. The surface temperature is interpolated between the minimum and maximum temperatures, $T_\text{min}$ and $T_\text{max}$ as
+The angle-based thermal radiosity model is more appropriate than the delayed model if the surface experience significant diurnal cooling and heating. The surface temperature is modeled as a function of the solar incidence angle $\theta_i$ and related to the radiosity through the Stefan--Boltzmann law. The surface temperature is interpolated between the minimum and maximum temperatures, $T_\textnormal{min}$ and $T_\textnormal{max}$ as
 \begin{align}
     \label{eq:surface-temperature}
-    T = \max\left( T_\text{max} \left(\cos\theta_i\right)_+^{1/4}, T_\text{min} \right).
+    T = \max\left( T_\textnormal{max} \left(\cos\theta_i\right)_+^{1/4}, T_\textnormal{min} \right).
 \end{align}
 These temperatures typically correspond to the nighttime temperature and the temperature at the subsolar point. The angle-based thermal radiosity of a panel is then~\cite{Lemoine2013}
 \begin{align}
     \label{eq:radiosity-thermal-anglebased}
-    J_\text{thermal} = e \sigma T^4,
+    J_\textnormal{thermal} = e \sigma T^4,
 \end{align}
-where $T$ is the surface temperature from \cref{eq:surface-temperature} at the panel center and $\sigma = \qty{5.670e-8}{\W\per\m\squared\per\K\tothe{4}}$ is the Stefan--Boltzmann constant. On the dayside, the radiosity is proportional to $T_\text{max}^4\cos\theta_i$. The maximum radiosity of $e \sigma T_\text{max}^4$ is usually larger than the near-constant $e E_s/4$ from \cref{eq:radiosity-thermal-delayed}, but quickly decreases as the panel moves away from the subsolar point (where $\theta_i = \ang{0}$). On the nightside, the thermal radiosity reduces to $e \sigma T_\text{min}^4$.
+where $T$ is the surface temperature from \cref{eq:surface-temperature} at the panel center and $\sigma = \qty{5.670e-8}{\W\per\m\squared\per\K\tothe{4}}$ is the Stefan--Boltzmann constant. On the dayside, the radiosity is proportional to $T_\textnormal{max}^4\cos\theta_i$. The maximum radiosity of $e \sigma T_\textnormal{max}^4$ is usually larger than the near-constant $e E_s/4$ from \cref{eq:radiosity-thermal-delayed}, but quickly decreases as the panel moves away from the subsolar point (where $\theta_i = \ang{0}$). On the nightside, the thermal radiosity reduces to $e \sigma T_\textnormal{min}^4$.
 
 The albedo and thermal radiosity models depend on the distribution of $a$ and $e$ over the planetary surface. The values may be assumed constant but generally vary with longitude, latitude, and time. Particularly for Earth, seasons and weather greatly affect reflectivity and emissivity~\cite{Goode2001}. Since the Moon lacks seasons, distributions that only vary spatially are appropriate.
 
 To obtain the irradiance at the target due to the panel radiosity, we assume that the emission follows Lambert's cosine law and account for the projected, attenuated area of the source panel. The irradiance therefore is
 \begin{align}
     \label{eq:irradiance-from-radiosity}
-    E = \left(\sum_{J_i \in \mathcal{J}} J_i\right) \frac{dA \left(\cos\theta_r\right)_+}{\pi\norm{\vb r_{t/s}}^2},
+    E = \left(\sum_{J_i \in \mathcal{J}} J_i\right) \frac{\dd{A} \left(\cos\theta_r\right)_+}{\pi\norm{\vb r_{t/s}}^2},
 \end{align}
-where $\mathcal{J}$ is the set of radiosities from any of the previous radiosity models. Usually, a panel has the albedo model and one thermal model. Here, the source--to--target vector $\vb r_{t/s}$ uses the panel center position, not the source body center. The direction $\vu r_{t/s}$ of the corresponding directional irradiance $\vb E = E \vu r_{t/s}$  is therefore not the same for each panel and thus considers the extent of the source. The radiosities $J_i$ in \cref{eq:irradiance-from-radiosity} can be summed since their radiation emanates from the same point, the panel center. Contrarily, the directional irradiances $\vb E$ can generally not be summed since the their  individual directions need to be retained: the reflectance model of the target may be sensitive to the incoming direction of each ray. Therefore, a set of directional radiances $\mathcal{E}$ is handed to the \gls{RP} target model for acceleration calculations.
+where $\mathcal{J}$ is the set of radiosities from any of the previous radiosity models. Usually, a panel has the albedo model and one thermal model. Here, the source-to-target vector $\vb r_{t/s}$ uses the panel center position, not the source body center. The direction $\vu r_{t/s}$ of the corresponding directional irradiance $\vb E = E \vu r_{t/s}$  is therefore not the same for each panel and thus considers the extent of the source. The radiosities $J_i$ in \cref{eq:irradiance-from-radiosity} can be summed since their radiation emanates from the same point, the panel center. Contrarily, the directional irradiances $\vb E$ can generally not be summed since the their  individual directions need to be retained: the reflectance model of the target may be sensitive to the incoming direction of each ray. Therefore, a set of directional radiances $\mathcal{E}$ is handed to the \gls{RP} target model for acceleration calculations.
 
 
 
 
 \subsection{Radiation pressure targets}
+\label{subsec:radiation-pressure-targets}
+
 A \gls{RP} target is a body that is accelerated by \gls{RP}. The target model governs how the incident irradiances from point sources and extended sources accelerate the target body.
 
 
 \subsubsection{Cannonball target}
-In its simplest form, a target can be modeled as isotropic sphere, also referred to as cannonball. This sphere is characterized by a cross-sectional area $A_c$ (independent of orientation), radiation pressure coefficient $C_r$ (incorporating reflectivity and absorption coefficients), and mass $m$. Due to its isotropy, any lateral components cancel and the net acceleration is always along the source--to--target vector. The \gls{RP} acceleration of a cannonball target is~\cite{Montenbruck2000}
+In its simplest form, a target can be modeled as isotropic sphere, also referred to as cannonball. This sphere is characterized by a cross-sectional area $A_c$ (independent of orientation), radiation pressure coefficient $C_r$ (incorporating reflectivity and absorption coefficients), and mass $m$. Due to its isotropy, any lateral components cancel and the net acceleration is always along the source-to-target vector. The \gls{RP} acceleration of a cannonball target is~\cite{Montenbruck2000}
 \begin{align}
+    \label{eq:cannonball-target}
     \vb a = C_r \frac{A_c}{m}\sum_{\vb E_j \in \mathcal{E}}\frac{\vb E_j}{c},
 \end{align}
-where the sum is vectorial and $\sum\vb E_j/c$ is the total \gls{RP} as described in \cref{subsec:general-rp-mechanics}. $\mathcal{E}$ is the set of directional irradiances from any number of sources, both point (\cref{eq:irradiance-point-luminosity}) and paneled (\cref{eq:irradiance-from-radiosity}). The dependence on the area-to-mass ratio $A_c/m$ is similar to drag accelerations. While the cannonball model cannot account for complex geometry, it is often used in orbit determination with $C_r$ as estimated variable.
+where the sum is vectorial and $\sum\vb E_j/c$ is the total \gls{RP} as described in \cref{subsec:general-rp-mechanics}. $\mathcal{E}$ is the set of directional irradiances from any number of sources, both point (\cref{eq:irradiance-point-luminosity}) and paneled (\cref{eq:irradiance-from-radiosity}). The dependence on the area-to-mass ratio $A_c/m$ is similar to drag accelerations. While the cannonball model cannot account for complex geometry, it is often used in orbit determination with $C_r$ as estimated variable. Ray tracing of a detailed model can also be used to establish the evolution of $A_c$ and $C_r$~\cite{Hattori2019}.
 
 
 \subsubsection{Paneled target}
 In reality, the cross-section and optical properties of a spacecraft change with orientation and incident direction. This effect is particularly noticeable for solar panels, which are large and usually track the Sun. To account for the geometry and differences in materials, a spacecraft can be represented as a collection of $n$ panels. Each panel is characterized by its area, surface normal, and reflectance distribution. The position would only be relevant for rotational but not for linear accelerations. In case of moving parts, the surface normal may change over time. The reflectance distribution can be given as generic \gls{BRDF}, but is often a specular--diffuse \gls{BRDF}. The \gls{RP} acceleration of a paneled target is~\cite{Marshall1992}
 \begin{align}
+    \label{eq:paneled-target}
     \vb a = \frac{1}{m} \sum_{\vb E_j \in \mathcal{E}} \left( \frac{\norm{\vb E_j}}{c} \sum_{k=1}^n A_k \left(\cos\theta_{i,k}\right)_+ \vb R_k\right),
 \end{align}
-where the indices $j$ and $k$ denote the (sub-)source and target panel, respectively. $A_k$ is the area of the $k$-th panel. $\theta_{i,k}$ is the incidence angle of $\vb E_i$ onto the $k$-th panel. $\vb R_k$ is the reaction vector as defined by {\renewcommand\creflastconjunction{ or }\cref{eq:brdf-reaction-general,eq:brdf-reaction-specular-diffuse,eq:brdf-reaction-specular-diffuse-instrerad}}, depending on the \gls{BRDF}. The reaction vector is a function of the panel surface normal $\vb N$ and the source--to--target direction $\vb L = \vu E_j$. Therefore, the inner sum has to be evaluated for each directional irradiance $\vb E_j$ of the outer sum. In general, the resulting acceleration will not be along the source--to--target direction as for the cannonball.
+where the indices $j$ and $k$ denote the (sub-)source and target panel, respectively. $A_k$ is the area of the $k$-th panel. $\theta_{i,k}$ is the incidence angle of $\vb E_i$ onto the $k$-th panel. $\vb R_k$ is the reaction vector as defined by {\renewcommand\creflastconjunction{ or }\cref{eq:brdf-reaction-general,eq:brdf-reaction-specular-diffuse,eq:brdf-reaction-specular-diffuse-instrerad}}, depending on the \gls{BRDF}. The reaction vector is a function of the panel surface normal $\vb N$ and the source-to-target direction $\vb L = \vu E_j$. Therefore, the inner sum has to be evaluated for each directional irradiance $\vb E_j$ of the outer sum. In general, the resulting acceleration will not be along the source-to-target direction as for the cannonball.
 
 Extensions for the paneled target model exist. The model described above does not account for self-shadowing, which is occurs when one ray would intersect two panels. This effectively reduces the area of the shadowed panel, an effect that can be significant for complex spacecraft geometries~\cite{Mazarico2009}. Polygon intersections enable simple calculation of the effective area~\cite{Mazarico2009}. Ray tracing is more involved but can also account for multiple reflections between target panels~\cite{Kenneally2020}.
 
@@ -186,7 +193,7 @@ Another extension is the radiation pressure due to thermal radiation of the spac
 
 
 \subsection{Occultation}
-All previous models that the line of sight between source and target is unobstructed. However, eclipses are a common astronomical phenomenon: a low altitude spacecraft may be in the planet's shadow for more than a third of its period, and partial or full lunar eclipses can occur multiple times per year. We present two occultation models.
+All previous models assume that the line of sight between source and target is unobstructed. However, occultation is a common astronomical phenomenon: a low-altitude spacecraft may be in the planet's shadow for more than a third of its orbit, and partial or full lunar eclipses can occur multiple times per year. We present two occultation models.
 
 \begin{figure}[b]
     \centering
@@ -198,14 +205,12 @@ All previous models that the line of sight between source and target is unobstru
 \subsubsection{Shadow function}
 The shadow function $\nu$ describes the fraction of light received from a spherical source in the presence of an occulting spherical body. The geometry of the conical occultation model is shown in \cref{fig:eclipse-geometry}. In the umbra, the source is fully occulted and the observer does not receive any radiation ($\nu = 0$), a state referred to as total eclipse. In the penumbra, the observer can see part of the source ($0 < \nu < 1$). Only outside the shadow region does the observer receive the full radiation ($\nu = 1$). In the case of a lunar eclipse, Earth occults the Sun and casts a shadow onto the Moon such that there is no lunar albedo radiation. On the nightside of a planet, the planet itself occults the Sun.
 
-In the framework of models previously defined, the shadow function needs to be considered both for direct radiation from a point source and for the solar radiation used for albedo radiosity. The extent of the source and occulting bodies needs to be known for shadow function calculations, even in the case of point sources. A derivation of conical model for $\nu$ is presented by \citeauthor{Montenbruck2000}~\cite{Montenbruck2000}.
+With the models described in \cref{subsec:radiation-sources,subsec:radiation-pressure-targets}, the shadow function needs to be considered for radiation from a point source, both when directly incident on the target and when used as solar radiation for albedo radiosity. The extent of the source and occulting bodies needs to be known for shadow function calculations, even in the case of point sources. A derivation of the conical model for $\nu$ is presented by \citeauthor{Montenbruck2000}~\cite{Montenbruck2000}.
 
 The conical model can only account for one occulting body. In case of multiple occulting bodies, shadows might overlap and the product of their shadow functions would underestimate the actual received fraction. Knowledge of the shadow intersection would be required to avoid this. \citeauthor{Zhang2019} derived a model for two occulting bodies~\cite{Zhang2019}. However, only single occultations will be considered in this paper.
 
-More involved shadow models exist that improve prediction of the penumbra passage. These models can consider planetary oblateness and atmospheric effects like absorption, scattering and refraction~\cite{Li2019}. Other models can account for topography by combining a paneled Sun model with topography map~\cite{Mazarico2018}. These modification usually prolong the penumbra duration.
+More involved shadow models exist that improve prediction of the penumbra passage. These models can consider planetary oblateness and atmospheric effects like absorption, scattering and refraction~\cite{Li2019}. Other models can account for topography by combining a paneled Sun model with a topography map~\cite{Mazarico2018}. These modification usually prolong the penumbra duration.
 
 
 \subsubsection{Point-to-point visibility}
-For source panels represented by their center, the shadow function becomes binary: either there is a line of sight between the panel center and the target or there is not. Such point-to-point visibility with a spherical occulting body is easily modeled geometrically. A derivation is given by \citeauthor{Vallado2013}~\cite{Vallado2013}. Multiple occultations are supported by this occultation model by the logical conjunction of the individual visibilities.
-
-
+For source panels represented by their center point, the shadow function becomes binary: either there is a line of sight between the panel center and the target or there is not. Such point-to-point visibility with a spherical occulting body is easily modeled geometrically. A derivation is given by \citeauthor{Vallado2013}~\cite{Vallado2013}. Multiple occultations are supported in this occultation model by the logical conjunction of the individual visibilities.

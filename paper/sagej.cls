@@ -357,6 +357,9 @@ centering]{geometry}
 \DeclareSIUnit{\vel}{\m\per\s}
 \AtBeginDocument{\RenewCommandCopy\qty\SI}
 
+% \renewcommand\thesubfigure{(\alph{subfigure})}
+% \captionsetup[subfigure]{subrefformat=simple,labelformat=simple}
+
 \usepackage{tabularx}
 
 \AtEndDocument{%
