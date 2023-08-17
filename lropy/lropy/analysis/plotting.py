@@ -7,11 +7,15 @@ import matplotlib.pyplot as plt
 import seaborn as sb
 
 
-def set_plotting_theme():
+def set_plotting_theme(force_light=False):
     dark = plt.rcParams["figure.facecolor"] == "black"
+    if force_light:
+        dark = False
+
+    plt.style.use("default")
     sb.set(
         context="paper",
-        style="whitegrid",
+        style="white",
         palette=[
             "#0C2340",
             "#A50034",
@@ -33,12 +37,20 @@ def set_plotting_theme():
             # "font.weight": "light",
             # "mathtext.default": "regular",
             "figure.figsize": (12, 3),
+            "axes.axisbelow": False,
             "xtick.bottom": True,
             "ytick.left": True,
+            "xtick.top": True,
+            "ytick.right": True,
             "xtick.minor.bottom": False,
             "ytick.minor.left": False,
+            "xtick.minor.top": False,
+            "ytick.minor.right": False,
+            "xtick.direction": "in",
+            "ytick.direction": "in",
         },
     )
+
     if dark:
         # For example, due to VS Code dark theme
         plt.style.use("dark_background")
@@ -67,8 +79,8 @@ def format_plot(
     y_minor_locator=None,
     tight_layout=True,
     zeroline=False,
-    xgrid=True,
-    ygrid=True,
+    major_grid=False,
+    minor_grid=False,
 ):
     fig = plt.gcf()
     for ax in fig.axes:
@@ -116,10 +128,10 @@ def format_plot(
         ax.get_xaxis().set_minor_locator(x_minor_locator_ax)
         ax.get_yaxis().set_minor_locator(y_minor_locator_ax)
 
-        if xgrid:
+        if major_grid:
             ax.grid(visible=True, which="major", linewidth=1.0)
-        if ygrid:
-            ax.grid(visible=True, which="minor", linewidth=0.5, linestyle="-.")
+        if minor_grid:
+            ax.grid(visible=True, which="minor", linewidth=0.5, linestyle=":")
 
     if tight_layout:
         fig.tight_layout(pad=0.1, h_pad=0.4, w_pad=0.4)
