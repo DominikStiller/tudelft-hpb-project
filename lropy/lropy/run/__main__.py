@@ -26,8 +26,8 @@ if __name__ == "__main__":
     runner = Runner(n_threads)
 
     # configurator = SingleConfigurator()
-    # configurator = FullConfigurator()
-    configurator = NumberOfPanelsPerRingConfigurator()
+    configurator = FullConfigurator()
+    # configurator = NumberOfPanelsPerRingConfigurator()
     # configurator = InstantaneousReradiationConfigurator()
     # configurator = AlbedoThermalConfigurator()
     # configurator = StaticVsDynamicConfigurator()

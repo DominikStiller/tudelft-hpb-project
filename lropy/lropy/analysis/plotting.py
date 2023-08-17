@@ -31,8 +31,12 @@ def set_plotting_theme():
             # "axes.titleweight": "bold",
             # "axes.labelweight": "light",
             # "font.weight": "light",
-            "mathtext.default": "regular",
+            # "mathtext.default": "regular",
             "figure.figsize": (12, 3),
+            "xtick.bottom": True,
+            "ytick.left": True,
+            "xtick.minor.bottom": False,
+            "ytick.minor.left": False,
         },
     )
     if dark:
