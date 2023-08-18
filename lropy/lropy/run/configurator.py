@@ -120,9 +120,7 @@ class SingleConfigurator(Configurator):
                 "use_solar_radiation": [True],
                 "use_moon_radiation": [True],
                 "paneling_moon": [PanelingType.Dynamic],
-                "albedo_distribution_moon": [
-                    AlbedoDistribution.DLAM1,
-                ],
+                "albedo_distribution_moon": [AlbedoDistribution.DLAM1],
                 "number_of_panels_moon": [5000],
                 "number_of_panels_per_ring_moon": [[6, 12, 18, 24, 30]],
                 "thermal_type_moon": [ThermalType.AngleBased],

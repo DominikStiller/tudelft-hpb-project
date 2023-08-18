@@ -129,7 +129,8 @@ def format_plot(
         ax.get_yaxis().set_minor_locator(y_minor_locator_ax)
 
         if major_grid:
-            ax.grid(visible=True, which="major", linewidth=1.0)
+            ax.grid(visible=True, which="major", linewidth=1.0, linestyle="-.")
+            ax.set_axisbelow(True)
         if minor_grid:
             ax.grid(visible=True, which="minor", linewidth=0.5, linestyle=":")
 

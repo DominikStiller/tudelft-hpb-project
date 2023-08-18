@@ -90,6 +90,7 @@ def get_frame(body):
     else:
         return f"IAU_{body}"
 
+
 def get_distance(first, second, time):
     return np.linalg.norm(spice.spkpos(first, time, "ECLIPJ2000", "NONE", second)[0]) * 1e3
 
