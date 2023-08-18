@@ -363,6 +363,7 @@ centering]{geometry}
 % \captionsetup[subfigure]{subrefformat=simple,labelformat=simple}
 
 \usepackage{tabularx}
+\usepackage{tablefootnote}
 
 \AtEndDocument{%
 \label{LastPage}}
