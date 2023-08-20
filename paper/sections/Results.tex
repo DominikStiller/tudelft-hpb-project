@@ -115,7 +115,7 @@ Both solar and lunar radiation are significant but their accelerations may ampli
 
 For the June arc (\cref{fig:acc-solarvslunar-jun}), the spacecraft is in permanent sunlight and orbit plane normal points towards the sun because $\beta \approx \qty{90}{\degree}$. This leads to extremely large, constant cross-track solar accelerations. The paneled model also has along-track solar accelerations due to the solar array as explained in \cref{subsec:inst-rerad}. Interestingly, the radial solar accelerations show the same phase shift between the cannonball and paneled target as observed without instantaneous reradiation (\cref{subsec:inst-rerad}). This suggests that symmetry is the cause of the phase shift. The magnitude of the total solar acceleration does not change much throughout the year since it is only dependent on the Moon--Sun distance, which is relatively constant at \qty{1}{\astronomicalunit} (see \cref{tab:orbit-geometry}).
 
-The lunar accelerations during the June arc are generally small (less than \qty{2}{\percent} of solar) because \gls{LRO} never passes over well-illuminated regions; half of the lunar source panels that are visible by \gls{LRO} are on the nightside and therefore rarely contribute. The variations in lunar radiation pressure are mainly caused by the fact that $\beta$ is not exactly \qty{90}{\degree} and \gls{LRO}'s angle to the subsolar point therefore varies by \qty{2}{\degree}. Secular variations in lunar accelerations (not shown) are due to the evolution of eccentricity over the 2.5 days caused by the non-uniform lunar gravity field~\cite{Tooley2010}. The eccentricity ranges from 0.005 to 0.008, which leads to periselene altitudes between \qty{37}{\km} and \qty{41}{\km}. Changes in ecentricity lead to larger amplitudes but no mean shift. Periodic variations in altitude due to the eccentricity itself have a minimal effect since higher altitudes mean larger distances but also a larger visible area of the lunar surface, which roughly cancels.
+The lunar accelerations during the June arc are generally small (less than \qty{2}{\percent} of solar) because \gls{LRO} never passes over well-illuminated regions; half of the lunar source panels that are visible by \gls{LRO} are on the nightside and therefore rarely contribute. The sinusoidal variations in lunar radiation pressure are mainly caused by the fact that $\beta$ is not exactly \qty{90}{\degree} and \gls{LRO}'s angle to the subsolar point therefore varies by \qty{2}{\degree}. Secular variations in lunar accelerations (not shown) are due to the evolution of eccentricity over the 2.5 days caused by the non-uniform lunar gravity field~\cite{Tooley2010}. The eccentricity ranges from 0.005 to 0.008, which leads to periselene altitudes between \qty{37}{\km} and \qty{41}{\km}. Changes in ecentricity lead to larger amplitudes but no mean shift. Periodic variations in altitude due to the eccentricity itself have a minimal effect since higher altitudes mean larger distances but also a larger visible area of the lunar surface, which roughly cancels.
 
 For the September arc (\cref{fig:acc-solarvslunar-sep}), the Sun is occulted for \qty{42}{\percent} of the orbit since $\beta \approx \qty{0}{\degree}$. The effect of these occultations is clearly visible in solar and lunar radiation, both of which vanish on the nightside. The accelerations are mostly in the radial and along-track directions. This is most clearly explained with the solar accelerations. At 0.2, \gls{LRO} crosses the terminator above the pole and is moving straight towards the Sun; the along-track component is maximal and negative since the Sun opposes the spacecraft's motion. Continuing the orbit, \gls{LRO} passes above the subsolar point at 0.5, leading to a maximal and negative radial component while the along-track component has vanished. Further towards the other pole, \gls{LRO} passes into the night at 0.8, where the along-track component accelerates the spacecraft into the direction of motion. During the whole time, the cross-track component is slightly negative because $\beta$ is slightly negative but not zero. If $\beta$ were slightly positive, the cross-track component would be similar but with the sign flipped. The same holds for changes in orbital elements, particularly the inclination and longitude of the ascending node. In addition to periodic changes, there is a secular change in solar accelerations (not shown) since the already slightly negative $\beta$ continues to decrease: over the 2.5 day arc, the mean of the along-track and cross-track components increase twofold and threefold, respectively. This trend continues until the cross-track component dominates for high $\beta$, as seen for the June arc.
 
@@ -140,28 +140,17 @@ In the previous subsection, lunar radiation was considered as the sum of albedo 
     \label{fig:acc-albedovsthermal}
 \end{figure*}
 
-For both arcs and all components, thermal radiation is far larger than albedo radiation (up to sixfold). This is even though the albedo is likely overestimated by \qty{25}{\percent} as described in \cref{subsec:lunar-albedo}.
+For both arcs and all components, thermal radiation is far larger than albedo radiation (up to sixfold). This is even though the albedo is likely overestimated by \qty{25}{\percent} as described in \cref{subsec:lunar-albedo}. In terms of behavior, the thermal radiation and constant albedo radiation are very similar: smooth and dependent on the subsolar angle. However, albedo radiation vanishes in the eclipse region of the September arc. The thermal irradiance at \gls{LRO} on the nightside is \qty{6}{\irr}, which gives a small total acceleration of \qty{1e-9}{\acc}.
 
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=\linewidth]{figures/plots/groundtrack.pdf}
-    \caption{Ground track for September arc.}
+    \caption{Ground track for September arc. The irradiance due to \gls{DLAM1} albedo is shown in color. The map shows the difference between \gls{DLAM1} and the constant albedo ($a=0.150$). The maximum irradiance does not occur above the subsolar point (\textcolor{mpl-yellow}{\ding{54}}) but above the local albedo maximum slightly north of it.}
     \label{fig:groundtrack}
 \end{figure}
 
-
-beta angle slightly less than 90 degrees leads to sinusoidal acceleration in June arc
-
-angle-based thermal behaves quite similar to albedo, but does not vanish in eclipse
-both affected by occultation
-
-
-lunar RP dominated by thermal such that variations from DLAM1 are too small to have effect
-
-max difference \qty{5e-9}{\acc}, find location on map via lat/lon -> corresponds to large deviation from mean in dlam1
-maximum occurs before subsolar point
-give rms difference
+The accelerations constant and \gls{DLAM1} albedo distributions are of very similar magnitude (in non-zero regions, rRMSE of \qty{19}{\percent} for June and \qty{24}{\percent} for September), although \gls{DLAM1} exihibits irregular variations. The largest difference of \qty{5e-9}{\acc} occurs in the radial component for the September arc. Interestingly, the maximum with \gls{DLAM1} occurs before the subsolar point, where the thermal and constant albedo peak. This behavior can be explained by the ground track of this orbit. \Cref{fig:groundtrack} shows the \gls{DLAM1} albedo irradiance over a map of the difference between \gls{DLAM1} and the constant albedo. In this figure, the maximum also appears before the subsolar point and coincides with a region where \gls{DLAM1} gives an albedo that is \num{0.067} higher or \qty{55}{\percent} more reflective than the constant albedo of $a=0.150$. All irregular differences between the albedo distributions are explained by this map. However, because the thermal radiation is so much larger, the effect of these differences remains overall limited.
 
 
 
