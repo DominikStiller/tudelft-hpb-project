@@ -131,6 +131,7 @@ To complete the target model, the mass is required to convert forces into accele
         \toprule
         & \bfseries 28 June 2010 & \bfseries 26 Sept. 2011 \\
         \midrule
+        \bfseries Start time (UTC) & 15:00:00 & 18:00:00 \\
         \bfseries $\mathbf \beta$~[\unit{\degree}] & \numrange{88.8}{88.9} & \numrange{-1.7}{-3.6} \\
         \bfseries Sun distance~[\unit{\astronomicalunit}] & 1.019 & 1.000 \\
         \bfseries Eclipse time~[\unit{\min}] & 0 & 48 \\
@@ -159,24 +160,25 @@ Since the effect of \gls{RP} varies greatly with $\beta$, we investigated two co
     \begin{tabularx}{\textwidth}{llXl}
     \toprule
     \multicolumn{3}{l}{\textbf{Planetary   bodies}}                                      \\
-    & Planetary ephemerides & DE 421 &                                                    \\
-    & Moon ellipsoid        & Equatorial radius: \qty{1738.1}{\km}, flattening: 0.0012 &         \\
-    & Moon reference frame  & Mean Earth/Polar Axis &                                                  \\
+    & Planetary ephemerides & DE 421~\cite{Folkner2009} &                                                    \\
+    & Moon ellipsoid        & Sphere of radius \qty{1737.4}{\km}~\cite{Archinal2010} (no flattening) &         \\
+    & Moon reference frame  & Mean Earth/Polar Axis~\cite{GSFC2008} &                                                  \\
      &                       &  &                                                         \\
     \multicolumn{3}{l}{\textbf{Force models}}                                            \\
-     & Moon gravity         & GRGM1200L (truncated to \numproduct{100 x 100}) &                       \\
+     & Moon gravity         & GRGM1200L~\cite{Goossens2021} (truncated to \numproduct{100 x 100}) &                       \\
      & Earth + Sun gravity   & Central     &                                              \\
-     & Solar radiation       & Isotropic point source with $L = \qty{3.828e26}{\W}$   & \cref{eq:irradiance-point-luminosity}                     \\
+     & Solar radiation       & Isotropic point source with $L = \qty{3.828e26}{\W}$~\cite{Prsa2016}   & \cref{eq:irradiance-point-luminosity}                     \\
      &                       & Occulted by Moon         &                                    \\
      & Lunar radiation       & Paneled source with 6 rings of 6, 12, 18, 24, 30, 36 panels   &                                   \\
      &                       & Albedo: Constant $a = 0.150$ or \gls{DLAM1} & \cref{eq:radiosity-albedo}                             \\
      &                       & Thermal: Angle-based ($e = 0.95$, $T_\textnormal{min} = \qty{95}{\K}$, $T_\textnormal{max} = \qty{385}{\K}$)       & \cref{eq:radiosity-thermal-anglebased}     \\
      & \gls{RP} target            & Cannonball ($A_c$ = \qty{14}{\m\squared}, $C_r = 1.0$) or Paneled (see \cref{tab:target-model})  & \cref{eq:cannonball-target,eq:paneled-target} \\
-     &                       & Mass: \qty{1087.0}{kg}         &                                    \\
+     &                       & Paneled model with or without instantaneous reradiation         & \cref{eq:brdf-reaction-specular-diffuse,eq:brdf-reaction-specular-diffuse-instrerad}                                   \\
+     &                       & Mass: \qty{1087.0}{kg} (end of science mission)         &                                    \\
      &                       & Orientation: LRO\_SC\_BUS frame from SPICE CK      &     \\
      &                       &       &                                                    \\
     \multicolumn{3}{l}{\textbf{Simulation settings}}                                     \\
-     & Software   & \acrfull{Tudat}                    &                \\
+     & Software   & \acrfull{Tudat} 2.12.1.dev19                    &                \\
      & Propagation frame     & ECLIPJ2000            &                                    \\
      & Propagation method    & Cowell             &                                       \\
      & Integration method    & Runge--Kutta--Fehlberg 7(8)           &                      \\
@@ -193,6 +195,7 @@ A range of simulations with varying models is necessary to determine the short-t
     \item Occultation of solar radiation through the Moon follows a simple conical model. Time spent in sunlight can be overestimated by up to \qty{480}{\s} for large $\beta$ if topography is ignored~\cite{Mazarico2018}.
     \item No lunar eclipses occur over the two simulation arcs, therefore occultation by Earth can be ignored.
     \item Good accuracy can be achieved with integration step sizes as high as \qty{15}{\s}~\cite{Mazarico2018}. We use \qty{5}{\s}, which is used for operational orbit determination~\cite{Nicholson2010}.
-    \item The Moon Mean Earth/Polar Axis frame is recommended for use with \gls{LRO}~\cite{GSFC2008}
+    \item While the Moon has a difference between polar and equatorial radius of \qty{2.1}{\km} due to flattening, a perfect sphere will be assumed here to simplify paneling and occultation.
+    \item The Moon Mean Earth/Polar Axis frame is recommended for use with \gls{LRO}~\cite{GSFC2008}.
     \item \gls{LRO} SPICE kernels containing ephemerides (SPK) and orientation (CK) are available online\footnote{\url{https://naif.jpl.nasa.gov/pub/naif/pds/data/lro-l-spice-6-v1.0/lrosp_1000/}}.
 \end{itemize}
