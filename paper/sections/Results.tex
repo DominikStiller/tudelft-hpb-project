@@ -58,36 +58,36 @@ First, we investigated the effect of instantaneous reradiation for the paneled t
 
 The large changes seen in some cases are mostly due to the +SA panel, which is highly absorptive ($C_a = 0.90$) and large ($A = \qty{11.00}{\m\squared}$). For the June arc, the solar array is angled at \qty{45}{\degree} with equal components in the cross-track and along-track directions The Sun is on the same side as the solar array in the cross-track direction. Without instantaneous reradiation, no panel has a significant contribution to the along-track acceleration, so it is quite small at around \qty{2e-9}{\acc}. With instantaneous reradiation, each panel, and especially the solar array, exerts an acceleration parallel to its normal, which leads to the along-track increase witnessed for the June arc.
 
-Since no reradiation due to spacecraft panels is physically unrealistic and the differences in magnitude are significant when instantaneous reradiation is added, we applied instantaneous reradiation for all other simulations. More sophisticated thermal models involving conduction and internal heat production would likely give more accurate results.
+We applied instantaneous reradiation for all of the following simulation since no reradiation due to spacecraft panels is physically unrealistic and the differences in magnitude are significant when instantaneous reradiation is added. More sophisticated thermal models involving conduction and internal heat production would likely give more accurate results.
 
 
 
 
-\subsection{Simulation setups}
+% \subsection{Simulation setups}
 
-Solar with/without
-Lunar with/without
-Albedo none/constant/dlam
-Thermal none/angle-based
-LRO cannonball/paneled
-with/without isntantaneous reradiation
-Beta angle/arc
+% Solar with/without
+% Lunar with/without
+% Albedo none/constant/dlam
+% Thermal none/angle-based
+% LRO cannonball/paneled
+% with/without isntantaneous reradiation
+% Beta angle/arc
 
-46 simulations
-
-no knowledge of true RP accelerations
-therefore, compare to baseline
-
-cannonball with fixed Cr and paneled cannot directly be compared
-
-Also use~\cite{Borderies1990} as reference for plots and discussion, especially about relation of acc and change in elements
+% 46 simulations
 
 
 
 
 
 \subsection{Accelerations}
-All accelerations are given in \qty{e-9}{\acc}.
+The most direct effect of \gls{RP} is visible in the accelerations. Therefore, we compare the \gls{RP} accelerations
+\begin{itemize}
+    \item for the September and June arcs,
+    \item due to solar and lunar (albedo + thermal) radiation,
+    \item for constant and \gls{DLAM1} albedo distributions,
+    \item for cannonball and paneled targets.
+\end{itemize}
+In total, we ran 46 simulations. All accelerations are given in \qty{e-9}{\acc}. Regarding cannonball and paneled target models, note that their comparative magnitudes are less important since the cannonball parameters have large uncertainties. Instead, we compared their behavior and how it relates to model assumptions (e.g., symmetry for the cannonball, tracking for the paneled target).
 
 
 \subsubsection{Solar and lunar radiation}
@@ -130,30 +130,38 @@ All accelerations are inversely proportional to the spacecraft mass. While we ch
 
 
 \subsubsection{Lunar albedo and thermal radiation}
+In the previous subsection, lunar radiation was considered as the sum of albedo and thermal radiation. In this subsection, we look at the separate contributions and the differences between albedo distributions. The accelerations on a paneled targetare shown in \cref{fig:acc-albedovsthermal}.
 
 \begin{figure*}[t]
     \centering
     \includegraphics[width=\textwidth]{figures/plots/acc_albedovsthermal.pdf}
 
-    \caption{Accelerations due to lunar thermal and albedo radiation. Thermal radiation dominates at all times and the difference between constant and \gls{DLAM1} albedo is small. Note the different scales of each subplot.}
+    \caption{Accelerations due to lunar thermal and albedo radiation on a paneled target. Thermal radiation dominates at all times and the difference between constant and \gls{DLAM1} albedo is small. Note the different scales of each subplot.}
     \label{fig:acc-albedovsthermal}
 \end{figure*}
 
-due to angle-based model
-paneled target
-both affected by occultation
+For both arcs and all components, thermal radiation is far larger than albedo radiation (up to sixfold). This is even though the albedo is likely overestimated by \qty{25}{\percent} as described in \cref{subsec:lunar-albedo}.
+
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{figures/plots/groundtrack.pdf}
+    \caption{Ground track for September arc.}
+    \label{fig:groundtrack}
+\end{figure}
+
 
 beta angle slightly less than 90 degrees leads to sinusoidal acceleration in June arc
 
 angle-based thermal behaves quite similar to albedo, but does not vanish in eclipse
+both affected by occultation
 
-albedo likely overestimated by 25\% as described in \cref{subsec:lunar-albedo}
 
 lunar RP dominated by thermal such that variations from DLAM1 are too small to have effect
 
 max difference \qty{5e-9}{\acc}, find location on map via lat/lon -> corresponds to large deviation from mean in dlam1
 maximum occurs before subsolar point
-
+give rms difference
 
 
 
@@ -163,6 +171,11 @@ maximum occurs before subsolar point
 
 
 \subsection{Change in final position}
+
+no knowledge of true RP accelerations
+therefore, compare to baseline
+
+Also use~\cite{Borderies1990} as reference for plots and discussion, especially about relation of acc and change in elements
 
 Thermal in the range of a few meters ~\cite{Mazarico2011}
 

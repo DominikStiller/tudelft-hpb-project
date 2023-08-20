@@ -167,10 +167,10 @@ Since the effect of \gls{RP} varies greatly with $\beta$, we investigated two co
     \multicolumn{3}{l}{\textbf{Force models}}                                            \\
      & Moon gravity         & GRGM1200L~\cite{Goossens2021} (truncated to \numproduct{100 x 100}) &                       \\
      & Earth + Sun gravity   & Central     &                                              \\
-     & Solar radiation       & Isotropic point source with $L = \qty{3.828e26}{\W}$~\cite{Prsa2016}   & \cref{eq:irradiance-point-luminosity}                     \\
+     & Solar radiation       & Isotropic point source ($L = \qty{3.828e26}{\W}$~\cite{Prsa2016})   & \cref{eq:irradiance-point-luminosity}                     \\
      &                       & Occulted by Moon         &                                    \\
      & Lunar radiation       & Paneled source with 6 rings of 6, 12, 18, 24, 30, 36 panels   &                                   \\
-     &                       & Albedo: Constant $a = 0.150$ or \gls{DLAM1} & \cref{eq:radiosity-albedo}                             \\
+     &                       & Albedo: Constant ($a = 0.150$) or \gls{DLAM1} & \cref{eq:radiosity-albedo}                             \\
      &                       & Thermal: Angle-based ($e = 0.95$, $T_\textnormal{min} = \qty{95}{\K}$, $T_\textnormal{max} = \qty{385}{\K}$)       & \cref{eq:radiosity-thermal-anglebased}     \\
      & \gls{RP} target            & Cannonball ($A_c$ = \qty{14}{\m\squared}, $C_r = 1.0$) or Paneled (see \cref{tab:target-model})  & \cref{eq:cannonball-target,eq:paneled-target} \\
      &                       & Paneled model with or without instantaneous reradiation         & \cref{eq:brdf-reaction-specular-diffuse,eq:brdf-reaction-specular-diffuse-instrerad}                                   \\
