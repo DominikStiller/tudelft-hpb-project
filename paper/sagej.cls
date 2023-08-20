@@ -21,6 +21,7 @@
 \RequirePackage[errorshow]{tracefnt}
 \usepackage[inline]{enumitem}
 \usepackage{moreverb,url}
+\usepackage{placeins}
 
 \DeclareGraphicsRule{.ai}{pdf}{.ai}{}
 

@@ -5,11 +5,11 @@ To compare accelerations over one or multiple orbits, we used the \gls{RMSE}, wh
 \begin{align}
     \text{RMSE}(x, y) = \sqrt{\frac{1}{n}\sum_{i=1}^{n}\left(x_i - y_i\right)^2}.
 \end{align}
-The \gls{RMSE} describes the difference between two scalar timeseries and gives more weight to large deviations. These scalar timeseries can be the magnitude of accelerations or individual components. The \gls{rRMSE} is defined as
+The \gls{RMSE} describes the difference between two scalar timeseries $x_i, y_i$ and gives more weight to large deviations. These scalar timeseries can be the magnitude of accelerations or individual components. The \gls{rRMSE} is defined as
 \begin{align}
     \text{rRMSE}(x, y) = \sqrt{\frac{\sum_{i=1}^{n}\left(x_i - y_i\right)^2}{\sum_{i=1}^{n} y_i^2}}
 \end{align}
-and useful to compare differences across orders of magnitude.
+and is useful to compare differences across orders of magnitude.
 
 While the simulation evaluates accelerations in a global frame, the effect of accelerations on the orbit is best analyzed in a spacecraft-fixed coordinate system that is aligned with the orbital track. The RSW coordinate system is one such system, defined by the unit vectors~\cite{Vallado2013}
 \begin{align}
@@ -24,6 +24,7 @@ The radial component $\vb R$ is aligned with the planetocentric position vector 
 
 
 \subsection{Instantaneous reradiation}
+\label{subsec:inst-rerad}
 
 First, we investigated the effect of instantaneous reradiation for the paneled target model. This increases the acceleration proportional to each panel's $C_a$, normal to the panel (cf. \cref{eq:brdf-reaction-specular-diffuse-instrerad}).
 
@@ -40,22 +41,22 @@ First, we investigated the effect of instantaneous reradiation for the paneled t
         \includegraphics[width=\textwidth]{figures/plots/acc_reradiation_rrms.pdf}
         \subcaption{Relative}
      \end{subfigure}
-    \caption{RMS differences of \gls{RP} accelerations over one orbit with and without instantaneous reradiation. The dashed box corresponds to \cref{fig:acc-reradiation}.}
+    \caption{RMS differences of \gls{RP} accelerations over one orbit with and without instantaneous reradiation. The dashed boxes correspond to \cref{fig:acc-reradiation}.}
     \label{fig:acc-reradiation-rms}
 \end{figure}
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=\linewidth]{figures/plots/acc_reradiation_sun_jun.pdf}
-    \caption{Solar \gls{RP} accelerations without and with instantaneous reradiation for June arc. There is a phase shift in the radial component and the along-track component increased by \qty{570}{\percent} \gls{RMSE}. Lunar contributions and the September arc are not sifnigicantly affected in shape.}
+    \caption{Accelerations due to solar radiation without and with instantaneous reradiation over one orbit for June arc. There is a phase shift in the radial component and the along-track component increased by \qty{570}{\percent} \gls{RMSE}. Lunar contributions and the September arc are not sifnigicantly affected in shape.}
     \label{fig:acc-reradiation}
 \end{figure}
 
 \Cref{fig:acc-reradiation} shows the absolute and relative differences between accelerations without and with instantaneous reradiation. In absolute terms, the radial and along-track components are impacted most for the September arc, while the along-track and cross-track components experience the largest increase for the June arc (for both arcs, up to about \qty{1.9e-8}{\acc} \gls{RMSE}). The relative differences are more uniform (around \qty{40}{\percent} \gls{rRMSE}), but the along-track components of lunar and solar radiation in the June arc increase by \qty{140}{\percent} and \qty{570}{\percent} \gls{rRMSE}, respectively. In most cases, only the magnitude of accelerations changes but not their pattern.
 
-\Cref{fig:acc-reradiation} shows the solar radiation of the June arc, the only of our simulations for which the pattern changed significantly. The phase of the radial acceleration is shifted by about \qty{10}{\percent} of the orbital period, which is not the case for the other two components or the acceleration due to lunar radiation. This arc also had the largest relative change in along-track acceleration as described above (highlighted in \cref{fig:acc-reradiation-rms}). This change is clearly visible as a constant offset of about \qty{13e9}{\acc}. 
+\Cref{fig:acc-reradiation} shows the solar radiation of the June arc, the only of our simulations for which the pattern changed significantly. The phase of the radial acceleration is shifted by about \qty{10}{\percent} of the orbital period, which is not the case for the other two components or the acceleration due to lunar radiation. This arc also had the largest relative change in along-track acceleration as described above (highlighted in \cref{fig:acc-reradiation-rms}). This change is clearly visible as a constant offset of about \qty{13e-9}{\acc}. 
 
-The large changes seen in some cases are mostly due to the +SA panel, which is highly absorptive ($C_a = 0.90$) and large ($A = \qty{11.00}{\m\squared}$). For the June arc, the solar array is angled at \qty{45}{\degree} with equal components in the cross-track and along-track directions. Without instantaneous reradiation, no panel has a significant contribution to the along-track acceleration, so it is quite small at around \qty{2e-9}{\acc}. With instantaneous reradiation, each panel, and especially the solar array, exerts an acceleration parallel to its normal, which leads to the along-track increase witnessed for the June arc.
+The large changes seen in some cases are mostly due to the +SA panel, which is highly absorptive ($C_a = 0.90$) and large ($A = \qty{11.00}{\m\squared}$). For the June arc, the solar array is angled at \qty{45}{\degree} with equal components in the cross-track and along-track directions The Sun is on the same side as the solar array in the cross-track direction. Without instantaneous reradiation, no panel has a significant contribution to the along-track acceleration, so it is quite small at around \qty{2e-9}{\acc}. With instantaneous reradiation, each panel, and especially the solar array, exerts an acceleration parallel to its normal, which leads to the along-track increase witnessed for the June arc.
 
 Since no reradiation due to spacecraft panels is physically unrealistic and the differences in magnitude are significant when instantaneous reradiation is added, we applied instantaneous reradiation for all other simulations. More sophisticated thermal models involving conduction and internal heat production would likely give more accurate results.
 
@@ -66,12 +67,13 @@ Since no reradiation due to spacecraft panels is physically unrealistic and the 
 
 Solar with/without
 Lunar with/without
-Albedo constant/dlam
+Albedo none/constant/dlam
+Thermal none/angle-based
 LRO cannonball/paneled
 with/without isntantaneous reradiation
 Beta angle/arc
 
-42 simulations
+46 simulations
 
 no knowledge of true RP accelerations
 therefore, compare to baseline
@@ -85,29 +87,79 @@ Also use~\cite{Borderies1990} as reference for plots and discussion, especially 
 
 
 \subsection{Accelerations}
-thermal vs albedo
+All accelerations are given in \qty{e-9}{\acc}.
 
-define along track, cross, radial
 
-kink in cross-track SRP also seen in SELENE \cite{Kubooka1999}, search for explanation
+\subsubsection{Solar and lunar radiation}
+Both solar and lunar radiation are significant but their accelerations may amplify or cancel each other. To compare them, we used a constant albedo model in addition to the thermal model. The accelerations over one orbit are shown in \cref{fig:acc-solarvslunar}. Note that secular variations in orbit geometry can change the magnitude of acceleration components even within one 2.5 day arc but are not shown here.
 
-Variation with orbital position and time of year (correlate with relative sun position and albedo map)
+\begin{figure*}[t]
+    \centering
+    \begin{subfigure}[c]{\textwidth}
+        \includegraphics[width=\textwidth]{figures/plots/acc_solarvslunar_jun.pdf}
+        \subcaption{June}
+        \label{fig:acc-solarvslunar-jun}
+     \end{subfigure}
 
-beta angle slightly less than 90 degrees leads to sinusoidal acceleration
+     \bigskip
 
-show partial/full eclipse on time axis
+     \begin{subfigure}[c]{\textwidth}
+        \includegraphics[width=\textwidth]{figures/plots/acc_solarvslunar_sep.pdf}
+        \subcaption{September}
+        \label{fig:acc-solarvslunar-sep}
+     \end{subfigure}
 
-absolute acceleration magnitude influenced by mass uncertainty
-rp acceleration magnitude increases as mass decreases
-17\% higher mass at start -> 17 \% lower acceleration magnitude
+    \caption{Accelerations due to solar and lunar radiation over one orbit for a paneled target. The cannonball and paneled target differ both in magnitude and pattern of accelerations. Note the different scales of each subplot.}
+    \label{fig:acc-solarvslunar}
+\end{figure*}
+
+For the June arc (\cref{fig:acc-solarvslunar-jun}), the spacecraft is in permanent sunlight and orbit plane normal points towards the sun because $\beta \approx \qty{90}{\degree}$. This leads to extremely large, constant cross-track solar accelerations. The paneled model also has along-track solar accelerations due to the solar array as explained in \cref{subsec:inst-rerad}. Interestingly, the radial solar accelerations show the same phase shift between the cannonball and paneled target as observed without instantaneous reradiation (\cref{subsec:inst-rerad}). This suggests that symmetry is the cause of the phase shift. The magnitude of the total solar acceleration does not change much throughout the year since it is only dependent on the Moon--Sun distance, which is relatively constant at \qty{1}{\astronomicalunit} (see \cref{tab:orbit-geometry}).
+
+The lunar accelerations during the June arc are generally small (less than \qty{2}{\percent} of solar) because \gls{LRO} never passes over well-illuminated regions; half of the lunar source panels that are visible by \gls{LRO} are on the nightside and therefore rarely contribute. The variations in lunar radiation pressure are mainly caused by the fact that $\beta$ is not exactly \qty{90}{\degree} and \gls{LRO}'s angle to the subsolar point therefore varies by \qty{2}{\degree}. Secular variations in lunar accelerations (not shown) are due to the evolution of eccentricity over the 2.5 days caused by the non-uniform lunar gravity field~\cite{Tooley2010}. The eccentricity ranges from 0.005 to 0.008, which leads to periselene altitudes between \qty{37}{\km} and \qty{41}{\km}. Changes in ecentricity lead to larger amplitudes but no mean shift. Periodic variations in altitude due to the eccentricity itself have a minimal effect since higher altitudes mean larger distances but also a larger visible area of the lunar surface, which roughly cancels.
+
+For the September arc (\cref{fig:acc-solarvslunar-sep}), the Sun is occulted for \qty{42}{\percent} of the orbit since $\beta \approx \qty{0}{\degree}$. The effect of these occultations is clearly visible in solar and lunar radiation, both of which vanish on the nightside. The accelerations are mostly in the radial and along-track directions. This is most clearly explained with the solar accelerations. At 0.2, \gls{LRO} crosses the terminator above the pole and is moving straight towards the Sun; the along-track component is maximal and negative since the Sun opposes the spacecraft's motion. Continuing the orbit, \gls{LRO} passes above the subsolar point at 0.5, leading to a maximal and negative radial component while the along-track component has vanished. Further towards the other pole, \gls{LRO} passes into the night at 0.8, where the along-track component accelerates the spacecraft into the direction of motion. During the whole time, the cross-track component is slightly negative because $\beta$ is slightly negative but not zero. If $\beta$ were slightly positive, the cross-track component would be similar but with the sign flipped. The same holds for changes in orbital elements, particularly the inclination and longitude of the ascending node. In addition to periodic changes, there is a secular change in solar accelerations (not shown) since the already slightly negative $\beta$ continues to decrease: over the 2.5 day arc, the mean of the along-track and cross-track components increase twofold and threefold, respectively. This trend continues until the cross-track component dominates for high $\beta$, as seen for the June arc.
+
+The lunar accelerations during the September arc are much larger than during the June arc because \gls{LRO} passes right over the subsolar point, which reflects much sunlight and has high thermal emissions. Indeed, the lunar irradiance (up to \qty{1831}{\irr}) is larger than the solar irradiance (up to \qty{1362}{\irr}) above the subsolar point. Still, the lunar acceleration magnitude is \qty{14}{\percent} smaller than the solar acceleration magnitude since lunar panels are distributed azimuthally around the nadir and thus partially cancel while all solar rays are parallel. Another feature of lunar accelerations is the sign opposite to solar accelerations: when passing over the subsolar point, the radial components of solar and lunar accelerations roughly cancel. A similar effect can be seen in the along-track and cross-track components for a paneled target, although the lunar radiation needs some time to build up. The along-track component peaks at a subsolar angle of \qty{33}{\degree}, the cross-track component above the subsolar point. The cross-track component increases secularly over the 2.5 day arc, similarly to solar radiation.
+
+Comparing the accelerations of cannonball and paneled targets for both arcs, it is clear that a single $C_r$ cannot capture the complex and changing spacecraft geometry. While the solar accelerations for the September arc are just off by about a constant factor, this is not the case for the June arc or any of the lunar accelerations. In fact, the sign may even be different, particularly for lunar along-track and cross-track accelerations in September. This is likely caused by the solar array tracking the Sun. On smaller scales, the effect of target panels of different size and reflective properties becoming visible as \gls{LRO} revolves around the Moon can be seen in the shape of the solar cross-track accelerations of the September arc.
+
+All accelerations are inversely proportional to the spacecraft mass. While we chose the end-of-mission mass for all simulations, the begin-of-mission mass is \qty{17}{\percent} higher and all accelerations are thus \qty{17}{\percent} lower (see \cref{subsec:lro-target}). This only changes magnitudes, not patterns.
+
+
+
+
+
+\subsubsection{Lunar albedo and thermal radiation}
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth]{figures/plots/acc_albedovsthermal.pdf}
+
+    \caption{Accelerations due to lunar thermal and albedo radiation. Thermal radiation dominates at all times and the difference between constant and \gls{DLAM1} albedo is small. Note the different scales of each subplot.}
+    \label{fig:acc-albedovsthermal}
+\end{figure*}
+
+due to angle-based model
+paneled target
+both affected by occultation
+
+beta angle slightly less than 90 degrees leads to sinusoidal acceleration in June arc
 
 angle-based thermal behaves quite similar to albedo, but does not vanish in eclipse
-
-cross track sign depends on sign of beta --> direction not super meaningful, also for orbital elements (e.g. change in lon asc node)
 
 albedo likely overestimated by 25\% as described in \cref{subsec:lunar-albedo}
 
 lunar RP dominated by thermal such that variations from DLAM1 are too small to have effect
+
+max difference \qty{5e-9}{\acc}, find location on map via lat/lon -> corresponds to large deviation from mean in dlam1
+maximum occurs before subsolar point
+
+
+
+
+
+
+
 
 
 \subsection{Change in final position}
@@ -115,6 +167,12 @@ lunar RP dominated by thermal such that variations from DLAM1 are too small to h
 Thermal in the range of a few meters ~\cite{Mazarico2011}
 
 Thermal lunar radiation may cause an offset of 1-2 meters over an arclength of 2.5 days~\cite{Bauer2016}
+
+not having moon leads to larger decrease because the sun radial component is not cancelled
+
+prediction september: change in arg peri because solar along-track acts fully above poles without being cancelled by lunar rad
+
+for september: sign of change of inclination and lon asc node depends on sign of beta
 
 
 \subsection{Change in orbital element}
