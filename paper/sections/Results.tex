@@ -146,7 +146,7 @@ For both arcs and all components, thermal radiation is far larger than albedo ra
 \begin{figure}[t]
     \centering
     \includegraphics[width=\linewidth]{figures/plots/groundtrack.pdf}
-    \caption{Ground track for September arc. The irradiance due to \gls{DLAM1} albedo is shown in color. The map shows the difference between \gls{DLAM1} and the constant albedo ($a=0.150$). The maximum irradiance does not occur above the subsolar point (\textcolor{mpl-yellow}{\ding{54}}) but above the local albedo maximum slightly north of it.}
+    \caption{Ground track for September arc, colored by the irradiance due to \gls{DLAM1} albedo. The map shows the difference between \gls{DLAM1} and the constant albedo ($a=0.150$). The maximum irradiance does not occur above the subsolar point (\textcolor{mpl-yellow}{\ding{54}}) but above the local albedo maximum \qty{18}{\degree} north of it.}
     \label{fig:groundtrack}
 \end{figure}
 
@@ -160,9 +160,28 @@ The accelerations constant and \gls{DLAM1} albedo distributions are of very simi
 
 
 \subsection{Change in final position}
+The goal of orbit determination is to estimate the state, and particularly the position, of a spacecraft. Therefore, comparing the difference in position at the end of the arc between models is very relevant. Since the true position is not known and this paper is rather concerned with relative differences, we use a simulation without solar and lunar \gls{RP} as baseline reference. As mentioned in \cref{sec:introduction}, the maximum allowable error is \qtyrange{50}{100}{\m} in total position and below \qty{1}{\m} radially.
 
-no knowledge of true RP accelerations
-therefore, compare to baseline
+\begin{table*}[t]
+    \centering
+    \caption{Error in final position, given as mean over the final orbit plus/minus periodic variations around that mean in the final orbit.}
+    \label{tab:final-position}
+    \begin{subfigure}[c]{\textwidth}
+        \input{tables/final_position_jun.tex}
+        \subcaption{June}
+     \end{subfigure}
+
+     \bigskip
+
+     \begin{subfigure}[c]{\textwidth}
+        \input{tables/final_position_sep.tex}
+        \subcaption{September}
+     \end{subfigure}
+\end{table*}
+
+
+
+
 
 Also use~\cite{Borderies1990} as reference for plots and discussion, especially about relation of acc and change in elements
 
@@ -172,9 +191,6 @@ Thermal lunar radiation may cause an offset of 1-2 meters over an arclength of 2
 
 not having moon leads to larger decrease because the sun radial component is not cancelled
 
-prediction september: change in arg peri because solar along-track acts fully above poles without being cancelled by lunar rad
-
-for september: sign of change of inclination and lon asc node depends on sign of beta
 
 
 \subsection{Change in orbital element}
@@ -182,6 +198,10 @@ for september: sign of change of inclination and lon asc node depends on sign of
 compare wih Gauss perturbing equations (analytical solution to change of osculating elements based on accelerations), e.g. ~\cite[Sec.~3.2]{Lucchesi2006}
 
 Keplerian state wrt ECLIPJ2000, not Moon frame!!
+
+prediction september: change in arg peri because solar along-track acts fully above poles without being cancelled by lunar rad
+
+for september: sign of change of inclination and lon asc node depends on sign of beta
 
 
 
