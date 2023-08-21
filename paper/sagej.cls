@@ -22,6 +22,7 @@
 \usepackage[inline]{enumitem}
 \usepackage{moreverb,url}
 \usepackage{placeins}
+\usepackage{pdflscape}
 
 \DeclareGraphicsRule{.ai}{pdf}{.ai}{}
 
@@ -352,6 +353,8 @@ centering]{geometry}
   mode=math,
   separate-uncertainty=true,
   multi-part-units=single,
+  retain-explicit-plus,
+  retain-zero-uncertainty
   % inter-unit-product=\ensuremath{{}\cdot{}}
 }
 

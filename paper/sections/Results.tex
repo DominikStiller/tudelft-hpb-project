@@ -1,5 +1,5 @@
 \section{Results}
-We analyzed short-term effects of \gls{RP} on accelerations, position, and Keplerian orbital elements. While position and orbital elements are ultimately relevant for precise orbit determination, examining the accelerations in different scenarios and along the orbit can explain why position and orbital elements changed. Additionally, the accelerations highlight differences between models of varying complexity.
+We analyzed short-term effects of \gls{RP} on accelerations and the position at the end of the arc. While the position is ultimately relevant for precise orbit determination, examining the accelerations in different scenarios and along the orbit can explain the cause of position changes. Additionally, the accelerations highlight differences between models of varying complexity.
 
 To compare accelerations over one or multiple orbits, we used the \gls{RMSE}, which is defined as
 \begin{align}
@@ -113,11 +113,11 @@ Both solar and lunar radiation are significant but their accelerations may ampli
     \label{fig:acc-solarvslunar}
 \end{figure*}
 
-For the June arc (\cref{fig:acc-solarvslunar-jun}), the spacecraft is in permanent sunlight and orbit plane normal points towards the sun because $\beta \approx \qty{90}{\degree}$. This leads to extremely large, constant cross-track solar accelerations. The paneled model also has along-track solar accelerations due to the solar array as explained in \cref{subsec:inst-rerad}. Interestingly, the radial solar accelerations show the same phase shift between the cannonball and paneled target as observed without instantaneous reradiation (\cref{subsec:inst-rerad}). This suggests that symmetry is the cause of the phase shift. The magnitude of the total solar acceleration does not change much throughout the year since it is only dependent on the Moon--Sun distance, which is relatively constant at \qty{1}{\astronomicalunit} (see \cref{tab:orbit-geometry}).
+For the June arc (\cref{fig:acc-solarvslunar-jun}), the spacecraft is in permanent sunlight and orbit plane normal points towards the sun because $\beta \approx \qty{90}{\degree}$. This leads to extremely large, constant cross-track solar accelerations. The paneled model also has along-track solar accelerations due to the solar array as explained in \cref{subsec:inst-rerad}. Interestingly, the radial solar accelerations show the same phase shift between the cannonball and paneled target as observed without instantaneous reradiation (\cref{subsec:inst-rerad}). This suggests that symmetry, or the lack thereof, is the cause of the phase shift. The magnitude of the total solar acceleration does not change much throughout the year since it is only dependent on the Moon--Sun distance, which is relatively constant at \qty{1}{\astronomicalunit} (see \cref{tab:orbit-geometry}).
 
 The lunar accelerations during the June arc are generally small (less than \qty{2}{\percent} of solar) because \gls{LRO} never passes over well-illuminated regions; half of the lunar source panels that are visible by \gls{LRO} are on the nightside and therefore rarely contribute. The sinusoidal variations in lunar radiation pressure are mainly caused by the fact that $\beta$ is not exactly \qty{90}{\degree} and \gls{LRO}'s angle to the subsolar point therefore varies by \qty{2}{\degree}. Secular variations in lunar accelerations (not shown) are due to the evolution of eccentricity over the 2.5 days caused by the non-uniform lunar gravity field~\cite{Tooley2010}. The eccentricity ranges from 0.005 to 0.008, which leads to periselene altitudes between \qty{37}{\km} and \qty{41}{\km}. Changes in ecentricity lead to larger amplitudes but no mean shift. Periodic variations in altitude due to the eccentricity itself have a minimal effect since higher altitudes mean larger distances but also a larger visible area of the lunar surface, which roughly cancels.
 
-For the September arc (\cref{fig:acc-solarvslunar-sep}), the Sun is occulted for \qty{42}{\percent} of the orbit since $\beta \approx \qty{0}{\degree}$. The effect of these occultations is clearly visible in solar and lunar radiation, both of which vanish on the nightside. The accelerations are mostly in the radial and along-track directions. This is most clearly explained with the solar accelerations. At 0.2, \gls{LRO} crosses the terminator above the pole and is moving straight towards the Sun; the along-track component is maximal and negative since the Sun opposes the spacecraft's motion. Continuing the orbit, \gls{LRO} passes above the subsolar point at 0.5, leading to a maximal and negative radial component while the along-track component has vanished. Further towards the other pole, \gls{LRO} passes into the night at 0.8, where the along-track component accelerates the spacecraft into the direction of motion. During the whole time, the cross-track component is slightly negative because $\beta$ is slightly negative but not zero. If $\beta$ were slightly positive, the cross-track component would be similar but with the sign flipped. The same holds for changes in orbital elements, particularly the inclination and longitude of the ascending node. In addition to periodic changes, there is a secular change in solar accelerations (not shown) since the already slightly negative $\beta$ continues to decrease: over the 2.5 day arc, the mean of the along-track and cross-track components increase twofold and threefold, respectively. This trend continues until the cross-track component dominates for high $\beta$, as seen for the June arc.
+For the September arc (\cref{fig:acc-solarvslunar-sep}), the Sun is occulted for \qty{42}{\percent} of the orbit since $\beta \approx \qty{0}{\degree}$. The effect of these occultations is clearly visible in solar and lunar radiation, both of which vanish on the nightside. The accelerations are mostly in the radial and along-track directions. This is most clearly explained with the solar accelerations. At 0.2, \gls{LRO} crosses the terminator above the pole and is moving straight towards the Sun; the along-track component is maximal and negative since the Sun opposes the spacecraft's motion. Continuing the orbit, \gls{LRO} passes above the subsolar point at 0.5, leading to a maximal and negative radial component while the along-track component has vanished. Further towards the other pole, \gls{LRO} passes into the night at 0.8, where the along-track component accelerates the spacecraft into the direction of motion. During the whole time, the cross-track component is slightly negative because $\beta$ is slightly negative but not zero. If $\beta$ were slightly positive, the cross-track component would be similar but with the sign flipped. In addition to periodic changes, there is a secular change in solar accelerations (not shown) since the already slightly negative $\beta$ continues to decrease: over the 2.5 day arc, the mean of the along-track and cross-track components increase twofold and threefold, respectively. This trend continues until the cross-track component dominates for high $\beta$, as seen for the June arc.
 
 The lunar accelerations during the September arc are much larger than during the June arc because \gls{LRO} passes right over the subsolar point, which reflects much sunlight and has high thermal emissions. Indeed, the lunar irradiance (up to \qty{1831}{\irr}) is larger than the solar irradiance (up to \qty{1362}{\irr}) above the subsolar point. Still, the lunar acceleration magnitude is \qty{14}{\percent} smaller than the solar acceleration magnitude since lunar panels are distributed azimuthally around the nadir and thus partially cancel while all solar rays are parallel. Another feature of lunar accelerations is the sign opposite to solar accelerations: when passing over the subsolar point, the radial components of solar and lunar accelerations roughly cancel. A similar effect can be seen in the along-track and cross-track components for a paneled target, although the lunar radiation needs some time to build up. The along-track component peaks at a subsolar angle of \qty{33}{\degree}, the cross-track component above the subsolar point. The cross-track component increases secularly over the 2.5 day arc, similarly to solar radiation.
 
@@ -160,58 +160,80 @@ The accelerations constant and \gls{DLAM1} albedo distributions are of very simi
 
 
 \subsection{Change in final position}
-The goal of orbit determination is to estimate the state, and particularly the position, of a spacecraft. Therefore, comparing the difference in position at the end of the arc between models is very relevant. Since the true position is not known and this paper is rather concerned with relative differences, we use a simulation without solar and lunar \gls{RP} as baseline reference. As mentioned in \cref{sec:introduction}, the maximum allowable error is \qtyrange{50}{100}{\m} in total position and below \qty{1}{\m} radially.
+The goal of orbit determination is to estimate the state, and particularly the position, of a spacecraft. Therefore, the difference in position at the end of the arc between models is highly relevant. Since the true position is not known and this paper is rather concerned with relative differences, we use a simulation without solar and lunar \gls{RP} as baseline reference. As mentioned in \cref{sec:introduction}, the maximum allowable error is \qtyrange{50}{100}{\m} in total position and below \qty{1}{\m} radially.
 
 \begin{table*}[t]
-    \centering
-    \caption{Error in final position, given as mean over the final orbit plus/minus periodic variations around that mean in the final orbit.}
+    \caption{Difference of final position in \unit{\m} with respect to no-\gls{RP} baseline, given as mean over the final orbit plus/minus periodic variations around that mean in the final orbit. The largest changes are in the along-track position. $\mathbf{A}$: solar only; $\mathbf{B}$: lunar only (thermal + constant albedo); $\mathbf{C}$: lunar only (thermal + \gls{DLAM1} albedo); $\mathbf{D}$: solar + lunar (thermal + \gls{DLAM1} albedo).}
     \label{tab:final-position}
-    \begin{subfigure}[c]{\textwidth}
+    \begin{subtable}[c]{\textwidth}
         \input{tables/final_position_jun.tex}
         \subcaption{June}
-     \end{subfigure}
+     \end{subtable}
 
-     \bigskip
+     \medskip
 
-     \begin{subfigure}[c]{\textwidth}
+     \begin{subtable}[c]{\textwidth}
         \input{tables/final_position_sep.tex}
         \subcaption{September}
-     \end{subfigure}
+     \end{subtable}
 \end{table*}
 
+The difference in final positions with respect to the baseline simulation are shown in \cref{tab:final-position}. The first number is the mean secular difference over the final orbit (32nd revolution), the second number gives the amplitude of periodic variations around that mean over the final orbit. Note that the periodic variation is quite large in some cases despite zero secular change.
+
+The June arc shows a large along-track difference (more than $\qty{1}{km}$) for the paneled target with solar radiation. This is due to the consistently large along-track acceleration of about \qty{-15e-9}{\acc}, which, however, is lower and of opposite sign than the constant acceleration of \qty{47e-9}{\acc} expected to result in this position difference. For the cannonball, the along-track accelerations have a zero mean and thus the position difference is also zero. This, again, highlight how the cannonball cannot account for assymetry; with symmetric accelerations, no secular changes occur. Interestingly, the large cross-track acceleration does not lead to a large cross-track difference in final position. Possibly, along-track accelerations have the greatest effect since they are almost aligned with the large orbital velocity (\qty{1.7}{\km\per\s}). Constant and \gls{DLAM1} albedo do not differ significantly.
+
+For the September arc, cannonball and paneled target give more similar results. Again, the largest secular difference is in the along-track position. However, in contrast to the June arc, \gls{LRO} is shifted back in the track this time. Due to the large variations in radial and along-track accelerations over each orbit, there are large periodic variations in the radial and along-track positions too. For the paneled target with solar and lunar radiation, these have amplitudes of \qty{18}{\m} and \qty{36}{\m} for the radial and along-track differences, respectively. Interestingly, these periodic variations have higher amplitudes when lunar radiation is not considered, which would otherwise cancel solar accelerations partially. There also is a an \qty{8}{m} RMSE difference for the paneled model between constant and \gls{DLAM1} albedo.
+
+
+These differences in position highlight how important \gls{RP} models are for precise orbit determination. The best estimate of the true effect of \gls{RP} is given by the cases D (solar + lunar radiation) for the paneled target. For both arcs, the maximum allowable total error would be exceeded by periodic variations if \gls{RP} were neglected. The radial requirement of sub-meter accuracy would be similarly violated.
 
 
 
 
-Also use~\cite{Borderies1990} as reference for plots and discussion, especially about relation of acc and change in elements
+% \subsection{Change in orbital element}
 
-Thermal in the range of a few meters ~\cite{Mazarico2011}
+% \begin{landscape}
+    
+%     \begin{table}
+%         \small
+%         \caption{Difference of Kepler elements with respect to no-\gls{RP} baseline, given as mean over the final orbit. The elements are the semi-major axis ($a$ in \unit{m}), eccentricity ($e$, unitless), inclination ($i$ in \unit{\degree}), longitude of the ascending node ($\Omega$ in \unit{\degree}), and argument of periapsis ($\omega$ in \unit{\degree}).}
+%         \label{tab:final-elements}
+%         \begin{subtable}[c]{\textwidth}
+%             \input{tables/final_elements_jun.tex}
+%             \subcaption{June}
+%          \end{subtable}
+    
+%          \medskip
+    
+%          \begin{subtable}[c]{\textwidth}
+%             \input{tables/final_elements_sep.tex}
+%             \subcaption{September}
+%          \end{subtable}
+%     \end{table}
 
-Thermal lunar radiation may cause an offset of 1-2 meters over an arclength of 2.5 days~\cite{Bauer2016}
+% \end{landscape}
 
-not having moon leads to larger decrease because the sun radial component is not cancelled
+% compare wih Gauss perturbing equations (analytical solution to change of osculating elements based on accelerations), e.g. ~\cite[Sec.~3.2]{Lucchesi2006}
 
+% Keplerian state wrt ECLIPJ2000, not Moon frame!!
 
+% prediction september: change in arg peri because solar along-track acts fully above poles without being cancelled by lunar rad
 
-\subsection{Change in orbital element}
-
-compare wih Gauss perturbing equations (analytical solution to change of osculating elements based on accelerations), e.g. ~\cite[Sec.~3.2]{Lucchesi2006}
-
-Keplerian state wrt ECLIPJ2000, not Moon frame!!
-
-prediction september: change in arg peri because solar along-track acts fully above poles without being cancelled by lunar rad
-
-for september: sign of change of inclination and lon asc node depends on sign of beta
+% for september: sign of change of inclination and lon asc node depends on sign of beta
 
 
 
 
 \subsection{Performance}
-no special setup like cpu pinning or disabled hyperthreading for benchmarking
-only on one setup
-Performance may vary in other situations~\cite{Mytkowicz2009}
-still, a good indication
-also mention minimum
+Choosing the appropriate model is not only a consideration of accuracy but also one of computational effort. The goal is to find the most efficient model that is sufficiently accurate. To determine how much less efficient complex models like paneled targets or \gls{DLAM1} are, we measured the walltime duration of the integration over 2.5 days with a step size of \qty{5}{\s}. We ran each simulation 100 times in random order on a server with 2 Intel Xeon E5-2683 v3 (14 cores, two threads per core with hyperthreading) while no other loads were running. 27 simulations ran in parallel such that all but one core were used by a single thread. More parallelism would have triggered hyperthreading, which would have skewed measurements. The simulation program was compiled in the release configuration with GCC 11.4.0 at optimization level \texttt{-O2}. No other steps such as CPU pinning were taken. Note that software performance can be influenced by many, seemingly innocuous aspects~\cite{Mytkowicz2009}. Still, the results show the general tendency.
 
-albedo model can increase computational demand by several hundred pct \cite{Nicholson2010}
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{figures/plots/performance.pdf}
+    \caption{Walltime duration of simulations with different \gls{RP} models. The statistics come from 100 runs for each model. Evaluation of \gls{DLAM1}'s spherical harmonics expansion increases the duration by up to \qty{80}{\percent}.}
+    \label{fig:performance}
+\end{figure}
 
+The walltime durations when including solar or lunar radiation are shown in \cref{fig:performance}. Again, the baseline simulation without and \gls{RP} models serves as reference. The median baseline time of \qty{4.3}{\min} includes computations of the lunar spherical harmonics gravity model, point gravities from Sun and Earth, and general integration and propagation equations. Solar radiation has a negligible complexity, even for a paneled target. Lunar radiation with constant albedo increases the duration by about \qty{20}{\percent}, but slightly more for the paneled than the cannonball target. Taking the albedo from the spherical harmonics expansion of \gls{DLAM1} increases the duration by up to \qty{80}{\percent}, compared to the baseline. This is a significant impact which may not always be tolerable. Other authors report increases of several hundred percent for \gls{DLAM1} albedo~\cite{Nicholson2010}.
+
+The durations are relatively consistent so that the inter-quartile range is at most \qty{5}{\s}. Still, all distributions have a long tail towards higher durations: the difference between maximum and median is between 9 and 21 times higher than the difference between minimum and median. This behavior is typical for software.
