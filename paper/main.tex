@@ -13,13 +13,13 @@
 
 
 \begin{abstract}
-    Precision orbit determination for geodetic applications requires force models even for small perturbations. Radiation from the Sun and Moon is a significant source of perturbation in lunar orbits and inadequate modeling of \gls{RP} can lead to large position errors. This paper describes the short-term effect of \gls{RP} on the \gls{LRO}, which has a position knowledge requirement of 50 m to 100 m in total and below 1 m radially. We compared models of varying complexity to determine the computational cost of high-accuracy \gls{RP} modeling. We found that
+    Precision orbit determination for geodetic applications requires force models even for small perturbations. Radiation from the Sun and Moon is a significant source of perturbation in lunar orbits and inadequate modeling of \gls{RP} can lead to large position errors. This paper describes the short-term effect of \gls{RP} on the \gls{LRO}, which has a position knowledge requirement of 50 m to 100 m in total and below 1 m radially. We compared models of varying complexity to determine the benefits and computational cost of high-accuracy \gls{RP} modeling. We found that
     \begin{enumerate*}[label=(\arabic*)]
         \item the accelerations differ greatly depending on the Sun position,
         \item only a paneled spacecraft model can account properly for changing orientation and geometry of \gls{LRO}, and
-        \item a constant-albedo model is sufficient for lunar radiation, which is dominated by the thermal component. A spherical harmonics model for lunar albedo increases computational cost with little impact on the attained accuracy.
+        \item a constant-albedo model is sufficient for lunar radiation, which is dominated by the thermal component. A spherical harmonics model for lunar albedo increases computational cost with little gain in the attained accuracy.
     \end{enumerate*}
-    If \gls{RP} is neglected, the along-track position errors can be as large as 1100 m and the radial error varies periodically with an amplitude of up to 24 m/s, highlighting the importance of proper force modeling to meet orbit determination requirements.
+    If \gls{RP} is neglected, the along-track position errors can be as large as 1100 m and the radial error varies periodically with an amplitude of up to 24 m/s, highlighting the importance of adequate force modeling to meet orbit determination requirements.
 \end{abstract}
 
 
@@ -30,7 +30,7 @@
 
 \maketitle
 
-\printacronyms[style=inline]
+\printacronyms[style=inline,title={Abbreviations}]
 
 % TODO expand table of symbols
 
@@ -41,6 +41,9 @@
 \input{sections/Results}
 \input{sections/Conclusion}
 
+\begin{codeav}
+The implementation of the models in Tudat is available at \url{https://github.com/DominikStiller/tudat/tree/feature/radiation_pressure_modeling}. Analysis code is available at \url{https://github.com/DominikStiller/tudelft-hpb-project}.
+\end{codeav}
 
 
 \printbibliography

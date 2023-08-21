@@ -184,9 +184,9 @@ centering]{geometry}
       {\raggedright\textbf{\@author}%
       \\ \textit{\small\@affiliation\@corrauth}
       \par}}
-     \vskip 35pt%
+     \vskip 38pt%
     {\noindent\usebox\absbox\par}
-    {\vspace{18pt}%
+    {\vspace{20pt}%
       %
       {\noindent\normalsize\@keywords}\par}
       \end{sf}
@@ -297,6 +297,10 @@ centering]{geometry}
 
 \newenvironment{biogs}[1]%
 {\subsection*{\normalsize\sagesf\bfseries Author Biographies}\begin{refsize}\noindent #1}%
+{\end{refsize}}
+
+\newenvironment{codeav}[1]%
+{\subsection*{\normalsize\sagesf\bfseries Code availability}\begin{refsize}\noindent #1}%
 {\end{refsize}}
   
 %Endnotes
