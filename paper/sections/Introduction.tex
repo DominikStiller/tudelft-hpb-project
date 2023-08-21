@@ -1,26 +1,10 @@
 \section{Introduction}
 \label{sec:introduction}
 
-Describe LRO mission
-Describe need for POD
+Precision orbit determination is cornerstone of satellite navigation and spaceborne geodesy. Only if the state, and particularly the position, of the spacecraft are known accuractely can the high precision of modern instruments for gravity field recovery or satellite altimetry be exploited fully. Next to tracking data, force models have the largest role in improving orbit determination, accounting for gravity, solid tides, drag, and other accelerations. Another important non-conservative force is \acrfull{RP}, which can have magnitudes similar to third-body and irregular gravity field perturbations~\cite{Montenbruck2000}. \gls{RP} arises from the exchange of momentum between electromagnetic radiation and the spacecraft. Neglecting or mismodeling \gls{RP} accelerations can deteriorate position knowledge below acceptable levels.
 
-sub-meter accuracy in radial component~\cite{Zuber2009}
-50-100 m in total position~\cite{Chin2007}
+The \acrfull{LRO} was launched in June 2009 to prepare for human missions to the Moon by identifying safe landing sites, locating resources, and characterizing the radiation environment~\cite{Tooley2010}. To fulfil these objectives, \gls{LRO} was equipped with instruments to, among other objectives, create high-resolution maps of the lunar topography and gravity field. Accuracies of \qtyrange{50}{100}{\m} in the total position and sub-meter accuracy in the radial component are required to take advantage of the instrument resolutions~\cite{Chin2007,Zuber2009}, which necessitates force models even for small perturbations. Solar \gls{RP} \enquote{is the largest non-gravitational perturbation affecting the LRO orbit and inadequate modeling [\ldots] is the primary cause of large prediction errors for LRO, particularly during high-beta angle periods}~\cite{Slojkowski2015}. The Moon itself is also a significant radiation source since there is no atmosphere and especially the lunar highlands are reflective~\cite{Floberghagen1999}. The orbit determination error is also highly dependent on the modeling of how \gls{RP} translates to accelerations; particularly during full-Sun periods, a model accounting for \gls{LRO}'s geometry and the real orientation of the solar array and high gain antenna outperforms a simple spherical model~\cite{Slojkowski2014}.
+ 
+This paper describes the short-term effects of \gls{RP} on \gls{LRO}'s orbit and their sensitivities to models of varying complexity. Other authors have described their orbit determination approaches for \gls{LRO}~\cite{Mazarico2011,Mazarico2018,Nicholson2010,Smith2008,Slojkowski2014,Slojkowski2015,Bauer2016,Maier2016} but none compared \gls{RP} modeling choices and their implications. \citeauthor{Vielberg2020} investigated the effect of different models for Earth, where a plethora of observations are available and the radiation environment differs greatly from the Moon. The results of this paper can guide the choice of force models for orbit determination both in terms of accuracy and computational performance. Note that our results relate to short-term effects over 2.5 days, which is a typical arc used in orbit determination. Long-term effects, which may cancel or compound over the span of months, are not considered here.
 
-figure with magnitudes of perturbations
-
-"SRP is the largest non-gravitational perturbation affecting the LRO orbit and inadequate modeling of SRP is the primary cause of large prediction errors for LRO, particularly during high-beta angle periods"~\cite{Slojkowski2015}
-albedo modeling on moon necessary for selenodetic mapping~\cite{Floberghagen1999}
-albedo radiation significant on moon since no atmosphere exists and surface of lunar highlands is rather reflective \%~\cite{Floberghagen1999}
-High OD error during full-sun periods with cannonball model, but acceptable with multi-panel model and real attitude for SA and HGA~\cite[]{Slojkowski2014}
-
-present similar papers like VielbergKusche
-mazarico 2018
-
-in this paper, only investigate orbital variations over 2.5 day arc -> goal is to improve force models for POD
-Long-term effect of RP would also be interesting (forces could cancel out over time or always act in same direction), but not considered here
-
-\gls{Tudat} is used and models are used for future research
-
-
-when adding acceleration magnitudes, add ref in simulation setup
+The \gls{Tudat} was used for all orbital simulations and the models presented here were integrated into the software, which is freely available at \url{https://docs.tudat.space/}.

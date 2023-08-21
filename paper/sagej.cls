@@ -127,9 +127,10 @@ centering]{geometry}
 \long\def\@makefntext#1{\parindent 1em%
 \noindent{$\m@th^{\@thefnmark}$}#1}
 
+
 \newcommand{\email}[1]{%
   \gdef\@email{%
-\footnotetext[0]{\sagesf Email: #1}}}
+\let\thefootnote\relax\footnote{\sagesf Email: #1}}}
 \let\@email\@empty
 
 \def\corrauth#1{\gdef\@corrauth{%

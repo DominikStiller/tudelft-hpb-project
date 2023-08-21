@@ -5,7 +5,7 @@
 \author{Dominik Stiller}
 \affiliation{B.Sc. Student, Faculty of Aerospace Engineering, TU Delft, Netherlands}
 \email{dstiller@uw.edu}
-% \keywords{Radiation pressure, lunar albedo, Lunar Reconnaissance Orbiter}
+\keywords{Radiation pressure modeling, Lunar Reconnaissance Orbiter, precision orbit determination}
 
 
 \makeglossaries
@@ -13,7 +13,7 @@
 
 
 \begin{abstract}
-    Centimeter-scale orbit determination is necessary for satellite navigation and spaceborne geodesy. Orbits are sensitive to perturbations such as \gls{RP} due to solar radiation as well as planetary albedo and thermal emissions. This project investigated sensitivities of orbit predictions to varying complexity in RP models for the \gls{LRO}. We found that solar RP dominates but lunar RP affects secular variations in semi-major axis and argument of periapsis. A constant-albedo lunar model and a paneled LRO model are recommended for precise radial and along-track positioning.
+    Precision orbit determination for geodetic applications requires force models even for small perturbations. Radiation from the Sun and Moon is a significant source of perturbation in lunar orbits and inadequate modeling of \gls{RP} can lead to large position errors. In this paper, we describe the short-term effect of \gls{RP} on the \gls{LRO}, which has a position knowledge requirement of 50 m to 100 m in total and below 1 m radially. Models of varying complexity are compared to determine the computational cost of high-accuracy \gls{RP} modeling. We find that the accelerations differ greatly depending on the Sun position, that a constant-albedo model is sufficient for lunar radiation, and that only a paneled spacecraft model can account properly for changing orientation and geometry of \gls{LRO}. A spherical harmonics model for lunar albedo increases computational cost with little impact on the attained accuracy. If \gls{RP} is neglected, the along-track position errors can be as large as 1100 m and the radial error varies periodically with an amplitude of up to 24 m/s, both of which violate the requirements.
 \end{abstract}
 
 
