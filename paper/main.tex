@@ -1,11 +1,11 @@
 \documentclass{sagej}
 
 \runninghead{Short-term orbital effects of radiation pressure on the Lunar Reconnaissance Orbiter}
-\title{Short-term orbital effects of radiation pressure on the Lunar Reconnaissance Orbiter}
+\title{Short-term orbital effects of radiation pressure \\ on the Lunar Reconnaissance Orbiter}
 \author{Dominik Stiller}
-\affiliation{B.Sc. Student, Faculty of Aerospace Engineering, TU Delft, Netherlands}
+\affiliation{B.Sc. student, Faculty of Aerospace Engineering, TU Delft, Netherlands}
 \email{dstiller@uw.edu}
-\keywords{Radiation pressure modeling, Lunar Reconnaissance Orbiter, precision orbit determination}
+\keywords{Radiation pressure, Lunar Reconnaissance Orbiter, precision orbit determination, force modeling}
 
 
 \makeglossaries
@@ -13,7 +13,13 @@
 
 
 \begin{abstract}
-    Precision orbit determination for geodetic applications requires force models even for small perturbations. Radiation from the Sun and Moon is a significant source of perturbation in lunar orbits and inadequate modeling of \gls{RP} can lead to large position errors. In this paper, we describe the short-term effect of \gls{RP} on the \gls{LRO}, which has a position knowledge requirement of 50 m to 100 m in total and below 1 m radially. Models of varying complexity are compared to determine the computational cost of high-accuracy \gls{RP} modeling. We find that the accelerations differ greatly depending on the Sun position, that a constant-albedo model is sufficient for lunar radiation, and that only a paneled spacecraft model can account properly for changing orientation and geometry of \gls{LRO}. A spherical harmonics model for lunar albedo increases computational cost with little impact on the attained accuracy. If \gls{RP} is neglected, the along-track position errors can be as large as 1100 m and the radial error varies periodically with an amplitude of up to 24 m/s, both of which violate the requirements.
+    Precision orbit determination for geodetic applications requires force models even for small perturbations. Radiation from the Sun and Moon is a significant source of perturbation in lunar orbits and inadequate modeling of \gls{RP} can lead to large position errors. This paper describes the short-term effect of \gls{RP} on the \gls{LRO}, which has a position knowledge requirement of 50 m to 100 m in total and below 1 m radially. We compared models of varying complexity to determine the computational cost of high-accuracy \gls{RP} modeling. We found that
+    \begin{enumerate*}[label=(\arabic*)]
+        \item the accelerations differ greatly depending on the Sun position,
+        \item only a paneled spacecraft model can account properly for changing orientation and geometry of \gls{LRO}, and
+        \item a constant-albedo model is sufficient for lunar radiation, which is dominated by the thermal component. A spherical harmonics model for lunar albedo increases computational cost with little impact on the attained accuracy.
+    \end{enumerate*}
+    If \gls{RP} is neglected, the along-track position errors can be as large as 1100 m and the radial error varies periodically with an amplitude of up to 24 m/s, highlighting the importance of proper force modeling to meet orbit determination requirements.
 \end{abstract}
 
 
