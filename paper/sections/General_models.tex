@@ -1,5 +1,7 @@
 \section{Radiation pressure modeling}
 
+\gls{RP} modeling requires the cooperation of models for the radiation sources and the spacecraft. This section describes a collection of compatible models, starting with a physical description of \gls{RP} and reflectance, then building models of increasing complexity on top of that.
+
 \subsection{Mechanics of radiation pressure}
 \label{subsec:general-rp-mechanics}
 
@@ -28,7 +30,7 @@ where $dL_r$ is the reflected radiance (the directional counterpart to radiosity
 
 % TODO expand figure with diffuse and specular reflection (e.g. Montenbruck 2000, p. 85)
 
-\begin{figure}[t]
+\begin{figure}[b]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/reflection_geometry.ai}
     \caption{Geometry of a \gls{BRDF} for a surface with normal $\vb N$, incoming direction $\vb L$, and observer direction $\vb V$. The viewing angle $\theta_r$ is between $\vb N$ and $\vb V$. The phase angle (not labeled) is between $\vb L$ and $\vb V$. Adapted from~\cite{Wetterer2014}.}
@@ -42,7 +44,7 @@ The target surface \gls{BRDF} gives the direction in which the target is acceler
     \label{eq:brdf-reaction-general}
     \vb R = -\left[ \vb L + \int_{0}^{2\pi} \int_{0}^{\pi/2} f_r \cos\theta_r \vb V d\theta_r d\phi_r \right].
 \end{align}
-This vector encapsulates the mechanics of momentum transfer. The reaction is minimal for pure absorption ($f_r = 0$). The reaction is maximal (double the minimum) for pure specular reflection in the incidence direction.
+This vector encapsulates the mechanics of momentum transfer. The reaction is minimal for pure absorption ($f_r = 0$) and maximal (double the minimum) for pure specular reflection in the incidence direction.
 
 \subsubsection{Specular--diffuse reflectance distribution}
 A simplified \gls{BRDF} is usually more practical for \gls{RP} modeling: the reflectance is assumed to be a mix of an ideal Lambertian diffuse component and a purely mirror-like specular component. Such a \gls{BRDF} is given by~\cite{Wetterer2014}
@@ -189,11 +191,11 @@ Another extension is the radiation pressure due to the thermal radiation of the 
 % TODO expand add figure how symbols fit together
 
 
-
 \subsection{Occultation}
 All previous models assume that the line of sight between the the source and the target is unobstructed. However, occultation is a common astronomical phenomenon: a low-altitude spacecraft may be in the planet's shadow for more than a third of its orbit, and partial or full lunar eclipses can occur multiple times per year. We present two occultation models.
 
-\begin{figure}[b]
+
+\begin{figure}[t]
     \centering
     \includegraphics[width=\linewidth]{figures/eclipse_geometry.ai}
     \caption{Conical occultation model for spherical sources and occulting bodies. The observer is partially illuminated in the penumbra but fully shadowed in the umbra. Adapted from~\cite{Vallado2013}.}

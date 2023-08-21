@@ -1,5 +1,7 @@
 \section{Radiation pressure modeling for LRO}
 
+After describing \gls{RP} modeling in general, we now present models that are relevant to \gls{LRO}. This includes the source models for lunar radiation and the target models. We also elaborate \gls{LRO}'s orbit geometry and the simulation setup.
+
 \subsection{Lunar albedo radiation}
 \label{subsec:lunar-albedo}
 
@@ -51,7 +53,7 @@ Diurnal variability is represented well by the angle-based thermal model (\cref{
 
 While the albedo varies with location (see \cref{subsec:lunar-albedo}), the emissivity and other thermophysical properties are remarkably uniform~\cite{Hayne2017}. This means that constant emissivity is a fair assumption. We used a value of $e = 0.95$, which is the broadband daytime emissivity, although it decreases to 0.90 during the night~\cite{Bandfield2015}. However, we assume the constant daytime emissivity at all times.
 
-\begin{figure}[t]
+\begin{figure}[b]
     \centering
     \includegraphics[width=\linewidth]{figures/plots/thermal_map.pdf}
     \caption{Map of lunar thermal emissions from the angle-based model (\cref{eq:radiosity-thermal-anglebased}). The emissivity is 0.95 and surface temperatures range between \qty{95}{\K} and \qty{385}{\K}, depending on the subsolar angle.}
@@ -85,7 +87,7 @@ We choose six rings as sufficiently accurate, which contain 127 panels in total 
 \subsection{LRO target}
 \label{subsec:lro-target}
 
-\begin{figure}[t]
+\begin{figure}[b]
     \centering
     \includegraphics[width=\linewidth]{figures/lro_rendering.ai}
     \caption{Rendering of \gls{LRO}~\cite{NSMD2018} with bus frame definition. The X axis is along the velocity vector, the +Y axis is away from the Sun, and the +Z axis is in the nadir direction~\cite{Tooley2010}.}
@@ -95,21 +97,21 @@ We choose six rings as sufficiently accurate, which contain 127 panels in total 
 \gls{LRO} comprises a cubical bus with a large solar array and a protruding high gain antenna (\cref{fig:lro-rendering}). The solar array can be gimbaled partially about the Y and Z axes such that it can track the Sun when it is within \gls{LRO}'s orbit plane; if not, the solar array is at a fixed \qty{45}{\degree} angle with the -Y bus side. The antenna points toward Earth whenever it is visible~\cite{Mazarico2018}. This leads to large variations in cross-section over time, and different sides are presented to solar and lunar radiation.
 
 
-\begin{table}[b]
+\begin{table}[t]
     \centering
     \caption{Panels for \gls{LRO} target model from \citeauthor{Smith2008}~\cite{Smith2008}. The coefficients are for absorptivity and specular/diffuse reflectivity. The solar array is by far the largest surface, followed by the Z-facing panels.}
     \label{tab:target-model}
     \input{tables/target_model.tex}
 \end{table}
 
-\gls{LRO} can be modeled as a paneled target (\cref{eq:paneled-target}) to account for this variability. The panels are summarized in \cref{tab:target-model}. There are six panels for the bus, with surface normals along the positive and negative axes of the \gls{LRO} bus frame (cf. \cref{fig:lro-rendering}). The solar array and high gain antenna are modeled separately, again with front and back panels. The solar array is almost as large as all other panels combined. Panels for the solar array and high gain antenna track the Sun and Earth or have a fixed orientation, as described above. Definitive attitudes of actuated panels are also available but were not used.
+\gls{LRO} can be modeled as a paneled target (\cref{eq:paneled-target}) to account for this variability. \Cref{tab:target-model} summarizes these panels. There are six panels for the bus, with surface normals along the positive and negative axes of the \gls{LRO} bus frame (cf. \cref{fig:lro-rendering}). The solar array and high gain antenna are modeled separately, again with front and back panels. The solar array is almost as large as all other panels combined. Panels for the solar array and high gain antenna track the Sun and Earth or have a fixed orientation, as described above. Definitive attitudes of actuated panels are also available but were not used.
 
 We also model \gls{LRO} as a cannonball (\cref{eq:cannonball-target}), a model which is often used for orbit determination. Finding a single equivalent cross-section area $A_c$ and coefficient $C_r$ that hold at all times is virtually impossible~\cite{Vallado2013}. Different values for \gls{LRO} exist in literature: \citeauthor{Bauer2016} used $A_c = \qty{10}{\m\squared}$ and $C_r = 1.2$~\cite{Bauer2016}, while \citeauthor{Nicholson2010} used $A_c=\qty{14}{\m\squared}$ and $C_r = 1.0$~\cite{Nicholson2010}. Their acceleration should differ by about \qty{15}{\percent}. We choose the latter since it is used for operational orbit estimation of \gls{LRO}.
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=\linewidth]{figures/plots/mass_history.pdf}
-    \caption{Mass evolution of \gls{LRO} over the science mission phase (15 September 2009 -- 11 December 2011, \textcolor[RGB]{206, 211, 217}{\ding{110}}). }
+    \caption{Mass evolution of \gls{LRO} over the science mission phase (\textcolor[RGB]{206, 211, 217}{\ding{110}}). \gls{LRO} expelled \qty{185}{\kg} of propellant for station keeping between 15 September 2009 and 11 December 2011.}
     \label{fig:mass-history}
 \end{figure}
 
@@ -130,7 +132,7 @@ To complete the target model, the mass is required to convert forces into accele
         & \bfseries 28 June 2010 & \bfseries 26 Sept. 2011 \\
         \midrule
         \bfseries Start time (UTC) & 15:00:00 & 18:00:00 \\
-        \bfseries $\mathbf \beta$~[\unit{\degree}] & \numrange{88.8}{88.9} & \numrange{-1.7}{-3.6} \\
+        \bfseries Beta angle $\mathbf \beta$~[\unit{\degree}] & \numrange{88.8}{88.9} & \numrange{-1.7}{-3.6} \\
         \bfseries Sun distance~[\unit{\astronomicalunit}] & 1.019 & 1.000 \\
         \bfseries Eclipse time~[\unit{\min}] & 0 & 48 \\
         \bfseries Solar array & Fixed (\qty{45}{\degree} to -Y) & Tracks Sun \\

@@ -184,9 +184,9 @@ centering]{geometry}
       {\raggedright\textbf{\@author}%
       \\ \textit{\small\@affiliation\@corrauth}
       \par}}
-     \vskip 40pt%
+     \vskip 35pt%
     {\noindent\usebox\absbox\par}
-    {\vspace{20pt}%
+    {\vspace{18pt}%
       %
       {\noindent\normalsize\@keywords}\par}
       \end{sf}

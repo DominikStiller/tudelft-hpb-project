@@ -94,7 +94,7 @@ In total, we ran 46 simulations. All accelerations are given in \qty{e-9}{\acc}.
 \subsubsection{Solar and lunar radiation}
 Both solar and lunar radiation are significant but their accelerations may amplify or cancel each other. To compare them, we used a constant albedo model in addition to the thermal model. The accelerations over one orbit are shown in \cref{fig:acc-solarvslunar}. Note that secular variations in orbit geometry can change the magnitude of acceleration components even within one 2.5-day arc but are not shown here.
 
-\begin{figure*}[t]
+\begin{figure*}[tb]
     \centering
     \begin{subfigure}[c]{\textwidth}
         \includegraphics[width=\textwidth]{figures/plots/acc_solarvslunar_jun.pdf}
@@ -133,7 +133,7 @@ All accelerations are inversely proportional to the spacecraft's mass. While we 
 \subsubsection{Lunar albedo and thermal radiation}
 In the previous subsection, lunar radiation was considered as the sum of albedo and thermal radiation. In this subsection, we look at the separate contributions and the differences between albedo distributions. The accelerations on a paneled target are shown in \cref{fig:acc-albedovsthermal}.
 
-\begin{figure*}[t]
+\begin{figure*}[tb]
     \centering
     \includegraphics[width=\textwidth]{figures/plots/acc_albedovsthermal.pdf}
 
@@ -144,7 +144,7 @@ In the previous subsection, lunar radiation was considered as the sum of albedo 
 For both arcs and all components, thermal radiation is far larger than albedo radiation (up to sixfold). This is even though the albedo is likely overestimated by \qty{25}{\percent} as described in \cref{subsec:lunar-albedo}. In terms of behavior, the thermal radiation and constant albedo radiation are very similar: smooth and dependent on the subsolar angle. However, albedo radiation vanishes in the eclipse region of the September arc. The thermal irradiance at \gls{LRO} on the nightside is \qty{6}{\irr}, which gives a small total acceleration of \qty{1e-9}{\acc}.
 
 
-\begin{figure}[t]
+\begin{figure}[htb]
     \centering
     \includegraphics[width=\linewidth]{figures/plots/groundtrack.pdf}
     \caption{Ground track for September arc, colored by the irradiance due to \gls{DLAM1} albedo. The map shows the difference between \gls{DLAM1} and the constant albedo ($a=0.150$). The maximum irradiance does not occur above the subsolar point (\textcolor{mpl-yellow}{\ding{54}}) but above the local albedo maximum \qty{18}{\degree} north of it.}
@@ -163,7 +163,7 @@ The accelerations of the constant and \gls{DLAM1} albedo distributions are of ve
 \subsection{Change in final position}
 The goal of orbit determination is to estimate the state, and particularly the position, of a spacecraft. Therefore, the difference in position at the end of the arc between models is highly relevant. Since the true position is not known and this paper is rather concerned with relative differences, we use a simulation without solar and lunar \gls{RP} as a baseline reference. As mentioned in \cref{sec:introduction}, the maximum allowable error is \qtyrange{50}{100}{\m} in total position and below \qty{1}{\m} radially.
 
-\begin{table*}[t]
+\begin{table*}[tb]
     \caption{Difference of final position in \unit{\m} with respect to no-\gls{RP} baseline, given as mean over the final orbit plus/minus periodic variations around that mean in the final orbit. The largest changes are in the along-track position. $\mathbf{A}$: solar only; $\mathbf{B}$: lunar only (thermal + constant albedo); $\mathbf{C}$: lunar only (thermal + \gls{DLAM1} albedo); $\mathbf{D}$: solar + lunar (thermal + \gls{DLAM1} albedo).}
     \label{tab:final-position}
     \begin{subtable}[c]{\textwidth}
@@ -228,7 +228,7 @@ These differences in position highlight how important \gls{RP} models are for pr
 \subsection{Performance}
 Choosing the appropriate model is not only a consideration of accuracy but also one of computational effort. The goal is to find the most efficient model that is sufficiently accurate. To determine how much less efficient complex models like paneled targets or \gls{DLAM1} are, we measured the wall time duration of the integration over 2.5 days with a step size of \qty{5}{\s}. We ran each simulation 100 times in random order on a server with 2 Intel Xeon E5-2683 v3 (14 cores, two threads per core with hyperthreading) while no other loads were running. 27 simulations ran in parallel such that all but one core were used by a single thread. More parallelism would have triggered hyperthreading, which would have skewed measurements. \gls{Tudat} was compiled in release configuration with GCC 11.4.0 at optimization level \texttt{-O2}. No other steps such as CPU pinning were taken. Note that software performance can be influenced by many, seemingly innocuous aspects~\cite{Mytkowicz2009}. Still, the results show the general tendency.
 
-\begin{figure}[t]
+\begin{figure}[b]
     \centering
     \includegraphics[width=\linewidth]{figures/plots/performance.pdf}
     \caption{Wall time duration of simulations with different \gls{RP} models. The statistics come from 100 runs for each model. Evaluation of \gls{DLAM1}'s spherical harmonics expansion increases the duration by up to \qty{80}{\percent}.}
