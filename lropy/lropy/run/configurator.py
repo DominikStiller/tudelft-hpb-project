@@ -141,7 +141,38 @@ class FullConfigurator(Configurator):
                 "simulation_duration_rev": [32],  # 2.5 days, about 32 orbital revolutions
                 "target_type": [TargetType.Cannonball, TargetType.Paneled],
                 "with_instantaneous_reradiation": [True],
-                "use_occultation": [False, True],
+                "use_occultation": [True],
+                "use_solar_radiation": [False, True],
+                "use_moon_radiation": [False, True],
+                "paneling_moon": [PanelingType.Dynamic],
+                "albedo_distribution_moon": [
+                    AlbedoDistribution.NoAlbedo,
+                    AlbedoDistribution.Constant,
+                    AlbedoDistribution.DLAM1,
+                ],
+                "number_of_panels_moon": [5000],
+                "number_of_panels_per_ring_moon": [[6, 12, 18, 24, 30, 36]],
+                "thermal_type_moon": [
+                    ThermalType.NoThermal,
+                    ThermalType.AngleBased,
+                ],
+                "step_size": [5],
+            },
+            is_benchmark,
+        )
+
+
+class FullBenchmarkConfigurator(Configurator):
+    # Used for paper
+    def __init__(self, is_benchmark: bool = True):
+        super().__init__(
+            "full",
+            {
+                "simulation_start": ["2010 JUN 28 15:00:00"],
+                "simulation_duration_rev": [32],  # 2.5 days, about 32 orbital revolutions
+                "target_type": [TargetType.Cannonball, TargetType.Paneled],
+                "with_instantaneous_reradiation": [True],
+                "use_occultation": [True],
                 "use_solar_radiation": [False, True],
                 "use_moon_radiation": [False, True],
                 "paneling_moon": [PanelingType.Dynamic],
@@ -151,7 +182,9 @@ class FullConfigurator(Configurator):
                 ],
                 "number_of_panels_moon": [5000],
                 "number_of_panels_per_ring_moon": [[6, 12, 18, 24, 30, 36]],
-                "thermal_type_moon": [ThermalType.AngleBased],
+                "thermal_type_moon": [
+                    ThermalType.AngleBased,
+                ],
                 "step_size": [5],
             },
             is_benchmark,
@@ -255,7 +288,7 @@ class InstantaneousReradiationConfigurator(Configurator):
         super().__init__(
             "instantaneous_reradiation_test",
             {
-                "simulation_start": ["2010 SEP 26 06:00:00"],
+                "simulation_start": ["2010 JUN 28 15:00:00", "2011 SEP 26 18:00:00"],
                 "simulation_duration_rev": [2],
                 "target_type": [TargetType.Paneled],
                 "with_instantaneous_reradiation": [False, True],
@@ -265,9 +298,9 @@ class InstantaneousReradiationConfigurator(Configurator):
                 "paneling_moon": [PanelingType.Dynamic],
                 "albedo_distribution_moon": [AlbedoDistribution.Constant],
                 "number_of_panels_moon": [2000],
-                "number_of_panels_per_ring_moon": [[6, 12, 18, 24, 30]],
+                "number_of_panels_per_ring_moon": [[6, 12, 18, 24, 30, 36]],
                 "thermal_type_moon": [ThermalType.AngleBased],
-                "step_size": [10],
+                "step_size": [5],
             },
             is_benchmark,
         )
@@ -279,13 +312,12 @@ class AlbedoThermalConfigurator(Configurator):
             "albedo_thermal_test",
             {
                 "simulation_start": [
-                    "2010 JUN 26 06:00:00",
-                    "2010 AUG 04 06:00:00",
-                    "2010 SEP 26 06:00:00",
+                    "2010 JUN 28 15:00:00",
+                    "2011 SEP 26 18:00:00",
                 ],
                 "simulation_duration_rev": [2],
                 "target_type": [TargetType.Cannonball, TargetType.Paneled],
-                "with_instantaneous_reradiation": [False],
+                "with_instantaneous_reradiation": [True],
                 "use_occultation": [True],
                 "use_solar_radiation": [True],
                 "use_moon_radiation": [True],
@@ -296,13 +328,13 @@ class AlbedoThermalConfigurator(Configurator):
                     AlbedoDistribution.DLAM1,
                 ],
                 "number_of_panels_moon": [2000],
-                "number_of_panels_per_ring_moon": [[6, 12, 18, 24, 30]],
+                "number_of_panels_per_ring_moon": [[6, 12, 18, 24, 30, 36]],
                 "thermal_type_moon": [
                     ThermalType.NoThermal,
                     ThermalType.AngleBased,
                     ThermalType.Delayed,
                 ],
-                "step_size": [10],
+                "step_size": [5],
             },
             is_benchmark,
         )

@@ -1,3 +1,5 @@
 import cartopy.crs as ccrs
 
-moon_globe = ccrs.Globe(semimajor_axis=1738100, semiminor_axis=1738100, ellipse=None)
+from lropy.constants import moon_radius
+
+moon_globe = ccrs.Globe(semimajor_axis=moon_radius, semiminor_axis=moon_radius, ellipse=None)

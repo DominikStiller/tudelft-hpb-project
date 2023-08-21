@@ -19,23 +19,15 @@ if __name__ == "__main__":
     else:
         n_threads = 4
 
-    n_iterations = 50
+    n_iterations = 100
 
     runner = Runner(n_threads)
 
-    configurator = FullConfigurator(True)
-    # configurator = NumberOfPanelsPerRingConfigurator(True)
-    # configurator = InstantaneousReradiationConfigurator(True)
-    # configurator = AlbedoThermalConfigurator(True)
-    # configurator = StaticVsDynamicConfigurator(True)
+    configurator = FullBenchmarkConfigurator(True)
 
     runs = configurator.get_runs()
     runs = runs * n_iterations
     random.shuffle(runs)
-
-    # print(len(runs))
-    # for run in runs:
-    #     print(run.as_json())
 
     print(f"======== RUNNING {len(runs)} SIMULATIONS ======== ")
     runner.run_all(runs)

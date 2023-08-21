@@ -86,7 +86,7 @@ def get_lro_beta_angle(t):
 
 def get_frame(body):
     if body == "Moon":
-        return "MOON_PA"
+        return "MOON_ME"
     else:
         return f"IAU_{body}"
 

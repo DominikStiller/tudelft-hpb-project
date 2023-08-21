@@ -32,7 +32,7 @@ def set_plotting_theme(force_light=False):
             "font.family": "sans-serif",
             "lines.linewidth": 1.2,
             "font.sans-serif": "Nimbus Sans",
-            # "axes.titleweight": "bold",
+            "axes.titleweight": "bold",
             # "axes.labelweight": "light",
             # "font.weight": "light",
             # "mathtext.default": "regular",
@@ -129,10 +129,12 @@ def format_plot(
         ax.get_yaxis().set_minor_locator(y_minor_locator_ax)
 
         if major_grid:
-            ax.grid(visible=True, which="major", linewidth=1.0, linestyle="-.")
+            ax.grid(visible=True, which="major", linewidth=1.0, linestyle=":")
             ax.set_axisbelow(True)
         if minor_grid:
-            ax.grid(visible=True, which="minor", linewidth=0.5, linestyle=":")
+            ax.grid(visible=True, which="minor", linewidth=0.5, linestyle=(0, (2, 6)), alpha=0.8)
+
+    fig.align_ylabels()
 
     if tight_layout:
         fig.tight_layout(pad=0.1, h_pad=0.4, w_pad=0.4)

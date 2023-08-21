@@ -1,5 +1,6 @@
 import datetime
 
+import numpy as np
 import pandas as pd
 
 from lropy.constants import JULIAN_DAY, lro_period
@@ -76,3 +77,28 @@ def trim_df(df: pd.DataFrame, start: datetime.datetime, end: datetime.datetime) 
     if end.tzinfo is None:
         end = end.replace(tzinfo=datetime.timezone.utc)
     return df.loc[(df.index >= start) & (df.index <= end)]
+
+
+def trim_df_revolutions(df: pd.DataFrame, start_rev: float = 0, n_rev: float = 1) -> pd.DataFrame:
+    df = df.set_index(get_revolutions_index(df))
+    df = df.iloc[(df.index >= start_rev) & (df.index <= start_rev + n_rev)]
+    df = df.set_index(df.index - df.index[0])
+    return df
+
+
+def rmse(a: pd.Series, b: pd.Series, ignore_zeros: bool = False):
+    """RMS error"""
+    if ignore_zeros:
+        zeros_idx = (a == 0) & (b == 0)
+        a = a.loc[~zeros_idx]
+        b = b.loc[~zeros_idx]
+    return np.sqrt(np.mean((a - b) ** 2))
+
+
+def rrmse(a: pd.Series, b: pd.Series, ignore_zeros: bool = False):
+    """Relative RMS error w.r.t. b"""
+    if ignore_zeros:
+        zeros_idx = (a == 0) & (b == 0)
+        a = a.loc[~zeros_idx]
+        b = b.loc[~zeros_idx]
+    return np.sqrt(np.sum((a - b) ** 2) / np.sum(b**2))
