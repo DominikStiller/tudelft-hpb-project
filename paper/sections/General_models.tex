@@ -52,7 +52,7 @@ A simplified \gls{BRDF} is usually more practical for \gls{RP} modeling: the ref
     \label{eq:brdf-specular-diffuse}
     f_r = C_d \frac{1}{\pi} + C_s \frac{\delta(\vb V - \vb M)}{\cos \theta_i}
 \end{align}
-where $C_d$ and $C_s$ are the diffuse and specular reflectivity coefficients. Together with the absorption coefficient $C_a$, energy is conserved when $C_a + C_d + C_s = 1$. The vector $\vb M = 2\cos\theta_i\vb N - \vb L$ is the direction of $\vb L$'s mirror-like reflection, which only contributes if $\vb V = \vb M$.
+where $\delta$ is the delta function and $C_d$ and $C_s$ are the diffuse and specular reflectivity coefficients. Together with the absorption coefficient $C_a$, energy is conserved when $C_a + C_d + C_s = 1$. The vector $\vb M = 2\cos\theta_i\vb N - \vb L$ is $\vb L$'s mirror-like reflection, which only contributes if $\vb V = \vb M$.
 
 For this simplified \gls{BRDF}, the integral in \cref{eq:brdf-reaction-general} evaluates analytically to~\cite{Montenbruck2014}
 \begin{align}
