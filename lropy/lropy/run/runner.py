@@ -45,8 +45,9 @@ class Runner:
                 f.result()
 
     def run_single(self, run: SimulationRun):
-        tudat_dir = Path.home() / "dev/tudat-bundle"
-        executable = tudat_dir / "build-release/tudat/bin/application_lro_json"
+        project_folder = Path("..")
+        executable = project_folder / "simulations/build-release/bin/application_lro_json"
+        spice_base = project_folder / "spice/"
         json_path = run.write_json()
 
         with self.lock:
@@ -63,9 +64,9 @@ class Runner:
         output_file = open(output_file, "w")
         p = subprocess.Popen(
             [executable, str(json_path)],
-            cwd=tudat_dir,
             stdout=output_file,
             stderr=output_file,
+            env={**os.environ, "SPICE_BASE": f"{spice_base}/"},
         )
         return_code = p.wait()
         time_end = time.perf_counter()
@@ -83,7 +84,7 @@ class Runner:
 
 
 if __name__ == "__main__":
-    run = SimulationRun(Path("results"))
+    run = SimulationRun(Path("../results"))
 
     run.simulation_start = "2010 SEP 26 16:30:00"
     # run.simulation_duration = 100

@@ -11,7 +11,7 @@ from lropy.constants import moon_polar_radius
 if os.getenv("HOSTNAME") == "eudoxos":
     spice_base = "/home2/dominik/dev/tudat-bundle/spice"
 else:
-    spice_base = "/home/dominik/dev/tudat-bundle/spice"
+    spice_base = "/home/dominik/dev/hpb-project/spice"
 
 
 def init_spice_lro():

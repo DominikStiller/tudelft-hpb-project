@@ -98,7 +98,7 @@ class Configurator:
             all_settings.extend(self._get_baseline_settings(all_settings[0]))
         print(f"Generated {len(all_settings)} run settings")
 
-        results_dir = Path("results") / (self.configuration_name + "-" + generate_folder_name())
+        results_dir = Path("../results") / (self.configuration_name + "-" + generate_folder_name())
         runs = [
             SimulationRun.from_dict(settings, results_dir, i + 1)
             for i, settings in enumerate(all_settings)

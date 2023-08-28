@@ -20,7 +20,6 @@ void analyzeSolarIrradiance();
 void analyzeIrradianceAtLRO();
 void analyzeVariationOfIrradianceWithSubsolarAngle();
 void analyzeVariationOfIrradianceWithNumberOfPanels();
-void analyzeOccultations();
 
 
 const auto simulationStart = "2010 JUN 26 06:00:00";
@@ -34,7 +33,6 @@ int main()
 //     analyzeIrradianceAtLRO();
 //    analyzeVariationOfIrradianceWithSubsolarAngle();
 //    analyzeVariationOfIrradianceWithNumberOfPanels();
-//     analyzeOccultations();
 }
 
 // Analyze solar irradiance at Earth and Moon
@@ -153,7 +151,7 @@ void analyzeVariationOfIrradianceWithSubsolarAngle()
     auto sunIrradianceAtMoon = sunRadiationSourceModel->evaluateIrradianceAtPosition(
             bodies.at("Moon")->getPosition() - bodies.at("Sun")->getPosition());
 
-    // MOve from 0° to 180° in steps of 5°
+    // Move from 0° to 180° in steps of 5°
     for (double theta = 0; theta <= mathematical_constants::PI; theta += mathematical_constants::PI / 36)
     {
         Eigen::Vector3d lroPosition = Eigen::Vector3d(cos(theta), sin(theta), 0) * (50e3 + moonRadius);
