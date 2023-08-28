@@ -195,4 +195,9 @@ fabric.properties
 plots/
 results/
 private/
-spice/
+
+spice/**
+!spice/lro
+!spice/generic
+!spice/bepicolombo
+!spice/**/source.txt
