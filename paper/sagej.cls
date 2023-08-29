@@ -323,7 +323,7 @@ centering]{geometry}
 	bibencoding=utf8,
 	sortlocale=en_US,
 	url=false,
-	style=ieee-custom,
+	style=ieee,
   citestyle=numeric-comp,
   isbn=false
 ]{biblatex}
