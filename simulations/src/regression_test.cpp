@@ -46,9 +46,9 @@ namespace simulation_constants
 }
 using namespace simulation_constants;
 
-void cannonballTargetNew()
+void cannonballTargetNew(int i)
 {
-    const auto resultsFolder = "results/regression/cannonball_new";
+    const auto resultsFolder = "results/regression/cannonball_new/" + std::to_string(i);
 
     simulationStartEpoch = spice_interface::convertDateStringToEphemerisTime(simulationStart);
     simulationEndEpoch = simulationStartEpoch + simulationDuration;
@@ -96,9 +96,9 @@ void cannonballTargetNew()
     saveSimulationResults(propagationResults, resultsFolder);
 }
 
-void paneledTargetNew()
+void paneledTargetNew(int i)
 {
-    const auto resultsFolder = "results/regression/paneled_new";
+    const auto resultsFolder = "results/regression/paneled_new/" + std::to_string(i);
 
     simulationStartEpoch = spice_interface::convertDateStringToEphemerisTime(simulationStart);
     simulationEndEpoch = simulationStartEpoch + simulationDuration;
@@ -156,9 +156,9 @@ void paneledTargetNew()
     saveSimulationResults(propagationResults, resultsFolder);
 }
 
-void cannonballTargetOld()
+void cannonballTargetOld(int i)
 {
-    const auto resultsFolder = "results/regression/cannonball_old";
+    const auto resultsFolder = "results/regression/cannonball_old/" + std::to_string(i);
 
     simulationStartEpoch = spice_interface::convertDateStringToEphemerisTime(simulationStart);
     simulationEndEpoch = simulationStartEpoch + simulationDuration;
@@ -203,9 +203,9 @@ void cannonballTargetOld()
     saveSimulationResults(propagationResults, resultsFolder);
 }
 
-void paneledTargetOld()
+void paneledTargetOld(int i)
 {
-    const auto resultsFolder = "results/regression/paneled_old";
+    const auto resultsFolder = "results/regression/paneled_old/" + std::to_string(i);
 
     simulationStartEpoch = spice_interface::convertDateStringToEphemerisTime(simulationStart);
     simulationEndEpoch = simulationStartEpoch + simulationDuration;
@@ -309,15 +309,33 @@ int main()
 {
     loadLROSpiceKernels();
 
+    int nRepetitions = 10;
+
     std::cout << "cannonballTargetNew" << std::endl;
-    cannonballTargetNew();
+    for (int i = 0; i < nRepetitions; ++i)
+    {
+        std::cout << "  " << i << std::endl;
+        cannonballTargetNew(i);
+    }
 
     std::cout << "paneledTargetNew" << std::endl;
-    paneledTargetNew();
+    for (int i = 0; i < nRepetitions; ++i)
+    {
+        std::cout << "  " << i << std::endl;
+        paneledTargetNew(i);
+    }
 
     std::cout << "cannonballTargetOld" << std::endl;
-    cannonballTargetOld();
+    for (int i = 0; i < nRepetitions; ++i)
+    {
+        std::cout << "  " << i << std::endl;
+        cannonballTargetOld(i);
+    }
 
     std::cout << "paneledTargetOld" << std::endl;
-    paneledTargetOld();
+    for (int i = 0; i < nRepetitions; ++i)
+    {
+        std::cout << "  " << i << std::endl;
+        paneledTargetOld(i);
+    }
 }
