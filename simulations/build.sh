@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-if [ "$HOSTNAME" = eudoxos ]; then
+if [ "$HOSTNAME" = eudoxos.lr.tudelft.nl ]; then
   n_jobs=14
-  conda_path=/home2/dominik/miniconda3/envs/tudat-bundle
+  conda_path="/home2/dominik/miniconda3/envs/tudat-bundle;/home2/dominik/.local/usr/local"
 elif [ "$HOSTNAME" = Dominik-Laptop ]; then
   n_jobs=4
   conda_path=/home/dominik/miniconda3/envs/tudat-bundle
@@ -17,9 +17,9 @@ cmake \
   -DBoost_NO_BOOST_CMAKE=ON \
   -DCMAKE_BUILD_TYPE=Release \
   -GNinja \
-  -S . -B build-release
+  -S . -B build
 
 # build step
 if [[ $? -eq 0 ]]; then
-  cmake --build build-release -j${n_jobs} "$@"
+  cmake --build build -j${n_jobs} "$@"
 fi

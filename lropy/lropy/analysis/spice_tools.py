@@ -8,8 +8,8 @@ import spiceypy.utils.support_types as stypes
 
 from lropy.constants import moon_polar_radius
 
-if os.getenv("HOSTNAME") == "eudoxos":
-    spice_base = "/home2/dominik/dev/tudat-bundle/spice"
+if os.getenv("HOSTNAME") == "eudoxos.lr.tudelft.nl":
+    spice_base = "/home2/dominik/dev/hpb-project/spice"
 else:
     spice_base = "/home/dominik/dev/hpb-project/spice"
 

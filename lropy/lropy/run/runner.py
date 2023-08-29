@@ -5,6 +5,7 @@ from concurrent.futures import ThreadPoolExecutor, wait
 from pathlib import Path
 from threading import Lock
 
+from lropy.analysis.spice_tools import spice_base
 from lropy.run.simulation_run import (
     SimulationRun,
     TargetType,
@@ -46,8 +47,7 @@ class Runner:
 
     def run_single(self, run: SimulationRun):
         project_folder = Path("..")
-        executable = project_folder / "simulations/build-release/bin/application_lro_json"
-        spice_base = project_folder / "spice/"
+        executable = project_folder / "simulations/build/bin/application_lro_json"
         json_path = run.write_json()
 
         with self.lock:

@@ -14,7 +14,7 @@ from lropy.run.runner import Runner
 from lropy.run.configurator import *
 
 if __name__ == "__main__":
-    if os.getenv("HOSTNAME") == "eudoxos":
+    if os.getenv("HOSTNAME") == "eudoxos.lr.tudelft.nl":
         n_threads = 27
     else:
         n_threads = 4

@@ -6,6 +6,8 @@ rsync -avzh --delete \
 	eudoxos:~/dev/tudat-bundle
 
 rsync -avzh --delete \
-	--exclude __pycache__ --exclude *.pyc --exclude ".*" --exclude venv/ --exclude /spice --exclude /results \
-	lropy/ \
-	eudoxos:~/dev/lropy
+	--exclude __pycache__ --exclude "*.pyc" --exclude "simulations/build" --exclude=".*" \
+	--include "lropy/***" --include "simulations/***" --include "requirements.txt" \
+	--exclude "*" \
+	. \
+	eudoxos:~/dev/hpb-project
