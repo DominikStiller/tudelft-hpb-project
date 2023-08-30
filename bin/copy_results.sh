@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 rsync -avzh \
-	eudoxos:~/dev/lropy/results/ \
+	eudoxos:~/dev/hpb-project/results/ \
 	results/
 
 rsync -avzh \

@@ -9,9 +9,9 @@ include("AddLROExecutable")
 include("AddLROLibrary")
 
 
-find_package(Eigen3 REQUIRED)
-find_package(Boost COMPONENTS filesystem REQUIRED)
-find_package(tudat REQUIRED)
+find_package(Eigen3 3.4 REQUIRED)
+find_package(Boost 1.81 COMPONENTS filesystem REQUIRED)
+find_package(tudat 2.12 REQUIRED)
 
 
 ADD_LRO_LIBRARY(
