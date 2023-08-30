@@ -313,6 +313,7 @@ class AlbedoThermalConfigurator(Configurator):
             {
                 "simulation_start": [
                     "2010 JUN 28 15:00:00",
+                    "2010 AUG 4 15:00:00",
                     "2011 SEP 26 18:00:00",
                 ],
                 "simulation_duration_rev": [2],
