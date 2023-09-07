@@ -1,4 +1,7 @@
 # High-accuracy radiation pressure models for the Lunar Reconnaissance Orbiter
+
+![Collection of figures from the project paper.](figures.png)
+
 This is the repository for the [Honours Programme Bachelor](https://www.tudelft.nl/en/student/faculties/ae-student-portal/education/bachelor/honours-programme/information-for-supervisors) (HPB) project of Dominik Stiller (dstiller@uw.edu) at TU Delft. The aim is to investigate the short-term effects of radiation pressure on the Lunar Reconnaissance Orbiter. The project is supervised by Dr. Dominic Dirkx (d.dirkx@tudelft.nl).
 
 The simulations use the TU Delft Astrodynamics Toolbox [Tudat](https://docs.tudat.space/en/latest/). All models are implemented in the [feature/radiation_pressure_modeling branch](https://github.com/DominikStiller/tudat/tree/feature/radiation_pressure_modeling) of my Tudat fork and will be merged soon.
@@ -7,6 +10,7 @@ Links:
 * See the [project plan](planning/build/main.pdf) for a somewhat outdated overview
 * See the [poster](poster/build/poster.pdf) for preliminary resutls
 * See the [paper](paper/build/main.pdf) for a comprehensive overview of methods and results
+* See the [final presentation](presentations/final_2023-08-31.pdf) for an overview of the motivation and key results
 * See the [references folder](references/) for any mentioned literature
 
 Code structure:
