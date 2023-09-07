@@ -7,10 +7,10 @@ This is the repository for the [Honours Programme Bachelor](https://www.tudelft.
 The simulations use the TU Delft Astrodynamics Toolbox [Tudat](https://docs.tudat.space/en/latest/). All models are implemented in the [feature/radiation_pressure_modeling branch](https://github.com/DominikStiller/tudat/tree/feature/radiation_pressure_modeling) of my Tudat fork and will be merged soon.
 
 Links:
-* See the [project plan](planning/build/main.pdf) for a somewhat outdated overview
-* See the [poster](poster/build/poster.pdf) for preliminary resutls
 * See the [paper](paper/build/main.pdf) for a comprehensive overview of methods and results
 * See the [final presentation](presentations/final_2023-08-31.pdf) for an overview of the motivation and key results
+* See the [poster](poster/build/poster.pdf) for preliminary results
+* See the [project plan](planning/build/main.pdf) for a somewhat outdated overview
 * See the [references folder](references/) for any mentioned literature
 
 Code structure:
@@ -54,7 +54,7 @@ cmake --build build
 4. Install Tudat using `cmake --install build`.
 5. Build the simulations using `simulations/build.sh`.
 6. Create and activate a virtual environment, then install the packages from `requirements.txt`.
-8. Change to `lropy/` directory and run `bin/run.sh` to run the simulation selected in `lropy/run/__main__.py`.
+7. Change to `lropy/` directory and run `bin/run.sh` to run the simulation selected in `lropy/run/__main__.py`.
  * Set the environment variable `SPICE_BASE` to point to your `spice/` folder
-9. Analyze the results using the notebooks in `analysis/`.
+8. Analyze the results using the notebooks in `analysis/`.
 
