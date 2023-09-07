@@ -75,9 +75,3 @@ ADD_LRO_EXECUTABLE(
         "src/regression_test.cpp"
         "${Tudat_PROPAGATION_LIBRARIES}" lro
 )
-
-ADD_LRO_EXECUTABLE(
-        application_scratch
-        "src/scratch.cpp"
-        "${Tudat_PROPAGATION_LIBRARIES}"
-)

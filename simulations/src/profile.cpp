@@ -81,7 +81,7 @@ SystemOfBodies createSimulationBodies()
 //                angleBasedThermalPanelRadiosityModelSettings(100, 375, 0.95)
 //            }, 2000, {"Earth"});
     bodySettings.at("Moon")->radiationSourceModelSettings =
-            dynamicallyPaneledRadiationSourceModelSettings("Sun", {
+            extendedRadiationSourceModelSettings("Sun", {
                 albedoPanelRadiosityModelSettings(SphericalHarmonicsSurfacePropertyDistributionModel::albedo_dlam1),
                 angleBasedThermalPanelRadiosityModelSettings(100, 375, 0.95)
             }, {6, 12, 18, 24, 30});

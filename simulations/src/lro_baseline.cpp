@@ -86,7 +86,7 @@ SystemOfBodies createSimulationBodies()
 //                angleBasedThermalPanelRadiosityModelSettings(100, 375, 0.95)
 //            }, 2000, {"Earth"});
     bodySettings.at("Moon")->radiationSourceModelSettings =
-            dynamicallyPaneledRadiationSourceModelSettings("Sun", {
+            extendedRadiationSourceModelSettings("Sun", {
                 albedoPanelRadiosityModelSettings(SphericalHarmonicsSurfacePropertyDistributionModel::albedo_dlam1),
                 angleBasedThermalPanelRadiosityModelSettings(95, 385, 0.95)
             }, {6, 12, 18, 24, 30}, {"Earth"});
@@ -200,7 +200,7 @@ std::shared_ptr<propagators::SingleArcSimulationResults<>> createAndRunSimulatio
                     receivedIrradianceDependentVariable("LRO", "Sun"),
                     receivedIrradianceDependentVariable("LRO", "Moon"),
                     receivedFractionDependentVariable("LRO", "Sun"),
-                    visibleAndIlluminatedSourcePanelCountDependentVariable("LRO", "Moon"),
+                    visibleAndEmittingSourcePanelCountDependentVariable("LRO", "Moon"),
                     visibleSourceAreaDependentVariable("LRO", "Moon")
             };
 

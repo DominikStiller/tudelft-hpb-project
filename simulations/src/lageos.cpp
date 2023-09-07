@@ -67,12 +67,6 @@ void orekitLike()
     // Get settings for celestial bodies
     auto bodySettings = getDefaultBodySettings({"Sun", "Earth"}, globalFrameOrigin, globalFrameOrientation);
 
-    bodySettings.at("Earth")->radiationSourceModelSettings =
-            dynamicallyPaneledRadiationSourceModelSettings("Sun", {
-                    albedoPanelRadiosityModelSettings(SecondDegreeZonalPeriodicSurfacePropertyDistributionModel::albedo_knocke),
-                    delayedThermalPanelRadiosityModelSettings(SecondDegreeZonalPeriodicSurfacePropertyDistributionModel::emissivity_knocke)
-            }, {6, 12});
-
     // Get settings for vehicle
     bodySettings.addSettings( "Vehicle" );
     bodySettings.at("Vehicle")->constantMass = bodyMass;
@@ -176,7 +170,7 @@ void dynamicPanelingConvergence(int nRings)
     }
 
     bodySettings.at("Earth")->radiationSourceModelSettings =
-            dynamicallyPaneledRadiationSourceModelSettings("Sun", {
+            extendedRadiationSourceModelSettings("Sun", {
                     albedoPanelRadiosityModelSettings(SecondDegreeZonalPeriodicSurfacePropertyDistributionModel::albedo_knocke),
                     delayedThermalPanelRadiosityModelSettings(SecondDegreeZonalPeriodicSurfacePropertyDistributionModel::emissivity_knocke)
             }, numberOfPanelsPerRing);
@@ -278,7 +272,7 @@ void orekitLikeFindDate(const std::string& startDate)
     auto bodySettings = getDefaultBodySettings({"Sun", "Earth"}, globalFrameOrigin, globalFrameOrientation);
 
     bodySettings.at("Earth")->radiationSourceModelSettings =
-            dynamicallyPaneledRadiationSourceModelSettings("Sun", {
+            extendedRadiationSourceModelSettings("Sun", {
                     albedoPanelRadiosityModelSettings(SecondDegreeZonalPeriodicSurfacePropertyDistributionModel::albedo_knocke),
                     delayedThermalPanelRadiosityModelSettings(SecondDegreeZonalPeriodicSurfacePropertyDistributionModel::emissivity_knocke)
             }, {6, 12});
@@ -397,73 +391,36 @@ void lageosSimulation(std::string name)
     if (name == "const_dynamic_double")
     {
         bodySettings.at("Earth")->radiationSourceModelSettings =
-                dynamicallyPaneledRadiationSourceModelSettings("Sun", {
+                extendedRadiationSourceModelSettings("Sun", {
                         constantPanelRadiosityModelSettings(1000)
                 }, {6, 12});
     }
     else if (name == "const_dynamic_hires")
     {
         bodySettings.at("Earth")->radiationSourceModelSettings =
-                dynamicallyPaneledRadiationSourceModelSettings("Sun", {
+                extendedRadiationSourceModelSettings("Sun", {
                         constantPanelRadiosityModelSettings(1000)
                 }, {12, 24, 36});
     }
     else if (name == "const_dynamic_superres")
     {
         bodySettings.at("Earth")->radiationSourceModelSettings =
-                dynamicallyPaneledRadiationSourceModelSettings("Sun", {
+                extendedRadiationSourceModelSettings("Sun", {
                         constantPanelRadiosityModelSettings(1000)
                 }, {24, 36, 48, 60, 72, 84});
-    }
-    else if (name == "const_static_100")
-    {
-        bodySettings.at("Earth")->radiationSourceModelSettings =
-                staticallyPaneledRadiationSourceModelSettings("Sun", {
-                        constantPanelRadiosityModelSettings(1000)
-                }, 100);
-    }
-    else if (name == "const_static_200")
-    {
-        bodySettings.at("Earth")->radiationSourceModelSettings =
-                staticallyPaneledRadiationSourceModelSettings("Sun", {
-                        constantPanelRadiosityModelSettings(1000)
-                }, 200);
-    }
-    else if (name == "const_static_2000")
-    {
-        bodySettings.at("Earth")->radiationSourceModelSettings =
-                staticallyPaneledRadiationSourceModelSettings("Sun", {
-                        constantPanelRadiosityModelSettings(1000)
-                }, 2000);
-    }
-    else if (name == "sh_static_2000")
-    {
-        bodySettings.at("Earth")->radiationSourceModelSettings =
-                staticallyPaneledRadiationSourceModelSettings("Sun", {
-                    albedoPanelRadiosityModelSettings(SecondDegreeZonalPeriodicSurfacePropertyDistributionModel::albedo_knocke),
-                    delayedThermalPanelRadiosityModelSettings(SecondDegreeZonalPeriodicSurfacePropertyDistributionModel::emissivity_knocke)
-                }, 2000);
-    }
-    else if (name == "sh_static_20000_low")
-    {
-        bodySettings.at("Earth")->radiationSourceModelSettings =
-                staticallyPaneledRadiationSourceModelSettings("Sun", {
-                    albedoPanelRadiosityModelSettings(SecondDegreeZonalPeriodicSurfacePropertyDistributionModel::albedo_knocke),
-                    delayedThermalPanelRadiosityModelSettings(SecondDegreeZonalPeriodicSurfacePropertyDistributionModel::emissivity_knocke)
-                }, 20000);
     }
     else if (name == "sh_dynamic_double" || name == "sh_dynamic_double_low")
     {
          bodySettings.at("Earth")->radiationSourceModelSettings =
-                dynamicallyPaneledRadiationSourceModelSettings("Sun", {
-                        albedoPanelRadiosityModelSettings(SecondDegreeZonalPeriodicSurfacePropertyDistributionModel::albedo_knocke),
+                extendedRadiationSourceModelSettings("Sun", {
+                    albedoPanelRadiosityModelSettings(SecondDegreeZonalPeriodicSurfacePropertyDistributionModel::albedo_knocke),
                     delayedThermalPanelRadiosityModelSettings(SecondDegreeZonalPeriodicSurfacePropertyDistributionModel::emissivity_knocke)
                 }, {6, 12});
     }
     else if (name == "sh_dynamic_hires" || name == "sh_dynamic_hires_low")
     {
         bodySettings.at("Earth")->radiationSourceModelSettings =
-                dynamicallyPaneledRadiationSourceModelSettings("Sun", {
+                extendedRadiationSourceModelSettings("Sun", {
                     albedoPanelRadiosityModelSettings(SecondDegreeZonalPeriodicSurfacePropertyDistributionModel::albedo_knocke),
                     delayedThermalPanelRadiosityModelSettings(SecondDegreeZonalPeriodicSurfacePropertyDistributionModel::emissivity_knocke)
                 }, {12, 24, 36});
@@ -551,12 +508,9 @@ int main()
 //    for (std::string name : {
 ////        "const_dynamic_double", "const_dynamic_hires",
 //        "const_dynamic_superres",
-////        "const_static_100", "const_static_200", "const_static_2000",
 ////        "sh_dynamic_hires",
 //        "sh_dynamic_hires",
 ////        "sh_dynamic_hires_low",
-////        "sh_static_2000",
-////        "sh_static_20000_low",
 ////        "sh_dynamic_double", "sh_dynamic_double_low"
 //    })
 //    {
@@ -576,11 +530,11 @@ int main()
 //        orekitLikeFindDate(startDate);
 //    }
 
-    for (int nRings = 1; nRings <= 10; ++nRings)
-    {
-        std::cout << nRings << std::endl;
-        dynamicPanelingConvergence(nRings);
-    }
+//    for (int nRings = 1; nRings <= 10; ++nRings)
+//    {
+//        std::cout << nRings << std::endl;
+//        dynamicPanelingConvergence(nRings);
+//    }
 
-//    orekitLike();
+    orekitLike();
 }

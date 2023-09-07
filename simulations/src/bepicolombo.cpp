@@ -105,7 +105,7 @@ SystemOfBodies createSimulationBodies()
     bodySettings.at("Mercury")->rotationModelSettings =
             spiceRotationModelSettings(globalFrameOrientation, mercuryFrame, mercuryFrame);
     bodySettings.at("Mercury")->radiationSourceModelSettings =
-            dynamicallyPaneledRadiationSourceModelSettings("Sun", {
+            extendedRadiationSourceModelSettings("Sun", {
                 albedoPanelRadiosityModelSettings(0.12),
             }, {6, 12, 18, 24, 30});
 
@@ -197,7 +197,7 @@ std::shared_ptr<propagators::SingleArcSimulationResults<>> createAndRunSimulatio
                     receivedIrradianceDependentVariable("MPO", "Sun"),
                     receivedIrradianceDependentVariable("MPO", "Mercury"),
                     receivedFractionDependentVariable("MPO", "Sun"),
-                    visibleAndIlluminatedSourcePanelCountDependentVariable("MPO", "Mercury"),
+                    visibleAndEmittingSourcePanelCountDependentVariable("MPO", "Mercury"),
                     visibleSourceAreaDependentVariable("MPO", "Mercury")
             };
 

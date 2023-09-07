@@ -32,7 +32,6 @@ int main()
    analyzeSolarIrradiance();
 //     analyzeIrradianceAtLRO();
 //    analyzeVariationOfIrradianceWithSubsolarAngle();
-//    analyzeVariationOfIrradianceWithNumberOfPanels();
 }
 
 // Analyze solar irradiance at Earth and Moon
@@ -82,7 +81,7 @@ void analyzeIrradianceAtLRO()
         // Create planets
         auto bodySettings = getDefaultBodySettings({"Sun", "Earth", "Moon"}, globalFrameOrigin, globalFrameOrientation);
         bodySettings.at("Moon")->radiationSourceModelSettings =
-                staticallyPaneledRadiationSourceModelSettings("Sun", {radiosityModel}, 25000);
+                extendedRadiationSourceModelSettings("Sun", {radiosityModel}, {6, 12, 18, 24, 30, 36});
 
         auto bodies = createSystemOfBodies(bodySettings);
         setGlobalFrameBodyEphemerides(bodies.getMap(), globalFrameOrigin, globalFrameOrientation);
@@ -127,11 +126,11 @@ void analyzeVariationOfIrradianceWithSubsolarAngle()
     // Create planets
     auto bodySettings = getDefaultBodySettings({"Sun", "Earth", "Moon"}, globalFrameOrigin, globalFrameOrientation);
     bodySettings.at("Moon")->radiationSourceModelSettings =
-            staticallyPaneledRadiationSourceModelSettings("Sun", {
+            extendedRadiationSourceModelSettings("Sun", {
                 albedoPanelRadiosityModelSettings(0.12),
                 angleBasedThermalPanelRadiosityModelSettings(100, 375, 0.95),
 //                delayedThermalPanelRadiosityModelSettings(0.95)
-                }, 25000);
+                }, {6, 12, 18, 24, 30, 36});
 
     auto bodies = createSystemOfBodies(bodySettings);
     setGlobalFrameBodyEphemerides(bodies.getMap(), globalFrameOrigin, globalFrameOrientation);
@@ -161,58 +160,6 @@ void analyzeVariationOfIrradianceWithSubsolarAngle()
                 -Eigen::Vector3d::UnitX());
 
         std::cout << "Moon at LRO: " << moonIrradianceAtLRO << "  " << theta * 180 / mathematical_constants::PI << std::endl;
-    }
-}
-
-// Analyze how the number of panels changes the received irradiance of LRO
-// Result: no large changes over 25000 panels, but significant deviation even with 5000 panels
-void analyzeVariationOfIrradianceWithNumberOfPanels()
-{
-    loadLROSpiceKernels();
-
-    auto simulationStartEpoch = spice_interface::convertDateStringToEphemerisTime(simulationStart);
-
-    for (int nPanels : {50, 100, 500, 5000, 25000, 50000, 100000})
-    {
-        // Create planets
-        auto bodySettings = getDefaultBodySettings({"Sun", "Earth", "Moon"}, globalFrameOrigin, globalFrameOrientation);
-        bodySettings.at("Moon")->radiationSourceModelSettings =
-                staticallyPaneledRadiationSourceModelSettings("Sun", {
-                    albedoPanelRadiosityModelSettings(0.12),
-                    angleBasedThermalPanelRadiosityModelSettings(100, 375, 0.95),
-    //                delayedThermalPanelRadiosityModelSettings(0.95)
-                }, nPanels);
-
-        auto bodies = createSystemOfBodies(bodySettings);
-        setGlobalFrameBodyEphemerides(bodies.getMap(), globalFrameOrigin, globalFrameOrientation);
-
-        bodies.at("Sun")->setStateFromEphemeris(simulationStartEpoch);
-        bodies.at("Sun")->getRadiationSourceModel()->updateMembers(simulationStartEpoch);
-        bodies.at("Moon")->setStateFromEphemeris(simulationStartEpoch);
-        bodies.at("Moon")->getRadiationSourceModel()->updateMembers(simulationStartEpoch);
-        bodies.at("Earth")->setStateFromEphemeris(simulationStartEpoch);
-
-        auto moonRadius = bodies.at("Moon")->getShapeModel()->getAverageRadius();
-        auto earthRadius = bodies.at("Earth")->getShapeModel()->getAverageRadius();
-        double moonEarthDistance = (bodies.at("Earth")->getPosition() - bodies.at("Moon")->getPosition()).norm();
-
-        auto moonRadiationSourceModel = bodies.at("Moon")->getRadiationSourceModel();
-        auto sunRadiationSourceModel =
-                std::dynamic_pointer_cast<IsotropicPointRadiationSourceModel>(bodies.at("Sun")->getRadiationSourceModel());
-
-        auto sunIrradianceAtMoon = sunRadiationSourceModel->evaluateIrradianceAtPosition(
-                bodies.at("Moon")->getPosition() - bodies.at("Sun")->getPosition());
-        auto sunIrradianceAtEarth = sunRadiationSourceModel->evaluateIrradianceAtPosition(
-                bodies.at("Earth")->getPosition() - bodies.at("Sun")->getPosition());
-
-        auto moonIrradianceAtLRO = moonRadiationSourceModel->evaluateTotalIrradianceAtPosition(
-                Eigen::Vector3d(50e3 + moonRadius, 0, 0),
-                sunIrradianceAtMoon,
-                -Eigen::Vector3d::UnitX());
-
-//        std::cout << "Sun at Moon: " << sunIrradianceAtMoon << std::endl;
-//        std::cout << "Sun at Earth: " << sunIrradianceAtEarth << std::endl;
-        std::cout << "Moon at LRO: " << moonIrradianceAtLRO << std::endl;
     }
 }
 

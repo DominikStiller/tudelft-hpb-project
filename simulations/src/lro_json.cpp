@@ -48,11 +48,14 @@ SystemOfBodies createSimulationBodies()
     // Create planets
     auto bodySettings = getDefaultBodySettings({"Sun", "Earth", "Moon"}, globalFrameOrigin, globalFrameOrientation);
 
+
     bodySettings.at("Moon")->shapeModelSettings = sphericalBodyShapeSettings(1737.4e3);
     bodySettings.at("Moon")->rotationModelSettings =
             spiceRotationModelSettings(globalFrameOrientation, moonFrame, moonFrame);
     std::dynamic_pointer_cast<SphericalHarmonicsGravityFieldSettings>(
             bodySettings.at("Moon")->gravityFieldSettings)->resetAssociatedReferenceFrame(moonFrame);
+
+    bodySettings.at("Moon")->radiationSourceModelSettings.reset();
 
     if (settings.useMoonRadiation) {
         std::vector<std::shared_ptr<PanelRadiosityModelSettings>> panelRadiosityModels;
@@ -90,16 +93,10 @@ SystemOfBodies createSimulationBodies()
             occultingBodiesForMoon = {"Earth"};
         }
 
-        if (settings.panelingMoon == "Static")
+        if (settings.panelingMoon == "Dynamic")
         {
             bodySettings.at("Moon")->radiationSourceModelSettings =
-                    std::make_shared<StaticallyPaneledRadiationSourceModelSettings>(
-                            "Sun", panelRadiosityModels, settings.numberOfPanelsMoon, occultingBodiesForMoon);
-        }
-        else if (settings.panelingMoon == "Dynamic")
-        {
-            bodySettings.at("Moon")->radiationSourceModelSettings =
-                    std::make_shared<DynamicallyPaneledRadiationSourceModelSettings>(
+                    extendedRadiationSourceModelSettings(
                             "Sun", panelRadiosityModels, settings.numberOfPanelsPerRingMoon, occultingBodiesForMoon);
         }
         else
@@ -244,7 +241,7 @@ std::shared_ptr<propagators::SingleArcSimulationResults<>> createAndRunSimulatio
         dependentVariablesList.insert(dependentVariablesList.end(), {
                 singleAccelerationDependentVariable(radiation_pressure, "LRO", "Moon"),
                 receivedIrradianceDependentVariable("LRO", "Moon"),
-                visibleAndIlluminatedSourcePanelCountDependentVariable("LRO", "Moon"),
+                visibleAndEmittingSourcePanelCountDependentVariable("LRO", "Moon"),
                 visibleSourceAreaDependentVariable("LRO", "Moon")
         });
     }
