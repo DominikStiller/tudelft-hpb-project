@@ -26,7 +26,7 @@ We found that
     (1) the accelerations differ greatly depending on the Sun position,
     (2) only a paneled spacecraft model can account properly for changing orientation and geometry of LRO, and
     (3) a constant-albedo model is sufficient for lunar radiation, which is dominated by the thermal component. A spherical harmonics model for lunar albedo increases computational cost with little gain in the attained accuracy.
-If radiation pressure is neglected, the along-track position errors can be as large as 1100 m and the radial error varies periodically with an amplitude of up to 24 m/s, highlighting the importance of adequate force modeling to meet orbit determination requirements.
+If radiation pressure is neglected, the along-track position errors can be as large as 1100 m and the radial error varies periodically with an amplitude of up to 24 m, highlighting the importance of adequate force modeling to meet LRO's orbit determination requirements.
 
 For more information, read the [paper](paper/build/main.pdf).
 
