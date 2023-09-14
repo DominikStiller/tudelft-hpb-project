@@ -43,6 +43,9 @@
 \usepackage[acronym,nonumberlist,nopostdot,nogroupskip]{glossaries}
 \usepackage{glossary-inline}
 \renewcommand*{\glossarysection}[2][]{\textbf{#1}: }
+\renewcommand*{\glspostinline}{\glspostdescription.}
+\renewcommand*{\glsinlinenameformat}[2]{\glstarget{#1}{#2}:}
+
 \glsdisablehyper
 
 % \@twosidetrue
