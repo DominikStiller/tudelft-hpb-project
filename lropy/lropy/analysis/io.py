@@ -105,6 +105,8 @@ def _get_column_name(id: str) -> str:
             return f"panels_ill_{source.lower()}"
         elif type == "visible and illuminated":
             return f"panels_vis_ill_{source.lower()}"
+        elif type == "visible and emitting":
+            return f"panels_vis_emi_{source.lower()}"
     elif match := re.fullmatch(r"Visible area of (\S+) as seen from (\S+)", id):
         source, target = match.groups()
         return f"area_vis_{source.lower()}"
