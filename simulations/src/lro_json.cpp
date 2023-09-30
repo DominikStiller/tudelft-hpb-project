@@ -67,7 +67,7 @@ SystemOfBodies createSimulationBodies()
         else if (settings.albedoDistributionMoon == "DLAM1")
         {
             panelRadiosityModels.push_back(
-                    albedoPanelRadiosityModelSettings(SphericalHarmonicsSurfacePropertyDistributionModel::albedo_dlam1));
+                    albedoPanelRadiosityModelSettings(SphericalHarmonicsSurfacePropertyDistributionModel::albedo_dlam1, "Sun"));
         }
         else if (settings.albedoDistributionMoon != "NoAlbedo")
         {
@@ -76,11 +76,11 @@ SystemOfBodies createSimulationBodies()
 
         if (settings.thermalTypeMoon == "Delayed")
         {
-            panelRadiosityModels.push_back(delayedThermalPanelRadiosityModelSettings(0.95));
+            panelRadiosityModels.push_back(delayedThermalPanelRadiosityModelSettings(0.95, "Sun"));
         }
         else if (settings.thermalTypeMoon == "AngleBased")
         {
-            panelRadiosityModels.push_back(angleBasedThermalPanelRadiosityModelSettings(95, 385, 0.95));
+            panelRadiosityModels.push_back(angleBasedThermalPanelRadiosityModelSettings(95, 385, 0.95, "Sun"));
         }
         else if (settings.thermalTypeMoon != "NoThermal")
         {
@@ -97,7 +97,7 @@ SystemOfBodies createSimulationBodies()
         {
             bodySettings.at("Moon")->radiationSourceModelSettings =
                     extendedRadiationSourceModelSettings(
-                            "Sun", panelRadiosityModels, settings.numberOfPanelsPerRingMoon, occultingBodiesForMoon);
+                            panelRadiosityModels, settings.numberOfPanelsPerRingMoon, occultingBodiesForMoon);
         }
         else
         {
